@@ -1,0 +1,119 @@
+.ft_d1 {
+  width: 1236px!important;
+  height: 70px;
+  margin:0 auto;
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+.ft_a1 {
+  width: 130px;
+  height: 50px;
+  display: inline-block;
+  border-radius: 15px;
+  border:1px solid #DFE4EC;
+  text-align: center;
+  color:#4873c5;
+  line-height: 50px;
+}
+
+.active {
+  background: #4873c5;
+  color: #fff;
+}
+
+.ft_a1:hover{
+  color: #fff;
+  animation: fadeIn .5s forwards;
+}
+.ft_d2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ft_d2 i{
+  background-image: url('../../../images/arrow_right.svg');
+  width:16px;
+  display: inline-block;
+  height:16px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin:0 10px 0 10px;
+}
+
+.ft_d1>.ft_d2:last-child>i {
+  display: none;
+}
+
+.ft-step1 >.ivu-steps-item .ivu-steps-status-process > .ivu-steps-head > .ivu-steps-head-inner{
+  border-color: #4873c5;
+  background-color: #4873c5;
+}
+
+.ft_d3 {
+  width:100%;
+  height: auto;
+  border:1px solid #ECF0F7;
+  text-align: center;
+}
+
+.ft-step1 {
+  margin-top:20px;
+}
+
+/* animate */
+@keyframes fadeIn {
+  from{
+    background:#fff;
+    color:#4873c5;
+  }
+  to{
+    background: #4873c5;
+    color:#fff;
+    box-shadow: 0 6px 15px rgba(0,0,0,.2);
+  }
+}
+
+@media screen and (max-width:1920px) {
+  .ft_a1 {
+    width: 130px;
+  }
+}
+
+@media screen and (max-width:1680px) {
+  .ft_a1 {
+    width: 130px;
+  }
+}
+
+@media screen and (max-width:1600px) {
+  .ft_a1 {
+    width: 130px;
+  }
+}
+
+@media screen and (max-width:1440px) {
+  .ft_a1 {
+    width: 130px;
+  }
+}
+
+@media screen and (max-width:1366px) {
+  .ft_a1 {
+    width: 110px;
+  }
+}
+
+@media screen and (max-width:1280px) {
+  .ft_a1 {
+    width: 90px;
+  }
+}
+
+@media screen and (max-width:1024px) {
+  .ft_a1 {
+    width: 90px;
+  }
+}

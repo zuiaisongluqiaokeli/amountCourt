@@ -1,0 +1,45 @@
+.ft-tabs-style1>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar>.ivu-tabs-nav-container {
+  overflow: visible;
+}
+
+.ft-tabs-style1>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar {
+  border-bottom: 0;
+  color: #4873C5;
+}
+
+.ft-tabs-style1>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
+  border-top-right-radius: 35px;
+  width: 150px;
+  height: 45px;
+  background: #fff;
+  line-height: 40px;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-tabs-style1>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
+  background: #4873C5;
+  color: #fff;
+}
+
+.ft-tabs-style2>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar>.ivu-tabs-nav-container {
+  overflow: visible;
+}
+
+.ft-tabs-style2>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar {
+  border-bottom: 0;
+  color: #4873C5;
+}
+
+.ft-tabs-style2>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
+  border-top-right-radius: 35px;
+  width: 120px;
+  height: 45px;
+  background: #fff;
+  line-height: 40px;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-tabs-style2>.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
+  background: #4873C5;
+  color: #fff;
+}

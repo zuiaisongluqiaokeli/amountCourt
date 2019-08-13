@@ -1,0 +1,12 @@
+.ft-review-tab>.ivu-tabs-bar>.ivu-tabs-nav-container>.ivu-tabs-nav-wrap > .ivu-tabs-nav-scroll > .nav-text > .ivu-tabs-tab {
+  width: 190px;
+  border-radius: 0px;
+}
+
+/* 临时用 */
+.ft-review-notice{
+  width: 90%;
+  margin: 0 auto;
+  height: 260px;
+  text-align: center;
+}

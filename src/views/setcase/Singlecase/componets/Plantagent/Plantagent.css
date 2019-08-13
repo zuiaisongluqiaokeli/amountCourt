@@ -1,0 +1,152 @@
+.ft-plant-div1 {
+  width: 100%;
+  text-align: center;
+}
+
+.ft-plant-div2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+}
+.addCommon{
+  width: 124px;
+  font-size: 16px;
+  height: 35px;
+  border-radius: 10px;
+  display: block;
+  border: 1px solid #dedfe2;
+  margin-left: 93px;
+  text-align: center;
+}
+.ft-plant-p1 {
+  color: #4873C5;
+  font-size: 20px;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+.ft-plant-a1 {
+  width: auto;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0 20px 0 20px;
+  height: auto;
+  border-radius: 30px;
+  line-height: 30px;
+  margin: 0 10px 0 10px;
+  color: #4873C5;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-plant-a1:hover {
+  color: #3a5c8b;
+}
+
+.plant_active {
+  background: #4873C5;
+  color: #fff !important;
+}
+
+
+.ft_form {
+  margin: 20px 100px 20px 20px;
+}
+
+.ft_form input {
+  width: 300px;
+  border-radius: 30px;
+}
+
+
+.ft_public1 {
+  width: 100%;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.ft_public2 {
+  width: auto;
+  white-space: nowrap;
+  padding: 20px;
+  font-size: 20px;
+  height: auto;
+  border-radius: 30px;
+  line-height: 30px;
+  margin: 0 10px 0 10px;
+  color: #4873C5;
+  border: 1px solid #E9EEF8;
+  margin-left: 80px;
+}
+
+.ft_public3 {
+  width: 270px;
+  height: 40px;
+  display: inline-block;
+  white-space: nowrap;
+  background: #4873C5;
+  text-align: center;
+  font-size: 17px;
+  border-radius: 5px;
+  line-height: 40px;
+  margin: 0 10px 0 10px;
+  color: #fff;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-public-color {
+  color: #4873C5 !important;
+  font-size: 16px !important;
+}
+
+.ft-agent-footer {
+  width: 100%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.ft-agent-btn1 {
+  width: 270px;
+  height: 40px;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 17px!important;
+  border-radius: 5px;
+  line-height: 40px;
+  margin: 0 10px 0 10px;
+  color: #4873C5;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-plant-chooseType>.ivu-form-item-content>.ivu-form-item-error-tip {
+  position: absolute;
+  top: 19%;
+  left: 312px;
+  line-height: 1;
+  padding-top: 6px;
+  color: #ed3f14;
+  z-index:-10;
+}
+
+.iconSet{
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.toolT{
+  float: right;
+  margin-right: 55px;
+  margin-top:20px;
+}
+
+.ivu-collapse {
+  /* background-color: #f7f7f7; */
+  border-radius: 3px;
+  border-bottom: 1px solid #dddee1;
+  border-right: none;
+  border-left: none;
+  border-top: none;
+  background-color: #fff;
+  margin-top:15px;
+}

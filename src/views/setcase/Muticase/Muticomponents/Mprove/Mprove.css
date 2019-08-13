@@ -1,0 +1,73 @@
+.ft-magenttype-step1 {
+  height: auto;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.ft-magenttype-tip1 {
+  margin-top: 50px;
+  text-align: center;
+  color: #4873C5;
+}
+
+.mEvidence-span {
+  height: 30px;
+  width: 300px !important;
+  border: 1px solid #E9EEF8;
+  border-radius: 30px;
+  margin-right: 30px;
+  padding: 10px;
+  line-height: 8px !important;
+}
+
+.ft-magent-btn1 {
+  background: #F54C4C;
+  color: #fff;
+  font-size: 14px;
+}
+
+.ft-magent-btn2 {
+  background: #4873C5;
+  color: #fff;
+  font-size: 14px;
+}
+
+.ft-magent-btn3 {
+  background: #4873C5;
+  color: #fff;
+  font-size: 14px;
+  margin-left: -100px;
+}
+
+.ft-magent-btn4 {
+  width: 270px!important;
+  height: 40px!important;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 5px!important;
+  line-height: 40px!important;
+  margin:20px 10px 0 30px;
+  color: #2F60BD;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-confirm-checkboxSingle {
+  font-size: 16px;
+  color: #4873C5;
+  margin-left: 18px;
+}
+
+.ft-confirm-checkboxSingle>.ivu-checkbox.ivu-checkbox-checked>.ivu-checkbox-inner {
+  border-color: #4873C5;
+  background-color: #4873C5;
+}
+
+.mEvidence-downspan {
+  position: absolute;
+  text-overflow: unset;
+  overflow: unset !important;
+  right: -160px;
+  color: #4873C5;
+}

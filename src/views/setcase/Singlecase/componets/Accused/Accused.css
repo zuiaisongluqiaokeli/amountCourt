@@ -1,0 +1,143 @@
+.ft-plant-div1 {
+  width: 100%;
+  text-align: center;
+}
+
+.ft-plant-div2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+}
+.addCommon{
+  width: 140px;
+  font-size: 16px;
+  height: 35px;
+  border-radius: 10px;
+  display: block;
+  border: 1px solid #dedfe2;
+  margin-left: 104px;
+  text-align: center;
+}
+.ft-plant-p1 {
+  color: #3D6AC1;
+  font-size: 20px;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+.ft-plant-a1 {
+  width: auto;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0 20px 0 20px;
+  height: auto;
+  border-radius: 30px;
+  line-height: 30px;
+  margin: 0 10px 0 10px;
+  color: #3a5c8b;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-plant-a1:hover {
+  color: #3a5c8b;
+}
+
+.plant_active {
+  background: #2F60BD;
+  color: #fff !important;
+}
+
+
+.ft_form {
+  margin: 0px 100px 20px 20px!important;
+}
+
+.ft_form input {
+  width: 300px;
+  border-radius: 30px;
+}
+
+
+.ft_public1 {
+  width: 827px;
+  text-align: left;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.ft_public2 {
+  width: auto;
+  white-space: nowrap;
+  padding: 20px;
+  font-size: 20px;
+  height: auto;
+  border-radius: 30px;
+  line-height: 30px;
+  margin: 0 10px 0 10px;
+  color: #3a5c8b;
+  border: 1px solid #E9EEF8;
+  margin-left: 80px;
+}
+
+
+.ft-accused-btn1 {
+  width: 270px!important;
+  height: 40px!important;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 17px;
+  border-radius: 5px;
+  line-height: 40px!important;
+  margin: -20px 10px 0 30px;
+  color: #4873c5;
+  border: 1px solid #E9EEF8;
+}
+
+.ft_public3 {
+  width: 270px!important;
+  height: 40px!important;
+  display: inline-block;
+  white-space: nowrap;
+  background: #4873C5;
+  text-align: center;
+  font-size: 17px;
+  border-radius: 5px!important;
+  line-height: 40px!important;
+  margin: -20px 10px 0 30px;
+  color: #fff;
+  border: 1px solid #E9EEF8;
+}
+
+.ft-public-color {
+  color: #2F60BD !important;
+  font-size: 16px !important;
+}
+.iconSet{
+  font-size: 35px!important;
+  cursor: pointer;
+}
+.ivu-tooltip, .ivu-tooltip-rel{
+  float: right;
+}
+.toolT{
+  float: right;
+  margin-right: 55px;
+  margin-top:20px;
+}
+
+.ivu-collapse {
+  /* background-color: #f7f7f7; */
+  border-radius: 3px;
+  border-bottom: 1px solid #dddee1;
+  border-right: none;
+  border-left: none;
+  border-top: none;
+  background-color: #fff;
+  margin-top:15px;
+}
+
+.ivu-collapse-header{
+  text-align: left;
+}

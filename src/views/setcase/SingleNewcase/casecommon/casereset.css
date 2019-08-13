@@ -1,0 +1,99 @@
+.ft-plant-upload>.ivu-form-item-content>.ivu-input-wrapper {
+  visibility: hidden;
+  width: 1px;
+}
+
+.ft-plant-upload>.ivu-form-item-content>span {
+  width: 179px;
+  font-size: 14px;
+  float: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 36px;
+}
+
+.ft-plant-upload>.ivu-form-item-content>span:hover {
+  color: #4873C5;
+  cursor: pointer;
+  transition: all .5s ease-in-out;
+}
+
+.ft-plant-upload>.ivu-form-item-content>span::after{
+  padding-top: 3px;
+}
+
+.ft-plant-upload>.ivu-form-item-content>.ivu-input-wrapper>input {
+  width: 170px;
+}
+
+.ft-plant-upload-button>.ivu-upload>button {
+  border-radius: 30px;
+  width: 120px;
+  background: #4873C5;
+  color: #fff;
+}
+
+.ft-plant-upload-button>.ivu-upload-list {
+  /* display: none; */
+}
+
+.ft-plant-upload>.ivu-form-item-content>.ivu-form-item-error-tip {
+  padding-top: 10px !important;
+  z-index: -10;
+}
+
+.ft-plant-slectType>.ivu-form-item-content>.ivu-select>.ivu-select-selection {
+  border-radius: 30px;
+}
+
+.ft_form>.ivu-form-item-content {
+  text-align: left;
+}
+
+.ft-plant-upload-button {
+  float: left;
+}
+
+.ft-plant-chooseType>.ivu-form-item-label {
+  color: #4873C5 !important;
+  font-size: 16px !important;
+}
+
+.ft-plant-upload-button>.ivu-upload>button {
+  border-radius: 30px;
+  width: 120px;
+  background: #4873C5;
+  color: #fff;
+}
+
+.ft-plant-slectType>.ivu-form-item-content>.ivu-select>.ivu-select-selection {
+  border-radius: 30px;
+}
+
+.ft-confirm-radio>.ivu-radio-wrapper {
+  font-size: 16px;
+  color: #4873C5;
+}
+
+.ft-confirm-radio>.ivu-radio-wrapper>.ivu-radio>.ivu-radio-inner {
+  border: 1px solid #4873C5
+}
+
+.ft-confirm-radio>.ivu-radio-wrapper>.ivu-radio>.ivu-radio-inner:after {
+  background-color: #4873C5;
+}
+
+.ft-confirm-checkbox>.ivu-checkbox-wrapper {
+  font-size: 16px;
+  color: #4873C5;
+}
+
+.ft-confirm-checkbox>.ivu-checkbox-wrapper>.ivu-checkbox-checked>.ivu-checkbox-inner {
+  border-color: #4873C5;
+  background-color: #4873C5;
+}
+
+.ft-confirm-checkbox>.ivu-checkbox-wrapper>.ivu-checkbox-checked>.ivu-checkbox-inner:after {
+  border-color: #fff;
+}

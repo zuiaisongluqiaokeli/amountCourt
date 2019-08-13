@@ -1,0 +1,29 @@
+.ft-step1{
+  text-align: center;
+}
+
+.muti-notice-window {
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+
+.muti-notice-addIcon {
+  background-image: url('../../../images/plus.svg');
+  width: 96px;
+  height: 96px;
+  cursor: pointer;
+  margin-top: 200px;
+  position: absolute;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.muti-notice-area {
+  width: 99%;
+  height: auto;
+  margin:20px 0 20px 0;
+  border:1px solid #eee;
+}

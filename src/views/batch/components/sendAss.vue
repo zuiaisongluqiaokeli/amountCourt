@@ -1,0 +1,413 @@
+<style lang="less">
+@import "./reset.less";
+</style>
+<template>
+    <div class="reviewsCase fde" style="height:100%">
+        <Row>
+            <Col span="24" style="min-height:100%">
+                <!-- <Card style="min-height:95%" class="">      -->
+                    <Row class="operation" style="margin-bottom:15px;">
+                      <Button size='large' @click="showRject" :loading="proLoading" style="background:#2083D8;color:#fff;float:right;margin-right:15px;" >发送</Button>
+                        <Button size='large' @click="showGO" style="background:#2083D8;float:right;margin-right:15px;"  type="primary" >为选中的案件选择文书</Button>
+                        
+                        <Button size='large' @click="addBatchList"  style="background:#2083D8;color:#fff;float:left;margin-right:15px;" >添加案件到批量工作列表</Button>
+                        <Dropdown  class="dropMenu"  @on-click="handleDropdown">
+                          <Button size='large' type="primary">
+                            更多操作
+                            <Icon type="ios-arrow-down"></Icon>
+                          </Button>
+                          <DropdownMenu size='large' slot="list">
+                            <DropdownItem size='large' style="color:red" name="clear">清空工作列表</DropdownItem>
+                            <DropdownItem size='large' name="refresh">刷新</DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                    </Row>
+
+                     <Row>
+                        <Alert show-icon>
+                            已选择 <span class="select-count">{{selectCount}}</span> 项
+                            <a class="select-clear" @click="clearSelectAll">清空</a>
+                        </Alert>
+                        <Alert type="warning" v-show="isError" show-icon closable>
+                            <span>发送成功个数：{{successNumber}}</span><br/>
+                            <span>发送失败个数：{{failedNumber}}</span><br/>
+                            <span>失败原因：{{reason}}</span>
+                        </Alert>
+                    </Row>
+                    <Row class="tables">
+                        <Table size="small" height="460" stripe style="min-height:350px" :loading="loading" border :columns="columns" :data="data" ref="table" sortable="custom"  @on-selection-change="changeSelect"></Table>
+                    </Row>
+                    <Row type="flex" justify="end" class="page" style="margin-top:10px;height:30px;">
+                        <Page :current="pageNumber" :total="total" :page-size="pageSize" @on-change="changePage" @on-page-size-change="changePageSize" placement='top' :page-size-opts="[10,20,50,100]" size="small" show-total show-elevator show-sizer></Page>
+                    </Row>
+                <!-- </Card> -->
+            </Col>
+        </Row>
+        <Modal
+            v-model="modal1"
+            title="添加案件到批量处理列表"
+            :mask-closable="false"
+            :styles="{top: '20px'}"
+            :width="modalWidth">
+            <div class="components-container">
+              <batch @cancelEvent="closeModel" @saveEvent='changeList'  ref="batch" />
+            </div>
+            <div slot="footer">
+            </div>
+        </Modal>
+        <Modal
+            v-model="modal2"
+            title="文书统一选择"
+            :mask-closable="false"
+            :styles="{top: '20px'}"
+            :width="modalWidth">
+            <div class="components-container">
+              <dipmosBatch @cancelEvent="closeModel2" :listData2='selectList' ref="handle" />
+            </div>
+            <div slot="footer">
+            </div>
+        </Modal>
+    </div>
+</template>
+
+<script>
+import {
+  findLitigantLawCaseQuery,
+  batchSendDiploms
+} from "@/api/batch";
+import { formatDate } from '@/libs/date';
+import batch from "@/components/batch/send/sendBatchList.vue";
+import dipmosBatch from "@/components/batch/sendAss/sendBatch.vue";
+import { tools_downLoad } from '@/libs/tools.js';
+export default {
+  name: "role-manage",
+  components: {
+    batch,
+    dipmosBatch
+  },
+  data() {
+    var width = window.innerWidth - 100;
+    return {
+      loading: false,
+      treeLoading: false,
+      modal1:false,
+      modalWidth:width,
+      modal2:false,
+      isError:false,
+      successNumber:"",
+      failedNumber:"",
+      reason:"",
+      proLoading:false,
+      selectList:[],  //选择的数据
+      selectCount:0,   //选择数量
+      columns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        // {
+        //   title: "网申号",
+        //   key: "netApplicationNo",
+        //   width: 170,
+        // },
+        {
+          title: "案号",
+          key: "caseNo",
+          align: "center",
+          width: 180,
+        },
+        {
+          title: "案由",
+          key: "briefName",
+          align: "center",
+          // width:170,
+        },
+        {
+          title: "送达方式",
+          key: "litigantName",
+          align: "center",
+          // width: 130,
+          render: (h, params) => {
+                return h(
+                    'span',
+                    {},
+                    params.row.sendType ? params.row.sendType : "无"
+                );
+          }
+        },
+        {
+          title: "受送达人",
+          key: "litigantName",
+          align: "center",
+        },
+        {
+          title: "地址",
+          key: "litigantAddress",
+          align: "center",
+          render: (h, params) => {
+              return h('div', {
+                  props:{
+                      
+                  },
+              },
+              // this.listData[params.index].sendType == '电子邮件送达' ? "邮箱号" : 
+              this.data[params.index].litigantAddress.map(item => {
+                      if(item.address == ""){
+                        return false
+                      }
+                      return h('p', {
+                          
+                      }, 
+                      item.litigantAddressType + '：' + item.address
+                  );
+              })
+              )
+          }
+        },
+        {
+          title: "邮单编号",
+          key: "PostalNumber ",
+          // width:150,
+          align: "center",
+          render: (h, params) => {
+            if(this.data[params.index].sendType && this.data[params.index].sendType == 'EMS送达'){
+              return h(
+                    'div',
+                    {},
+                    this.data[params.index].litigantAddress.map(item => {
+                      return h('p', {
+                      }, item.oddNumbers ? item.oddNumbers : "");
+                    })
+              );
+              
+            }else{
+              return h(
+                  'span',
+                  {},
+                  params.row.PostalNumber ? params.row.PostalNumber : "无"
+              );
+            }
+                
+          }
+        },
+        {
+          title: "邮箱",
+          key: "litiganteEmail",
+          // width:150,
+          align: "center",
+          render:(h,params) =>{
+            return h('span',params.row.litiganteEmail ? params.row.litiganteEmail : "无")
+          },
+        },
+        {
+          title: "送达文书",
+          key: "clerk",
+          // width:250,
+          align: "center",
+          render: (h, params) => {
+                return h(
+                    'div',
+                    {},
+                    params.row.checkboxValue ? params.row.checkboxValue.map(item => {
+                      return h('p', {
+                      }, item);
+                    }) : "无"
+                );
+          }
+        },
+      ],
+      data: [
+      ],
+      pageNumber: 1,
+      pageSize: 10,
+      total: 0,
+    };
+  },
+  methods: {
+    init() {
+      // this.getRoleList();
+    },
+    changePage(v) {
+      this.pageNumber = v;
+      this.getRoleList();
+    },
+    changePageSize(v) {
+      this.pageSize = v;
+    },
+    getRoleList() {
+      console.log(99544)
+      this.selectList = [];
+      this.selectCount = 0;
+      this.loading = true;
+      let params = {
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+      };
+      findLitigantLawCaseQuery(params).then(res => {
+        this.loading = false;
+        if (res.data.state == 100) {
+          let data=res.data.data;
+          this.data = data.list;
+          this.total = data.total;
+        }else{
+          this.$Message.info(res.data.message);
+        }
+      });
+    },
+    changeSelect(e){
+      this.selectList = e;
+      this.selectCount = e.length;
+    },
+    /**
+     * 打开审核模态框
+     */
+    showGO(){
+      if (this.selectCount <= 0) {
+          this.$Notice.warning({
+              title: '',
+              desc: '您还未选择需要操作案件',
+              duration: 5
+          });
+        return;
+      }
+      this.$refs.handle.getList();
+      this.modal2 = true;
+    },
+    closeModel(){
+      this.modal1 = false;
+    },
+    closeModel2(data){
+      if(data){ //表示选择成功 刷新
+        this.selectList = [];
+        this.selectCount = 0;
+        this.modal2 = false;
+        this.data = data;
+        let ys = true;
+        let that = this;
+        setTimeout(function(){
+					that.$refs.table.selectAll(ys);
+				}, 500)
+        // this.getRoleList();
+      }else{
+        this.modal2 = false;
+      }
+    },
+    addBatchList(){
+      this.$refs.batch.init();
+      this.modal1 = true;
+    },
+    showRject(){
+      if (this.selectCount <= 0) {
+          this.$Notice.warning({
+              title: '',
+              desc: '您还未选择需要操作案件',
+              duration: 5
+          });
+        return;
+      }
+      this.proLoading = true;
+      this.isError = false;
+      let data = [];
+      for(let i=0;i<this.data.length;i++){
+        let oddNumbersAry = [];
+        let sendAddressAry = [];
+        for(let j=0;j<this.data[i].litigantAddress.length;j++){
+          if(this.data[i].litigantAddress[j].address != ""){
+
+            oddNumbersAry.push(this.data[i].litigantAddress[j].oddNumbers ? this.data[i].litigantAddress[j].oddNumbers : null);
+            sendAddressAry.push(this.data[i].litigantAddress[j].address)
+          }
+        }
+        const da = {
+          lawCaseId:this.data[i].lawCaseId.toString(),                                                 //案件id
+          litigantId:this.data[i].litigantId.toString(),                                        //当事人id
+          sendType:this.data[i].sendType,                                                       //发送方式
+          diplmosList:this.data[i].checkboxValue ? this.data[i].checkboxValue.join(",") : "",   //文书
+          oddNumbers:oddNumbersAry,                                                             //邮单号数组
+          sendAddress:sendAddressAry,                                                           //地址数组
+          email:this.data[i].litiganteEmail,                                                             //邮箱
+          emailModelId:this.data[i].emailModelId ? this.data[i].emailModelId.toString() : null,    //邮箱模板id
+          sendWay:'庭后送达',
+          afterCourtDiplomsList:this.data[i].afterCourtDiplomsList ? JSON.stringify(this.data[i].afterCourtDiplomsList) : ''
+        }
+        data.push(da)
+      }
+      
+      batchSendDiploms(data).then(res => {
+          this.proLoading = false;
+          if(res.data.state == 100){
+            // tools_downLoad(res.data.data)
+            this.$Notice.success({
+                title: '',
+                desc: '发送成功',
+                duration: 3
+            });
+            
+          }else if(res.data.state == 104){
+              this.isError = true;
+              console.log(9999)
+              this.successNumber = res.data.data.success;
+              this.failedNumber = res.data.data.error;
+              this.reason = res.data.message;
+              let ary = [];
+                for(let i=0;i<this.data.length;i++){
+                    for(let j=0;j<res.data.data.errorLitigantIdList.length;j++){
+                        if(res.data.data.errorLitigantIdList[j] == this.data[i].litigantId){
+                            ary.push(this.data[i])
+                        }
+                    }
+                }
+                this.data = ary;
+                this.selectList = [];
+                this.selectCount = 0;
+          }else{
+            this.$Notice.warning({
+                title: '',
+                desc: res.data.message,
+                duration: 5
+            });
+          }
+      })
+    },
+     /**
+     * 批量操作的案件
+     */
+    changeList(data){
+      this.data = data;
+      this.modal1 = false;
+      let ys = true;
+      let that = this;
+      setTimeout(function(){
+        that.$refs.table.selectAll(ys);
+      }, 500)
+    },
+    clearSelectAll(){
+      this.$refs.table.selectAll(false);
+    },
+    handleDropdown(name){
+    if(name == 'clear'){
+        this.selectList = [];
+        this.selectCount = 0;
+        this.data = [];
+      }else if(name == 'refresh'){
+        this.getRoleList()
+      }
+    },
+    
+  },
+
+  mounted() {
+    // this.init();
+  },
+  filters: {
+      formatDate(time) {
+          if (time == '') {
+              return '';
+          }
+          var date = new Date(time);
+          return formatDate(date, 'yyyy-MM-dd');
+      },
+    },
+};
+</script>
