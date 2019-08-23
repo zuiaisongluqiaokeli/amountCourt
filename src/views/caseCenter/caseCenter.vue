@@ -342,7 +342,7 @@ export default {
           width: 300,
           align: "center",
           render: (h, params) => {
-            if((params.row.progress == "立案申请" || params.row.progress == "预立案") && (this.$store.getters.roLeName == "庭长" || this.$store.getters.roLeName == "法官" || this.$store.getters.roLeName == "法官助理" || this.$store.getters.roLeName == "书记员")){
+            if((this.allowProgress.indexOf(params.row.progress)>-1) && (this.allowRole.indexOf(this.$store.getters.roLeName)>-1)){
               return h('div', [
                   h(
                     "Button",
@@ -399,6 +399,22 @@ export default {
                       }
                   }, "推送调解员")
               ]);
+            }else if((this.allowProgress.indexOf(params.row.progress)>-1) && (this.allowRole2.indexOf(this.$store.getters.roLeName)>-1)){
+              return h('div', [
+                  h('Button', {
+                      props: {
+                          type: 'primary',
+                          size: 'small',
+                      },
+                      on: {
+                          click: () => {
+                            //阻止事件冒泡
+                            this.stopPropagation()
+                            this.pushIt(params.row);
+                          }
+                      }
+                  }, "推送调解员")
+              ]);
             }else{
               return h('span','暂无操作');
             }
@@ -407,6 +423,9 @@ export default {
       ],
       data: [],
       exportData: [],
+      allowProgress:["立案申请","预立案"],//允许的案件状态
+      allowRole:["庭长","法官助理","法官","书记员"],//允许的角色1
+      allowRole2:["法院调解员"],//允许的角色2
       total: 0
     };
   },
