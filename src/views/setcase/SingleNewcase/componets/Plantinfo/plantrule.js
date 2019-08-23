@@ -151,7 +151,10 @@ const naRule = {
     { type: 'string', pattern: /^[1][0-9][0-9]{9}$/, message: '请输入正确的手机号', trigger: 'change' }
   ],
   address: [
-    { required: true, message: '请输入常住地址', trigger: 'blur' }
+    { message: '请输入常住地址', trigger: 'blur' }
+  ],
+  serviceAddress: [
+    { required: true, message: '请输入文书送达地址', trigger: 'blur' }
   ],
   businessLicenseUp: [
     { type: 'string', message: '请上传个人身份证明文件', trigger: 'change' }
@@ -170,13 +173,16 @@ const legalRule = {
     { required: true, message: '请输入营业执照注册的主题名称(不区分中英文括号)', trigger: 'blur' }
   ],
   identityCard: [
-    { message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
+    { required: true, message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
   ],
   address: [
     { required: true, message: '请输入注册地址', trigger: 'blur' }
   ],
   address1: [
     { message: '请输入经营地址', trigger: 'blur' }
+  ],
+  serviceAddress: [
+    { required: true, message: '请输入文书送达地址', trigger: 'blur' }
   ],
   businessLicenseUp1: [
     { type: 'string', message: '请上传单位证明文件', trigger: 'change' }
@@ -211,13 +217,16 @@ const nolegalRule = {
     { required: true, message: '请输入营业执照注册的主题名称(不区分中英文括号)', trigger: 'blur' }
   ],
   identityCard: [
-    { message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
+    { required: true, message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
   ],
   address: [
     { required: true, message: '请输入注册地址', trigger: 'blur' }
   ],
   address1: [
     { message: '请输入经营地址', trigger: 'blur' }
+  ],
+  serviceAddress: [
+    { required: true, message: '请输入文书送达地址', trigger: 'blur' }
   ],
   businessLicenseUp1: [
     { type: 'string', message: '请上传单位证明文件', trigger: 'change' }

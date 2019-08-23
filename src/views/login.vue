@@ -38,13 +38,12 @@
                 <p style="font-size:15px;line-height:35px;padding-top: 5px;">
                     &nbsp;
                     <span><a href="http://218.5.2.1:18080/" target="_blank" style="color:white">法务云盘</a></span>
-                    <span>最高人民法院</span>
-                    <span>福建省高级法院</span>
-                    <span>厦门市中级人民法院</span>
-                    <span>中国庭审公开网</span>
+                    <span><a href="http://courtapp.chinacourt.org/" target="_blank" style="color:white">最高人民法院</a></span>
+                    <span><a href="https://www.fjcourt.gov.cn/" target="_blank" style="color:white">福建省高级人民法院</a></span>
+                    <span><a href="https://www.xmcourt.gov.cn/" target="_blank" style="color:white">厦门市中级人民法院</a></span>
+                    <span><a href="http://tingshen.court.gov.cn/" target="_blank" style="color:white">中国庭审公开网</a></span>
                 </p>
                 <p  style="line-height:25px;padding-bottom: 5px;">
-                    
                 </p>
             </div>
         </div>

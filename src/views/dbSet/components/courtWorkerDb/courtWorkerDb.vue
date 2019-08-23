@@ -98,12 +98,15 @@
       v-model="upMod"
       title="上传电子签章"
       :mask-closable="false"
-      width="250"
     >
       <div style="text-align:center">
-        <Upload action="/api/court/judgement_result/uploadSign.jhtml" ref="uploadFile" :on-success="plant_uploadSuccess" :data="{type:'法院工作者',id:nowId}" multiple>
+        <Upload action="/api/court/judgement_result/uploadSign.jhtml" ref="uploadFile" :show-upload-list="false" :default-file-list="nowUploadSign ? [{name:'已上传',url:nowUploadSign}] : []" :on-success="plant_uploadSuccess" :data="{type:'法院工作者',id:nowId}">
             <Button icon="ios-cloud-upload-outline">上传电子签章</Button>
         </Upload>
+        <div v-if="nowUploadSign">
+          <p>浏览：</p>
+          <iframe :src="nowUploadSign"></iframe>
+        </div>
       </div>
     </Modal>
   </div>
@@ -242,10 +245,10 @@ export default {
                     },
                     on: {
                         click: () => {
-                            this.showUpBox(params.row.id);
+                            this.showUpBox(params.row.id,params.row.uploadSign);
                         }
                     }
-                }, '上传电子签章'),
+                }, params.row.uploadSign ? "修改电子签章" : "上传电子签章"),
                 // h('Button', {
                 //     props: {
                 //         type: 'error',
@@ -283,10 +286,10 @@ export default {
         enable:"true",//是否启用
         phone:"",//手机号
         telephone:"",//固话
-        uploadSign:""//电子签章
       },
       nowId:"",//当前选择项id
       nowState:"",//当前状态
+      nowUploadSign:"",//当前起诉状
       upMod:false,
       ruleList:{
         name: [
@@ -370,16 +373,25 @@ export default {
         break;
       }
     },
+    //上传之前
+    mAgent_beforeUpload() {
+      this.$refs.upload.clearFiles();
+      this.$Message.info({
+        content: "文件上传中...",
+        duration: 0
+      });
+    },
     plant_uploadSuccess (res,item) {//文件上传成功事件
       console.log("888888888888888888888",item)
+      this.$Message.destroy()
       if(res.state === 100) {
         this.$Message.success(res.message);
-        this.getNowPageContent();
+        this.getNowPageContent(this.nowId);
       }else{
         this.$Message.error(res.message);
       }
     },
-    getNowPageContent(){//获取当前页内容
+    getNowPageContent(id){//获取当前页内容
       this.loading=true;
       getCourtWorkerInfo(this.pageData).then(res=>{
         console.log(res);
@@ -387,6 +399,13 @@ export default {
           this.loading=false;
           let data = res.data.data[0];
           this.tableData = data.content;
+          if(id){//获取对应的电子签章
+             data.content.forEach((item,index) => {
+              if(item.id==id){
+                this.nowUploadSign=item.uploadSign;
+              }
+             });
+          }
           this.setPageData(data.pageNumber, data.pageSize, data.total);
         }else{
             this.$Message.error(res.data.message);
@@ -419,10 +438,8 @@ export default {
                 content: '正在提交数据...',
                 duration: 0
           });
-          debugger
           //添加
           if(this.nowState=="add"){
-            debugger
             addJudgeNew(data).then(res=>{
               this.$Message.destroy();
               //  console.log(res);
@@ -462,20 +479,20 @@ export default {
           duration: 0
       });
       this.nowState=type;
+      //获取部门信息
+      getAllDepartMentName().then(res=>{
+        if(res.data.state==100){
+          this.$Message.destroy();
+          this.boxInfo.show=true;
+          this.boxInfo.departMentList=res.data.data;
+        }else{
+          this.$Message.error(res.data.message);          
+        } 
+      });
       //增加
       if(type=='add'){
         this.boxInfo.title="添加新工作人员";
         this.boxInfo.footerBtn1="添加";
-        //获取部门信息
-        getAllDepartMentName().then(res=>{
-          if(res.data.state==100){
-            this.$Message.destroy();
-            this.boxInfo.show=true;
-            this.boxInfo.departMentList=res.data.data;
-          }else{
-            this.$Message.error(res.data.message);          
-          } 
-        });
         //清空数据绑定
         for(var key in this.courtWorkerInfo){
             //不清空的内容
@@ -502,20 +519,11 @@ export default {
           phone:payload.phone,//手机号
           telephone:payload.telephone,//固话
         };
-
-        getAllDepartMentName().then(res=>{
-          if(res.data.state==100){
-            this.boxInfo.departMentList=res.data.data;
-            this.$Message.destroy();
-          }else{
-            this.$Message.error(res.data.message);          
-          } 
-        });
-        this.boxInfo.show = true;
       }
     },
-    showUpBox(id){//上传电子签章的模态框
+    showUpBox(id,uploadSign){//上传电子签章的模态框
       this.$refs.uploadFile.clearFiles()
+      this.nowUploadSign= uploadSign ? uploadSign : '';
       this.nowId=id;
       this.upMod=true;
     }

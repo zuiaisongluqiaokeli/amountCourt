@@ -2,9 +2,9 @@
   <div class='ft-magenttype-step1'>
     <div class='ft-magenttype-tip1'>
       <p>请将所有word文件要素表压缩成包（zip/7z）后上传（rar暂不支持），Excel文件直接上传。</p>
-      <p>压缩包名称应包含案由如：AAA银行保证保险合同纠纷。身份证明，代理人要有"律师执业证"字样， 授权与所函里面要有 "委托书"和"律所函"字样 ，原告里面要有原告 "营业执照" 字样。</p>
-      <p>为确保平台运行稳定性，单次限制至多50个案件要素表。超出部分请在本次批量立案提交后，再次进行批量立案提交操作</p>
-      <p>批量案件提交过程中，请尽可能关闭其他运行程序，并保证网络稳定</p>
+      <p>压缩包名称应包含案由如：AAA银行保证保险合同纠纷。身份证明，代理人需含"律师执业证"字样， 授权与所函，代理人需含 "委托书"和"律所函"字样 ，原告需含 "营业执照" 字样。</p>
+      <p>为确保平台运行稳定性，单次限制至多50个案件要素表。超出部分请在本次批量立案提交后，再次进行批量立案提交操作。</p>
+      <p>批量案件提交过程中，请尽可能关闭其他运行程序，并保证网络稳定。</p>
     </div>
     <Form
       :model="mAgentList"
@@ -50,6 +50,7 @@
         <Upload
           action="/api/court/case/importCase.jhtml"
           class="ft-plant-upload-button"
+          :show-upload-list="false"
           :on-success="mAgent_uploadSuccess"
           :before-upload="mAgent_beforeUpload"
           :data="{fileType:'要素表'}"
@@ -75,8 +76,10 @@
         <Upload
           action="/api/court/judgement_result/uploadExcel.jhtml"
           class="ft-plant-upload-button"
+          :show-upload-list="false"
           :on-success="excel_uploadSuccess"
           :before-upload="mAgent_beforeUpload"
+          ref="upload"
         >
           <Button
             type="ghost"
@@ -314,6 +317,7 @@ export default {
 
     //上传之前
     mAgent_beforeUpload() {
+      this.$refs.upload.clearFiles();
       this.$Notice.open({
         title: "上传解压中",
         desc: "如果上传文件较大，请耐心等待.....",
@@ -374,7 +378,7 @@ export default {
           confrimObj.caseInfo = val;
           confirmList.push(confrimObj);
         })
-          this.$Notice.success({ title: "上传成功！" });
+          this.$Notice.success({ title: "提交成功！" });
           if(skip){
             this.$emit("jumpIt", confirmList);//跳过证据、证明文件上传
           }else{

@@ -65,7 +65,7 @@
             <FormItem label="所函" class="ft_form ft-plant-chooseType ft-plant-upload" prop="lawFirmLetter">
                 <Input v-model="item.lawFirmLetter" placeholder="请上传所函扫描件"></Input>
                 <span>{{item.agent_fileName1}}</span>
-                <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="agent_uploadSuccess" :data="{fileType:'律师函',id:item.agPlantId}">
+                <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="agent_uploadSuccess" :data="{fileType:'律师函',id:item.agPlantId}">
                     <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                 </Upload>
             </FormItem>
@@ -73,7 +73,7 @@
             <FormItem label="律师执业证" class="ft_form ft-plant-chooseType ft-plant-upload" prop="lawerCardUrl">
                 <Input v-model="item.lawerCardUrl" placeholder="请上传律师扫描证件"></Input>
                 <span>{{item.agent_fileName2}}</span>
-                <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="agent_uploadSuccess" :data="{fileType:'律师执业证',id:item.agPlantId}">
+                <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="agent_uploadSuccess" :data="{fileType:'律师执业证',id:item.agPlantId}">
                     <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                 </Upload>
             </FormItem>
@@ -81,7 +81,7 @@
             <FormItem label="委托书" class="ft_form ft-plant-chooseType ft-plant-upload" prop="commission">
                 <Input v-model="item.commission" placeholder="请上传委托书"></Input>
                 <span>{{item.agent_fileName3}}</span>
-                <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="agent_uploadSuccess" :data="{fileType:'委托书',id:item.agPlantId}">
+                <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="agent_uploadSuccess" :data="{fileType:'委托书',id:item.agPlantId}">
                     <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                 </Upload>
             </FormItem>

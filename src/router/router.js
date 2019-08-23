@@ -338,6 +338,21 @@ export const appRouter = [
     ]
   },
   {
+    path: '/courtfinance/',
+    name: 'revisionApproval',
+    title: '修改审批',
+    access: ['法官','当事人','代理人'],
+    component: Main,
+    icon:'ios-clipboard',
+    children: [{
+      path: 'revisionApproval',
+      title: '修改审批',
+      name: 'revisionApproval_index',
+      component: () => import('@/views/revisionApproval/revisionApproval.vue')
+     },
+    ]
+  },
+  {
     path: '/courtfinance/sys',
     name: 'sys',
     title: '系统管理',

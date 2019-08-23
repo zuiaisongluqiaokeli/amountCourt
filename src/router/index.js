@@ -41,6 +41,7 @@ router.beforeEach((to, from, next) => {
                 store.commit("SET_ROLENAME", res.data.data.roleName);
                 store.commit("SET_USERIDCARD", res.data.data.result.idCard);
                 store.commit("SET_USERNAME", res.data.data.result.name);
+                store.commit("SET_USERID", res.data.data.result.id);
             }
             console.log(555)
             console.log(to.name)

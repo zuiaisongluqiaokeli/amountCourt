@@ -32,12 +32,10 @@
         :relationArr="thirdRelation"
         :caseLoading="caseLoading" 
         ref="revertsList3" />
-
     </div>
 </div>
 </template>
 <script>
-import { formatDate } from '@/libs/date'
 import litigantInfo from './litigant/litigantInfo.vue';
 import {
     litigantLawyerList,
@@ -48,21 +46,11 @@ export default {
     },
     data(){
         return{
-            caseInfo:{},
-            showNum:0,
-            plaintiffList:[
-                {
-                    name:'张三'
-                },
-                {
-                    name:'李四'
-                },
-            ],
+            plaintiffList:[],
             defendantList:[],
             thirdList:[],
             caseLoading:true,
             isLoading: false,
-            // changeCaseInfo:false,
             caseId: this.$store.getters.caseId,
             plaintiffRelation: [],
             defendantRelation: [],
@@ -91,27 +79,7 @@ export default {
                 }
             })
         },
-        getLitigantLawyerList(){
-            
-        },
     },
-    filters: {
-      formatDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd');
-      },
-      formatStartDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd hh:mm');
-      }
-  }
-
 }
 </script>
 

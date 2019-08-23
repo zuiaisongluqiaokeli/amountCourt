@@ -56,9 +56,11 @@
             :data="{fileType:'起诉状扫描件'}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="plant_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+            <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
           </Upload>
         </FormItem>
         <FormItem>

@@ -25,7 +25,7 @@
       style="margin:0 auto;width:821px"
     >
       <FormItem
-        label="上传证明文件统一上传包"
+        label="上传证明文件压缩包"
         class="ft_form ft-plant-chooseType ft-plant-upload"
         prop="mKeyInfoPath"
       >

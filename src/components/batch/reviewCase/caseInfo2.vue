@@ -29,7 +29,7 @@
         <div v-show="showComponents == '证据材料'">
             <evidences  ref="evidences"/>
         </div>
-        <div v-show="showComponents == '要素信息'">
+        <div v-show="showComponents == '要素修改'">
             <essential  ref="essential"/>
         </div>            
     </div>
@@ -47,7 +47,7 @@ import indictment from "@/views/caseInfo/components/indictment.vue";
 import materials from "@/views/caseInfo/components/materials.vue";
 // 证据材料
 import evidences from "@/views/caseInfo/components/evidences.vue";
-// 要素信息
+// 要素修改
 import essential from "@/views/caseInfo/components/essential.vue";
 export default {
     components: {
@@ -87,7 +87,7 @@ export default {
                 },
                 {
                     acClass:"selTab2",
-                    name:'要素信息'
+                    name:'要素修改'
                 },
                 // {
                 //     acClass:"selTab2",
@@ -133,7 +133,7 @@ export default {
             if(idName == '证据材料'){
                 this.$refs.evidences.getEvidenceList();
             }
-            if(idName == '要素信息'){
+            if(idName == '要素修改'){
                 this.$refs.essential.getEssential();
             }
         },

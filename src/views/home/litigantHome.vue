@@ -80,7 +80,7 @@
             <div style="margin-left:50px">
                 <div style="padding-left:10px">
                   <a style="padding-right:20px" href="/courtfinance/mycase">待审核</a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase">被驳回</a>
+                  <a style="padding-right:20px" href="/courtfinance/mycase"></a>
                   <a style="padding-right:20px" href="/courtfinance/mycase">待排期</a>
                   <a style="padding-right:20px" href="/courtfinance/mycase">待送达</a>
                 </div>

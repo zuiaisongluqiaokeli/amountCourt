@@ -107,12 +107,10 @@
                         <Button @click="handleSubmit" type="primary" long>登录</Button>
                     </FormItem>
                 </Form>
-
-                 <!-- <p class="login-tip register" @click="register">注册</p> -->
-                  <p class="login-tip">
-                      没有账号？<a href="javascript:;" @click="gotoResiter" style="margin-right:20px">立即注册</a>
-                      忘记密码？<a href="javascript:;" @click="forgetPass">找回密码</a>
-                  </p>
+                    <p class="login-tip">
+                        没有账号？<a href="javascript:;" @click="gotoResiter" style="margin-right:20px">立即注册</a>
+                        忘记密码？<a href="javascript:;" @click="forgetPass">找回密码</a>
+                    </p>
                 </div>
             </Card>
         </div>

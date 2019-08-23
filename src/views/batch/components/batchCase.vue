@@ -362,20 +362,20 @@ export default {
             );
           }
         },
-        // {
-        //   title: "图片材料",
-        //   key: "picUp",
-        //   // width:100,
-        //   align: "center",
-        //   render: (h, params) => {
-        //     return (
-        //       "div",
-        //       [
-        //         h("span", {}, params.row.eviUp ? "" : "未上传")
-        //       ]
-        //     );
-        //   }
-        // }
+        {
+          title: "诉前材料",
+          key: "appealUp",
+          // width:100,
+          align: "center",
+          render: (h, params) => {
+            return (
+              "div",
+              [
+                h("span", {}, params.row.appealUp ? "" : "未上传")
+              ]
+            );
+          }
+        }
       ],
       listData: [],
 

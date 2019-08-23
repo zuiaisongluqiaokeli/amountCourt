@@ -41,7 +41,7 @@
             </Row >  
         </div>
         <div class='button-clas' style='text-align:center;'>
-            <Button size='large' :loading="buttonLoading" @click="save" style="background:#F54C4C;color:#fff;font-size:16px;width:128px;" >确认驳回</Button>
+            <Button size='large' :loading="buttonLoading" @click="save" style="background:#F54C4C;color:#fff;font-size:16px;width:128px;" >确认退回</Button>
             <Button size='large' @click="cancel" style="border:1px solid #F54C4C;color:#F54C4C;padding: 6px 31px;font-size:16px;width:128px;" >取消</Button>
         </div>
     </div>
@@ -97,7 +97,7 @@ export default {
                     // width: 120,
                 },
                 {
-                    title: "驳回理由",
+                    title: "退回理由",
                     key: "phone",
                     width: 200,
                     className:'backRed',
@@ -200,7 +200,7 @@ export default {
             let ary = [];
             this.listData.map(item => {
                 const data = {
-                    examine:false,       //true审核通过或者驳回
+                    examine:false,       //true审核通过或者退回
                     lawCaseId:item.lawCaseId.toString(),  //案件id
                     briefId:item.briefId ? item.briefId.toString() : '',
                     courtId:item.courtId ? item.courtId.toString() : '',

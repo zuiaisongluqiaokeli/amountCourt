@@ -31,6 +31,7 @@
             :data="{fileType:qtwNames[0]}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
@@ -54,6 +55,7 @@
             :data="{fileType:qtwNames[1]}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
@@ -77,6 +79,7 @@
             :data="{fileType:qtwNames[2]}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
@@ -100,6 +103,7 @@
             :data="{fileType:qtwNames[3]}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>

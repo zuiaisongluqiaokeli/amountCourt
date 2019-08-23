@@ -2,11 +2,15 @@
 const manType = [{'t1': '1', 'name': '自然人'}, {'t1': '2', 'name': '法人'}, {'t1': '3', 'name': '非法人组织'}];
 // 第三人类型
 const thirdManType = [{'t1': '1', 'name': '自然人'}, {'t1': '2', 'name': '法人'}, {'t1': '3', 'name': '非法人组织'}];
+//角色类型
+const roleList=['贷款人','借款人','配偶','保证人','抵押人','质押人','第三方平台','投保人']
+
 
 // 自然人表单数据
 const accusedNatureList = {
   litigantType: '', // 当事人类别
   name: '', // 姓名
+  defendantStates:[],//角色
   identityCard: '', // 身份证号
   litigantBirthday: '', // 出生日期
   litigantSex: '男', // 性别
@@ -22,6 +26,7 @@ const accusedNatureList = {
 const accusedLegealList = {
   litigantType: '', // 当事人类别
   name: '', // 名称
+  defendantStates:[],//角色
   identityCard: '', // 社会统一信用代码
   address: '', // 注册地址
   businessLicense: '', // 单位证明文件
@@ -38,6 +43,7 @@ const accusedLegealList = {
 const accused_notLegealList = {
   litigantType: '', // 当事人类别
   name: '', // 名称
+  defendantStates:[],//角色
   identityCard: '', // 社会统一信用代码
   address: '', // 注册地址
   businessLicense: '', // 单位证明文件
@@ -55,6 +61,7 @@ const accused_obj={
   plantiffId:"plant_0", //自定义id
   accusedPlantNowIndex:0,  //类型数组下表
   litigantType:"自然人",  //类型
+  defendantStates:[],//角色
 
   //自然人
   name:"",  //名字
@@ -89,6 +96,9 @@ const accusedNatureRule = {
   name: [
     { required: true, message: '请输入姓名', trigger: 'blur' }
   ],
+  defendantStates: [
+    {type: "array", required: true, message: '请选择角色', trigger: 'blur' }
+  ],
   identityCard: [
     { required: true, message: '请输入身份证号', trigger: 'blur' },
     { type: "string", pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/, message: '身份证不匹配', trigger: 'blur' }
@@ -106,13 +116,13 @@ const accusedNatureRule = {
     { required: true, message: '请输入户籍地址', trigger: 'blur' }
   ],
   address: [
-    { required: true, message: '请输入常住地址', trigger: 'blur' }
+    { message: '请输入常住地址', trigger: 'blur' }
   ],
   serviceAddress: [
-    { message: '请输入文书送达地址', trigger: 'blur' }
+    { required: true, message: '请输入文书送达地址', trigger: 'blur' }
   ],
   phone: [
-    { required: true, message: '请输入电话号码', trigger: 'blur' },
+    { message: '请输入电话号码', trigger: 'blur' },
     { type: 'string', pattern: /^[1][0-9][0-9]{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
   ],
   businessLicense: [
@@ -131,8 +141,11 @@ const accusedLegalRule = {
   name: [
     { required: true, message: '请输入营业执照注册的主体名称(不区分中英文括号)', trigger: 'blur' }
   ],
+  defendantStates: [
+    {type: "array", required: true, message: '请选择角色', trigger: 'blur' }
+  ],
   identityCard: [
-    { message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
+    { required: true, message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
   ],
   address: [
     { required: true, message: '请输入注册地址', trigger: 'blur' }
@@ -169,6 +182,9 @@ const accusedNotLegalRule = {
   name: [
     { required: true, message: '请输入营业执照注册的主题名称(不区分中英文括号)', trigger: 'blur' }
   ],
+  defendantStates: [
+    {type: "array", required: true, message: '请选择角色', trigger: 'blur' }
+  ],
   identityCard: [
     { message: '请确认统一社会信用代码准确无误', trigger: 'blur' }
   ],
@@ -204,6 +220,7 @@ const accusedNotLegalRule = {
 
 const plantVialte = {
   manType,
+  roleList,
   thirdManType,
   accusedNatureRule,
   accusedLegalRule,

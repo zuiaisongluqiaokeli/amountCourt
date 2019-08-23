@@ -3,31 +3,31 @@
 </style>
 <template>
 <div class="courtcaseInfo">
-    <Row >
-        <Col span="24" class="change-tab">
-            <div @click="changeMenu('lian')" id="lian" class="selTab  tabOn">
+    <Row>
+        <Col span="24" class="change-tab" style="display:flex">
+            <div @click="changeMenu('lian')" id="lian" class="selTab tabOn">
                 <span>综合信息</span>
             </div>
-            <!-- <div @click="changeMenu('payfor')" id="payfor" class="selTab ">
-                <span>诉费信息</span>
-            </div> -->
-            <div @click="changeMenu('litigantInfo')" id="litigantInfo" class="selTab ">
+            <div @click="changeMenu('litigantInfo')" id="litigantInfo" class="selTab">
                 <span>当事人与代理人信息</span>
             </div>
-            <div @click="changeMenu('indictment')" id="indictment" class="selTab ">
+            <div @click="changeMenu('indictment')" id="indictment" class="selTab">
                 <span>起诉状</span>
             </div>
-            <div @click="changeMenu('materials')" id="materials" class="selTab ">
+            <div @click="changeMenu('materials')" id="materials" class="selTab">
                 <span>证明与委托材料</span>
             </div>
-            <div @click="changeMenu('evidences')" id="evidences" class="selTab ">
+            <div @click="changeMenu('evidences')" id="evidences" class="selTab">
                 <span>证据材料</span>
             </div>
-            <div @click="changeMenu('electarch')" id="electarch" class="selTab ">
+            <div @click="changeMenu('electarch')" id="electarch" class="selTab">
                 <span>电子卷宗</span>
             </div>
-            <div @click="changeMenu('timeAxis')" id="timeAxis" class="selTab" ref="timeAxis">
+            <div @click="changeMenu('timeAxis')" id="timeAxis" class="selTab">
                 <span>案件时间轴</span>
+            </div>
+            <div @click="changeMenu('tjAgreementSend')" id="tjAgreementSend" class="selTab">
+                <span>调解协议与送达回执</span>
             </div>
         </Col>
     </Row>
@@ -52,10 +52,12 @@
     <div v-show="showComponents == 'timeAxis'">
         <timeAxis ref="timeAxis"/>
     </div>
+    <div v-show="showComponents == 'tjAgreementSend'">
+        <tjAgreementSend ref="tjAgreementSend"/>
+    </div>
 </div>
 </template>
 <script>
-import { formatDate } from '@/libs/date'
 // 综合信息
 import setCaseInfo from "./components/setCaseInfo.vue";
 // 当事人与代理人信息
@@ -70,6 +72,8 @@ import evidences from "./components/evidences.vue";
 import timeAxis from "./components/timeAxis.vue";
 // 电子卷宗
 import electarch from "./components/electarch.vue";
+// 调解协议与送达回执
+import tjAgreementSend from "./components/tjAgreementSend.vue";
 export default {
     components: {
         setCaseInfo,
@@ -78,16 +82,13 @@ export default {
         materials,
         evidences,
         timeAxis,
-        electarch
+        electarch,
+        tjAgreementSend,
     },
     data(){
         return{
-            caseInfo:{
-
-            },
             showComponents:'lian',
             caseId:this.$store.getters.caseId,
-            isEviLoad:true,
         }
     },
     methods:{
@@ -101,70 +102,41 @@ export default {
             addClassN.classList.add('tabOn');
             this.showComponents = idName;
             console.log(this.showComponents)
-            if(idName == 'lian'){
-                this.$refs.setCaseInfo.lawCaseQuery(this.$store.getters.caseId);
-                // if(this.$store.getters.caseId){//提前加载证据文件
-                //     this.$refs.evidences.getEvidenceList();
-                // }
-            }
-            if(idName == 'litigantInfo'){
-                this.$refs.litigantInfo.onRefreshList();
-            }
-            if(idName == 'indictment'){
-                this.$refs.indictment.getIndictment();
-            }
-            if(idName == 'materials'){
-                this.$refs.materials.getMaterials();
-            }
-            if(idName == 'evidences'){
-                this.$refs.evidences.getEvidenceList();
-            }
-            if(idName == 'timeAxis'){
-                this.$refs.timeAxis.getProcessNote();
-            }
-            if(idName == 'electarch'){
-                this.$refs.electarch.ft_elec_init();
+            switch (idName) {
+                case 'lian':
+                    this.$refs.setCaseInfo.lawCaseQuery(this.$store.getters.caseId);
+                break;
+                case 'litigantInfo':
+                    this.$refs.litigantInfo.onRefreshList();
+                break;
+                case 'indictment':
+                    this.$refs.indictment.getIndictment();
+                break;
+                case 'materials':
+                    this.$refs.materials.getMaterials();
+                break;
+                case 'evidences':
+                    this.$refs.evidences.getEvidenceList();
+                break;
+                case 'timeAxis':
+                    this.$refs.timeAxis.getProcessNote();
+                break;
+                case 'electarch':
+                    this.$refs.electarch.ft_elec_init();
+                break;
+                case 'tjAgreementSend':
+                    this.$refs.tjAgreementSend.init();
+                break;
             }
         },
     },
-    filters: {
-      formatDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd');
-      },
-      whether(boole) {
-          return boole ? '是' : '否';
-      },
-      filCheck(boole) {
-          return boole == 0 ? '未确认' : '已确认';
-      },
-      formatStartDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd hh:mm');
-      }
-    },
-    // mounted: {
-    //     // changeMemberTab() {
-    //     // return this.$store.getters.caseId;
-    //     // }
-    // },
     watch:{
         "$store.getters.caseId":function(){
             let that = this;
             setTimeout(function(){
                 that.changeMenu('lian')
-             }, 500);
-
+            }, 500);
         }
-        // changeMemberTab(val) {
-        //     this.changeMenu('lian')
-        // }
     }
 
 }

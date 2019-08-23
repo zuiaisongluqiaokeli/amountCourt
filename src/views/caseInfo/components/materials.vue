@@ -31,6 +31,7 @@
             :data="{fileType:'原告身份证明文件'}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
@@ -54,6 +55,7 @@
             :data="{fileType:'代理人身份证明文件'}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
@@ -77,6 +79,7 @@
             :data="{fileType:'授权与所函/劳动合同或公积金缴交证明'}"
             :multiple="true"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="evi_uploadSuccess"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>

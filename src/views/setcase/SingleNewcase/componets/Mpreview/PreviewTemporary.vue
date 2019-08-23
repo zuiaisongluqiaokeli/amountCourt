@@ -25,7 +25,7 @@
       class="ft-agent-footer"
       style="margin-top:50px;text-align:center"
     >
-      <a href="javascript:void(0)" class="ft-magent-btn4" @click="mSendBacktoStep4">返回上一步</a>
+      <a href="javascript:void(0)" class="ft-magent-btn4" @click="mSendBacktoStep4" v-if="isUpStepShow">返回上一步</a>
       <a
         href="javascript:void(0)"
         class="ft_public3 ft-agent-btn1 ft-magent-btn1"
@@ -59,6 +59,7 @@ export default {
       mEviTableShow: 1, //表格显示状态
       mEvidenceStatus: false, //全选反选状态
       mEvidenceHasSelectList: [], //已经要素列表
+      isUpStepShow:true,//是否显示上一步按钮
       pageNumber: 1,//当前第几页
       pageSize: 10,//每页几条
       total: 0,//总条数
@@ -186,6 +187,7 @@ export default {
       let data=res.data.data;
       this.mEvidenceKeyInfoList = data.lawCaseList;
       this.total = data.total;
+      this.isUpStepShow=false;
     },
     //接收上一步骤的list
     mreReceiveList(payload) {
@@ -241,6 +243,7 @@ export default {
 
     //继续添加新案件
     mEvidence_addMany() {
+      this.isUpStepShow=true;
       this.$emit('toNextStep',{type:'浏览与暂存',state:'continue'});
     },
 

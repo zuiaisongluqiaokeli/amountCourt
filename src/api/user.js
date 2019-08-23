@@ -155,7 +155,7 @@ export function personRegist (data) {
     });
 }
 
-//发送手机验证码
+//注册发送手机验证码
 export function sendPhoneCode (data) {
     const params =  data;
     return service({
@@ -189,6 +189,26 @@ export function getRnd () {
     return service({
         url: '/court/login/getRnd.jhtml',
         method: 'get',
+    });
+}
+
+//重置密码发送手机验证码
+export function sendPhoneCodefindPw (data) {
+    const params =  data;
+    return service({
+        url: '/court/register/sendPhoneCodefindPw.jhtml',
+        method: 'get',
+        params
+    });
+}
+
+//重置密码
+export function forgetPassword (data) {
+    const params =  data;
+    return service({
+        url: '/court/login/forgetPassword.jhtml',
+        method: 'get',
+        params
     });
 }
 

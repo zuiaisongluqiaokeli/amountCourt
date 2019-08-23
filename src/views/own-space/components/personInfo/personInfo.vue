@@ -1,103 +1,80 @@
 <template>
   <div class="ownInfo">
     <!-- 代理人和当事人登陆 -->
-    <!-- 自然人信息 -->
+    <!-- 当事人信息 -->
     <div class="bookbuilding-table" v-show="isNatureInfo">
       <Row>
-        <Col span="24" class="noemalTb th-header">自然人身份信息</Col>
+        <Col span="24" class="noemalTb th-header">当事人身份信息</Col>
       </Row>
       <Card>
         <Row class="topline-border right-border">
           <Col span="2" class="noemalTb tb-head textCenter">当事人类型</Col>
-          <Col span="4" class="noemalTb">
-            <Select transfer style="width:100%" disabled v-model="personInfo.agentType">
-              <Option value="法人" label="法人">
-                <span>法人</span>
-                <span>非法人组织</span>
-                <span>代理人</span>
-              </Option>
-            </Select>
+          <Col span="4" class="noemalTb textLeft">
+            <span>{{personInfo.agentType ? personInfo.agentType : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">姓名</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.name}}</span>
+            <span>{{personInfo.name ? personInfo.name : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">当事人证件</Col>
-          <Col span="4" class="noemalTb">
-            <Select transfer disabled style="width:100%" v-model="personInfo.cardType">
-              <Option value="身份证" label="身份证">
-                <span>身份证</span>
-              </Option>
-            </Select>
+          <Col span="4" class="noemalTb textLeft">
+            <span>身份证</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">当事人证件号码</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.idcard}}</span>
+            <span>{{personInfo.idcard ? personInfo.idcard : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">性别</Col>
           <Col span="4" class="noemalTb">
-            <Select transfer v-model="personInfo.sex" disabled style="width:100%">
-              <Option value="男" label="男">
-                <span>男</span>
-              </Option>
-              <Option value="女" label="女">
-                <span>女</span>
-              </Option>
-            </Select>
+            <span>{{personInfo.sex ? personInfo.sex : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">出生日期</Col>
           <Col span="4" class="noemalTb textLeft">
-            <DatePicker
-              type="datetime"
-              v-model="personInfo.birthday"
-              :disabled="isDatePickerShow"
-              placeholder="请选择时间"
-              style="width:100%"
-            ></DatePicker>
+            <span>{{personInfo.birthday ? personInfo.birthday : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">民族</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.nation}}</span>
+            <span>{{personInfo.nation ? personInfo.nation : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">手机号码</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.phone}}</span>
+            <span>{{personInfo.phone ? personInfo.phone : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">电子邮箱</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.email}}</span>
+            <span>{{personInfo.email ? personInfo.email : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">工作单位</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.companyName}}</span>
+            <span>{{personInfo.companyName ? personInfo.companyName : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">单位地址</Col>
           <Col span="10" class="noemalTb textLeft">
-            <span>{{personInfo.workAddress}}</span>
+            <span>{{personInfo.workAddress ? personInfo.workAddress : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">户籍地址</Col>
           <Col span="22" class="noemalTb textLeft">
-            <span>{{personInfo.address}}</span>
+            <span>{{personInfo.address ? personInfo.address : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">经常居住地址</Col>
           <Col span="22" class="noemalTb textLeft">
-            <span>{{personInfo.offtenAddress}}</span>
+            <span>{{personInfo.offtenAddress ? personInfo.offtenAddress : "暂无"}}</span>
           </Col>
         </Row>
-        <div class="textCenter editBtnDiv">
+        <!-- <div class="textCenter editBtnDiv">
           <Button type="primary" shape="circle" class="editBtn">编辑</Button>
-        </div>
+        </div> -->
         <div class="edit-msg">
           <div>
-            <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span>
+            <!-- <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span> -->
             <span>信息不可删除，除向法院申请账号注销</span>
           </div>
         </div>
@@ -111,70 +88,52 @@
       <Card>
         <Row class="topline-border right-border">
           <Col span="2" class="noemalTb tb-head textCenter">代理人类型</Col>
-          <Col span="4" class="noemalTb">
-            <Select transfer style="width:100%" disabled v-model="agentInfo.lawyerType">
-              <Option value="律师" label="律师">
-                <span>律师</span>
-              </Option>
-            </Select>
+          <Col span="4" class="noemalTb textLeft">
+            <span>{{agentInfo.lawyerType ? agentInfo.lawyerType : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">姓名</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{agentInfo.lawyerName}}</span>
+            <span>{{agentInfo.lawyerName ? agentInfo.lawyerName : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">代理人证件</Col>
-          <Col span="4" class="noemalTb">
-            <Select transfer disabled style="width:100%" v-model="agentInfo.lawyerTypeId">
-              <Option value="身份证" label="身份证">
-                <span>身份证</span>
-              </Option>
-              <Option value="律师证" label="律师证">
-                <span>律师证</span>
-              </Option>
-            </Select>
+          <Col span="4" class="noemalTb textLeft">
+            <span>律师证</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">代理人证件号码</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{agentInfo.lawyerIdNum}}</span>
+            <span>{{agentInfo.lawerNum ? agentInfo.lawerNum : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">代理人手机号</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{agentInfo.lawyerPhone}}</span>
+            <span>{{agentInfo.lawyerPhone ? agentInfo.lawyerPhone : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">代理人邮箱</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{agentInfo.lawyerEmail}}</span>
+            <span>{{agentInfo.lawyerEmail ? agentInfo.lawyerEmail : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">公民身份证号</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{agentInfo.lawyerIdcard}}</span>
+            <span>{{personInfo.lawyerIdcard ? personInfo.lawyerIdcard : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">代理授权类型</Col>
-          <Col span="4" class="noemalTb">
-            <Select transfer disabled style="width:100%" v-model="agentInfo.agentType">
-              <Option value="一般授权" label="一般授权">
-                <span>一般授权</span>
-              </Option>
-              <Option value="特别授权" label="特别授权">
-                <span>特别授权</span>
-              </Option>
-            </Select>
+          <Col span="4" class="noemalTb textLeft">
+            <span>{{agentInfo.agentType ? agentInfo.agentType : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border" v-for="(item,index) in agentInfo.lawyerAddress">
           <Col span="2" class="noemalTb tb-head textCenter">{{item.addressType}}</Col>
           <Col span="22" class="noemalTb textLeft">
-            <span>{{item.address}}</span>
+            <span>{{item.address ? item.address : "暂无"}}</span>
           </Col>
         </Row>
-        <div class="textCenter editBtnDiv">
+        <!-- <div class="textCenter editBtnDiv">
           <Button type="primary" shape="circle" class="editBtn">编辑</Button>
-        </div>
+        </div> -->
         <div class="edit-msg">
           <div>
-            <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span>
+            <!-- <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span> -->
             <span>信息不可删除，除向法院申请账号注销</span>
           </div>
         </div>
@@ -190,45 +149,45 @@
         <Row class="topline-border right-border">
           <Col span="2" class="noemalTb tb-head textCenter">姓名</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.name}}</span>
+            <span>{{personInfo.name ? personInfo.name : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">公民身份证号</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.idCard}}</span>
+            <span>{{personInfo.idCard ? personInfo.idCard : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">出生</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.birthday}}</span>
+            <span>{{personInfo.birthday ? personInfo.birthday : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">性别</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.sex}}</span>
+            <span>{{personInfo.sex ? personInfo.sex : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">民族</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.nation}}</span>
+            <span>{{personInfo.nation ? personInfo.nation : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">手机号</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.telphone}}</span>
+            <span>{{personInfo.telphone ? personInfo.telphone : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">电子邮箱</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.email}}</span>
+            <span>{{personInfo.email ? personInfo.email : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">联系地址</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{personInfo.trueAddress}}</span>
+            <span>{{personInfo.trueAddress ? personInfo.trueAddress : "暂无"}}</span>
           </Col>
         </Row>
-        <div class="textCenter editBtnDiv">
+        <!-- <div class="textCenter editBtnDiv">
           <Button type="primary" shape="circle" class="editBtn">编辑</Button>
-        </div>
+        </div> -->
         <div class="edit-msg">
           <div>
-            <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span>
+            <!-- <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span> -->
             <span>信息不可删除，除向法院申请账号注销</span>
           </div>
         </div>
@@ -243,33 +202,33 @@
         <Row class="topline-border right-border">
           <Col span="2" class="noemalTb tb-head textCenter">姓名</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{workInfo.name}}</span>
+            <span>{{workInfo.name ? workInfo.name : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">所属部门</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{workInfo.court.name}}</span>
+            <span>{{workInfo.court.name ? workInfo.court.name : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">职务/岗位</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{workInfo.judgeType}}</span>
+            <span>{{workInfo.judgeType ? workInfo.judgeType : "暂无"}}</span>
           </Col>
           <Col span="2" class="noemalTb tb-head textCenter">办公电话</Col>
           <Col span="4" class="noemalTb textLeft">
-            <span>{{workInfo.telephone}}</span>
+            <span>{{workInfo.telephone ? workInfo.telephone : "暂无"}}</span>
           </Col>
         </Row>
         <Row class="right-border">
           <Col span="2" class="noemalTb tb-head textCenter">工作邮箱</Col>
           <Col span="22" class="noemalTb textLeft">
-            <span>{{personInfo.email}}</span>
+            <span>{{personInfo.email ? personInfo.email : "暂无"}}</span>
           </Col>
         </Row>
-        <div class="textCenter editBtnDiv">
+        <!-- <div class="textCenter editBtnDiv">
           <Button type="primary" shape="circle" class="editBtn">编辑</Button>
-        </div>
+        </div> -->
         <div class="edit-msg">
           <div>
-            <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span>
+            <!-- <span>此处的信息编辑不会影响到案件中的当事人信息，该信息仅提供立案时智能填充用。</span> -->
             <span>信息不可删除，除向法院申请账号注销</span>
           </div>
         </div>
@@ -335,29 +294,6 @@ export default {
         if (res.data.state == 100) {
           var data = res.data.data;
           switch (this.$store.getters.roLeName) {
-            case "法官":
-              this.isBaseInfo = true; //显示基础信息
-              this.isWorkInfo = true; //显示职务信息
-              if (data.baseInfo) {
-                this.personInfo = {
-                  name: data.baseInfo.name,
-                  idCard: data.baseInfo.idCard,
-                  sex: data.baseInfo.sex,
-                  birthday: data.baseInfo.birthday,
-                  nation: data.baseInfo.nation,
-                  telphone: data.baseInfo.telphone,
-                  email: data.baseInfo.email,
-                  trueAddress: data.baseInfo.trueAddress
-                };
-                this.workInfo = {
-                  name: data.workInfo.name,
-                  court: data.workInfo.court,
-                  judgeType: data.workInfo.judgeType,
-                  telephone: data.workInfo.telephone,
-                  identity: data.workInfo.identity
-                };
-              }
-              break;
             case "代理人":
               this.isNatureInfo = true; //显示基础信息
               this.isAgentInfo = true; //显示代理人信息
@@ -382,6 +318,7 @@ export default {
 
               //代理人信息
               if (data.agentInfo) {
+                console.log("123123123",data)
                 this.agentInfo = {
                   lawyerType: data.agentInfo.agentType,
                   lawyerName: data.agentInfo.name,
@@ -418,6 +355,29 @@ export default {
                   workAddress: data.baseInfo.workAddress,
                   address: data.baseInfo.address,
                   offtenAddress: data.baseInfo.offtenAddress
+                };
+              }
+              break;
+            default:
+              this.isBaseInfo = true; //显示基础信息
+              this.isWorkInfo = true; //显示职务信息
+              if (data.baseInfo) {
+                this.personInfo = {
+                  name: data.baseInfo.name,
+                  idCard: data.baseInfo.idCard,
+                  sex: data.baseInfo.sex,
+                  birthday: data.baseInfo.birthday,
+                  nation: data.baseInfo.nation,
+                  telphone: data.baseInfo.telphone,
+                  email: data.baseInfo.email,
+                  trueAddress: data.baseInfo.trueAddress
+                };
+                this.workInfo = {
+                  name: data.workInfo.name,
+                  court: data.workInfo.court,
+                  judgeType: data.workInfo.judgeType,
+                  telephone: data.workInfo.telephone,
+                  identity: data.workInfo.identity
                 };
               }
               break;

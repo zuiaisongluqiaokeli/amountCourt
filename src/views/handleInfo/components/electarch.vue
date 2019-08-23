@@ -18,6 +18,7 @@
         <ul v-show='ft_elec_hasBook===2'>
           <li
           v-for="(val,index) in ft_elect_fileList"
+          :key="index"
           class="ft-elec-books-li"
           :class="ft_elect_active==index?'ft-elec-book-li-active':''"
           @click="ft_elect_viewBooks(val,index)"
@@ -34,7 +35,8 @@
       </div>
     </div>
     <div class='ft-elect-showArea'>
-      <iframe :src="ft_elect_pdfViewer" frameborder="0" width="100%" height="600px"></iframe>
+      <!-- <iframe :src="ft_elect_pdfViewer" frameborder="0" width="100%" height="600px"></iframe> -->
+      <zh-viewer :viewerId="'file'" :fileUrls="ft_elect_pdfViewer" @setNowItem="setNowItem"></zh-viewer>
     </div>
   </div>
 </template>
@@ -43,22 +45,26 @@
 
 <script>
 import { ft_getElecArchInfo,fileList,textwww,decDiploms } from "@/api/casetemp.js";
+import ZhViewer from "@/components/moreFileViewer/moreFileViewer.vue";
 export default {
+  components: {
+    ZhViewer
+  },
   data () {
     return {
       ft_elect_Indexactive:0,
       ft_elect_active:0,
       ft_elec_hasBook:1,
-      ft_elect_pdfViewer:'',
+      ft_elect_pdfViewer:[],
       ft_elect_indexList:[],
       ft_elect_fileList:[],
     }
   },
+
   computed :{
     ft_Elect_isDevEnv () {
       let Envpro = location.protocol;
       let EnvdoName = location.host;
-      EnvdoName = EnvdoName==='localhost:8080'?'47.105.189.44:8880':EnvdoName;
       let requestUrl = Envpro+'//'+EnvdoName
       return requestUrl;
     },
@@ -68,7 +74,7 @@ export default {
     ft_elec_init(){
       this.ft_elec_hasBook =1;
       this.ft_elect_Indexactive = 0;
-      this.ft_elect_pdfViewer = '';
+      this.ft_elect_pdfViewer = [];
       this.$Message.loading({content: '正在加载文件目录,请稍后...', duration: 0});
       //获取目录
       let params = {
@@ -102,15 +108,32 @@ export default {
         this.$Message.destroy();
         if(res.data.state === 100) {
           let data=res.data.data;
-          this.ft_elect_pdfViewer = this.ft_Elect_isDevEnv+'/'+data.result;
+          //保证每次添加不重复
+          if(this.ft_elect_pdfViewer.indexOf(data.result)>-1){
+            console.log("99999",this.ft_elect_pdfViewer.indexOf(data.result))
+            let index=this.ft_elect_pdfViewer.indexOf(data.result);
+            this.ft_elect_pdfViewer.splice(index,1)
+          }
+          this.ft_elect_pdfViewer.push(data.result);
         }else{
           this.$Message.error(res.data.message);
         }
       });
     },
+    setNowItem(nowUrl){//设置当前选中项
+      //提取文件名
+      let fileName=nowUrl.split('/')[nowUrl.split('/').length-1]
+      console.log(fileName)
+      console.log(this.ft_elect_fileList)
+      //查找数组对象属性中相同文件名的索引
+      this.ft_elect_active= this.ft_elect_fileList.findIndex((value, index, arr) => {
+        return value.fileName==fileName
+      })
+    },
     //更改案宗目录
     ft_elect_chgIndex(index) {
       this.ft_elect_Indexactive = index;
+      this.ft_elect_pdfViewer=[];
       console.log(this.ft_elect_indexList)
       if(this.ft_elect_indexList[index].caseFileList.length !== 0) {
         this.ft_elect_active = 0;

@@ -9,7 +9,7 @@
                 <Button size='large' @click="showGO" style="background:#2083D8;float:right;margin-right:15px;"  type="primary" >分案选中的案件</Button>
                 <Button size='large' @click="getExcel" style="background:#2083D8;float:right;margin-right:15px;"  type="primary"  :loading="excelLoading">导出选中的案件</Button>
                 <Button size='large' @click="setInside" style="background:#2083D8;float:right;margin-right:15px;"  type="primary" :loading="setInsideLoading">为选中的案件导出到内网</Button>
-                  <!-- <Button size='large' @click="showRject" style="background:#F54C4C;color:#fff" >驳回选中的案件</Button> -->
+                  <!-- <Button size='large' @click="showRject" style="background:#F54C4C;color:#fff" >退回选中的案件</Button> -->
                   <Button size='large' @click="addBatchList"  style="background:#2083D8;color:#fff;float:left;margin-right:15px;" >添加案件到批量工作列表</Button>
                   <Dropdown  class="dropMenu"  @on-click="handleDropdown">
                     <Button size='large' type="primary">

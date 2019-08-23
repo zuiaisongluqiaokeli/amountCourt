@@ -27,6 +27,7 @@ const getters = {
     roLeName: state => state.app.roLeName,
     userIdCard: state => state.app.userIdCard,
     userName: state => state.app.userName,
+    userId: state => state.app.userId,
     isCl: state => state.app.isCl,
     batchCache: state => state.batch.batchCache
 };

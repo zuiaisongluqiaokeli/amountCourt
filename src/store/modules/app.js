@@ -31,8 +31,9 @@ const app = {
         ], // 面包屑数组
         menuList: [],//菜单权限列表
         tabList:[],//选项卡权限列表
-        userIdCard:[],//用户id
-        userName:"",//用户id
+        userIdCard:[],//用户身份证
+        userName:"",//用户名
+        userId:"",//用户id
         roLeName:"",    //角色
         caseId: '', //案件id
         breifName: '', //案件案由
@@ -67,6 +68,9 @@ const app = {
         },
         SET_USERNAME: (state, USERNAME) => {
             state.userName = USERNAME;
+        },
+        SET_USERID: (state, USERID) => {
+            state.userId = USERID;
         },
         SET_ROLENAME: (state, ROLENAME) => {
             state.roLeName = ROLENAME;

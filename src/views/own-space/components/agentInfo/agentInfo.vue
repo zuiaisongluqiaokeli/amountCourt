@@ -94,7 +94,7 @@
 
                     <!-- <FormItem label="律所函" class="ft_form zh-plant-upload" prop="businessLicenseUp1">
                         <Input v-model="lawyerList.businessLicenseUp1"></Input>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'律所函',id:agPlantBox.plantiffId}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'律所函',id:agPlantBox.plantiffId}">
                             <Button type="ghost" icon="ios-cloud-upload-outline" style="width:100%">选择文件</Button>
                         </Upload>
                     </FormItem>
@@ -104,8 +104,9 @@
 
                     <FormItem label="律师执业证" class="ft_form zh-plant-upload" prop="businessLicenseUp2">
                         <Input v-model="lawyerList.businessLicenseUp2"></Input>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'律师执业证',id:agPlantBox.plantiffId}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'律师执业证',id:agPlantBox.plantiffId}">
                             <Button type="ghost" icon="ios-cloud-upload-outline" style="width:100%">选择文件</Button>
+                            <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                         </Upload>
                     </FormItem>
                     <FormItem class="sexType">
@@ -114,7 +115,7 @@
 
                     <!-- <FormItem label="委托书" class="ft_form zh-plant-upload" prop="businessLicenseUp3">
                         <Input v-model="lawyerList.businessLicenseUp3"></Input>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'委托书',id:agPlantBox.plantiffId}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'委托书',id:agPlantBox.plantiffId}">
                             <Button type="ghost" icon="ios-cloud-upload-outline" style="width:100%">选择文件</Button>
                         </Upload>
                     </FormItem>

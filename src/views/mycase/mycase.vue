@@ -173,7 +173,7 @@
           <TabPane name="案件信息" label="案件信息">
             <!-- <caseInfo /> -->
           </TabPane>
-          <TabPane name="庭审排期信息" label="庭审排期信息" v-if="lawOrLiti"></TabPane>
+          <TabPane name="庭审排期信息" label="庭审排期信息"></TabPane>
           <TabPane name="受送达文书" label="受送达文书">
             <!-- <dipsmos /> -->
           </TabPane>
@@ -244,7 +244,6 @@ export default {
   data() {
     var width = window.innerWidth - 100;
     return {
-      lawOrLiti: true,
       loading: true,
       modalWidth: width,
       onedata: [],
@@ -357,28 +356,27 @@ export default {
           width: 150,
           align: "center",
           render: (h, params) => {
-            if (params.row.progress == "立案申请") {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      size: "small",
-                      type: "primary"
-                    },
-                    on: {
-                      click: () => {
-                        this.$refs.info.init();
-                        this.modal4 = true;
-                      }
-                    }
+            this.$store.commit("SET_CASEID", params.row.lawCaseId);
+            this.$store.commit("SET_BREIFNAME", params.row.briefName); //获取案由并保存（子选项卡需要用到，勿删）
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    size: "small",
+                    type: "primary"
                   },
-                  "补充与修改"
-                )
-              ]);
-            } else {
-              return h("span", "暂无操作");
-            }
+                  on: {
+                    click: () => {
+                      this.stopPropagation();//阻止事件冒泡
+                      this.$refs.info.init();
+                      this.modal4 = true;
+                    }
+                  }
+                },
+                "补充与修改"
+              )
+            ]);
           }
         }
       ],
@@ -392,11 +390,6 @@ export default {
   methods: {
     //初始化数据
     init() {
-      //代理人没有庭审排期信息面板
-      if (this.$store.getters.roLeName == "代理人") {
-        this.lawOrLiti = false;
-      }
-      console.log(this.lawOrLiti);
       this.isClick = false;
       this.getUserList();
     },
@@ -489,6 +482,15 @@ export default {
         this.searchForm.order = "";
       }
       this.getUserList();
+    },
+    //阻止事件冒泡
+    stopPropagation(e) { 
+        e = e || window.event; 
+        if(e.stopPropagation) { //W3C阻止冒泡方法 
+            e.stopPropagation(); 
+        } else { 
+            e.cancelBubble = true; //IE阻止冒泡方法 
+        } 
     },
     //展开与收起按钮
     dropDown() {

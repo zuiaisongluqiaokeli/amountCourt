@@ -51,7 +51,50 @@
 .reg_card{
     min-height:600px;
 }
+
+.formStyle {
+    margin: 0 auto;
+    padding-top: 50px;
+    padding-bottom: 40px;
+    text-align: left;
+}
+
 .zh-plant-div{
     width: 100%;
     text-align: center;
+}
+
+.zh-plant-chooseType>.ivu-form-item-label {
+    color: #2F60BD !important;
+    font-size: 16px !important;
+}
+
+.zh-plant-chooseType>.ivu-form-item-label {
+    color: #2F60BD !important;
+    font-size: 16px !important;
+}
+.zh-plant-chooseType .ivu-select-selection{
+    border-radius: 30px;
+    width: 420px;
+}
+
+.zh-getCodeBtn {
+    width: 150px;
+    background-color: #3162BE;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.zh-nextBtnDiv {
+    margin-top: 10px !important;
+    margin-bottom: 10px;
+}
+  
+.nextBtn {
+    width: 300px;
+    height: 40px;
+    background-color: #3162be!important;
+    font-size: 14px!important;
 }

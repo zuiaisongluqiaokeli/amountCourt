@@ -29,7 +29,7 @@
             @on-change="selJudge"
             style="width: 185px"
           >
-            <Option v-for="(item) in tribunalList" :value="item.id" :key="item.id">{{item.name}}</Option>
+            <Option v-for="(item,index) in tribunalList" :value="item.id" :key="index">{{item.name}}</Option>
           </Select>
         </Form-item>
         <Form-item label="开庭时间" class="selr" prop="timeList">
@@ -55,6 +55,7 @@
             <ul>
               <li
                 v-for="(item, index) in timeList"
+                :key="index"
                 :class="{ 'checked': item.isCheck, 'disable': !item.able }"
                 @click="selectTimeVal(index)"
               >{{ item.value }}</li>
@@ -66,7 +67,7 @@
             style="width:200px;margin-left:165px;"
           >
             <ul>
-              <li v-for="(item, index) in caseNoList" @click="detailM(item.id)">{{item.caseNo}}</li>
+              <li v-for="(item, index) in caseNoList" @click="detailM(item.id)" :key="index">{{item.caseNo}}</li>
               <!-- <li >暂无排期案件</li>                -->
             </ul>
           </div>
@@ -119,10 +120,6 @@
       </div>
     </div>
     <div
-      style="position: fixed;top:0;left:0;z-index:9999;width:100%;height:100%;background:#000;opacity:0.5"
-      v-show="modal2back"
-    ></div>
-    <div
       class="noneShow"
       v-show="modal2"
       style="width:200px;position: fixed;top: 20px;z-index: 99999;left: 50%;margin-left: -100px;background: #fff;border-radius: 15px;"
@@ -152,11 +149,11 @@
           @on-change="selCourt2"
           style="width: 185px"
         >
-          <Option v-for="(item) in courtList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in courtList" :value="item.id" :key="index">{{item.name}}</Option>
         </Select>
       </div>
       <div class="ivu-modal-footer">
-        <Button @click="modal3 = false;modal2back = false" type="dashed" size="large">关闭</Button>
+        <Button @click="modal3 = false" type="dashed" size="large">关闭</Button>
       </div>
     </div>
     <div
@@ -181,7 +178,7 @@
         </Select>
       </div>
       <div class="ivu-modal-footer">
-        <Button @click="modal4 = false;modal2back = false" type="dashed" size="large">关闭</Button>
+        <Button @click="modal4 = false" type="dashed" size="large">关闭</Button>
       </div>
     </div>
   </div>
@@ -211,7 +208,6 @@ export default {
             modal2:false,
             modal3:false,
             modal4:false,
-            modal2back:false,
             tribunalList2:[],
             dexSel:"",
             tribunalIds:"",
@@ -241,7 +237,7 @@ export default {
                 disabledDate: date => {
                 let array = this.disabledDateArr;
                 return (
-                    (date && date.valueOf() < Date.now()) ||
+                    // (date && date.valueOf() < Date.now()) ||
                     (date && array.indexOf(new Date(date).getTime()) !== -1)
                 );
                 }
@@ -318,10 +314,8 @@ export default {
                                                 this.selRow = this.listData[params.index];
                                                 this.searchForm.mkks = this.selRow.courtId ? this.selRow.courtId : "";
                                                 this.dexSel = params.index;
-                                                this.modal2back = true;
                                                 console.log(this.selRow)
                                                 console.log(this.selRow.courtId)
-                                                console.log(this.modal2back)
                                             }
                                         },
                                     },
@@ -350,19 +344,18 @@ export default {
                                         on: {
                                             click: () => {
                                                 console.log(this.listData[params.index]);
-                                                if(!this.listData[params.index].tribunalList){
-                                                    this.$Notice.warning({
-                                                        title: '',
-                                                        desc: '请先选择开庭地点',
-                                                        duration: 5
-                                                    });
-                                                    return false;
-                                                }
+                                                if (!this.listData[params.index].courtId) {
+                                                this.$Notice.warning({
+                                                    title: "",
+                                                    desc: "请先选择开庭地点",
+                                                    duration: 5
+                                                });
+                                                return;
+                                                } else {
                                                 this.modal4 = true;
-                                                this.tribunalIds = this.listData[params.index].tribunalId ? this.listData[params.index].tribunalId : "";
-                                                this.tribunalList2 = this.listData[params.index].tribunalList;
                                                 this.dexSel = params.index;
-                                                this.modal2back = true;
+                                                this.selCourt2(this.listData[params.index].courtId);
+                                                }
                                             }
                                         },
                                     },
@@ -378,15 +371,6 @@ export default {
                     width: 170,
                     align: 'center',
                     render: (h, params) => {
-                        let dateOptions = {
-                            disabledDate: date => {
-                            let array = this.listData[params.index].disabledDateArr ? this.listData[params.index].disabledDateArr : "";
-                            return (
-                                (date && date.valueOf() < Date.now()) ||
-                                (date && array.indexOf(new Date(date).getTime()) !== -1)
-                            );
-                            }
-                        }
                         let aUUI = [];
                         aUUI.push(
                             h('Icon',
@@ -455,7 +439,7 @@ export default {
                                             
                                             on: {
                                                 click: () => {
-                                                    if(!this.listData[params.index].tribunalId || this.listData[params.index].tribunalId == ''){
+                                                    if(!this.listData[params.index].tribunalName || this.listData[params.index].tribunalName == ''){
                                                         this.$Notice.warning({
                                                             title: '',
                                                             desc: '请先选择审判庭室！',
@@ -464,7 +448,6 @@ export default {
                                                         return false;
                                                     }
                                                     this.modal2 = true;
-                                                    this.modal2back = true;
                                                     this.selRow = this.listData[params.index];
                                                     return false;
                                                 }
@@ -577,7 +560,7 @@ export default {
             if (this.selectTime) {
                 this.selectTime = false;
             }
-            holiday(this.judgeId).then(res => {
+            holiday().then(res => {
                 if (res.data.state == 100) {
                 res.data.data.holidays.map((item, index) => {
                     pushArr.push(item.date);
@@ -642,188 +625,161 @@ export default {
 
         },
         save(){
-            if(this.listData.length < 1){
+            if (this.listData.length < 1) {
                 this.$Notice.warning({
-                    title: '',
-                    desc: '您还未选择需要操作的案件',
-                    duration: 5
+                title: "",
+                desc: "您还未选择需要操作的案件",
+                duration: 5
                 });
                 return false;
             }
-            // this.buttonLoading = true;
             let ary = [];
             this.isWornning = false;
             this.isError = false;
-            let hasDayTime=true;//是否有选择日期
-            let hasTribunalId=true;//是否有选择审判庭室
-            let hasStartDate=true;//是否有选择排班时间
+            let strings = "";
+
             this.listData.map(item => {
-                if(!item.dayTimes){
-                    hasDayTime=false
-                }
-                if(!item.tribunalId){
-                    hasTribunalId=false
-                }
-                if(!item.selTime){
-                    hasStartDate=false
-                }
+                let str = item.selTime.split(" ")[0];
                 const data = {
-                    lawCaseId:item.lawCaseId.toString(),  //案件id
-                    dayTimes:item.dayTimes ? item.dayTimes.toString() : '',
-                    tribunalId:item.tribunalId ? item.tribunalId.toString() : '',
-                    startDate:item.selTime ? item.selTime.split(" ")[0] : '',
+                lawCaseId: item.lawCaseId.toString(), //案件id
+                dayTimes: item.dayTimes ? item.dayTimes.toString() : "",
+                tribunalId: item.tribunalId ? item.tribunalId.toString() : "",
+                startDate: str
+                };
+
+                if (!item.dayTimes || item.dayTimes == "") {
+                strings = strings + item.caseNo + "；";
                 }
-                ary.push(data)
-            })
-            if(!hasDayTime || !hasStartDate){
-                this.$Notice.warning({
-                    title: '有案件未设置庭审日期！',
-                    duration: 5
-                });
-                return false
+                console.log(strings);
+                ary.push(data);
+            });
+
+            if (strings != "") {
+                this.reason2 = strings;
+                this.isWornning = true;
+                return false;
             }
-            if(!hasTribunalId){
-                this.$Notice.warning({
-                    title: '有案件未选择审判庭室！',
-                    duration: 5
-                });
-               return false
-            }
-            console.log(ary)
+            console.log(ary);
             this.buttonLoading = true;
-            
             batchScheduldingLawCaseList(ary).then(res => {
                 this.buttonLoading = false;
-                if(res.data.state == 100){
-                    this.$Notice.success({
-                        title: '',
-                        desc: res.data.message,
-                        duration: 3
-                    });
-                    this.reSetList(this.listData)//重置父组件数据
-                    this.$emit("cancelEvent");
-                }else if(res.data.state == 104){
-                    this.isError = true;
-                    this.successNumber = res.data.data.success;
-                    this.failedNumber = res.data.data.error;
-                    this.reason = res.data.message;
-                    //剔除成功案件，显示错误案件
-                    let errorAry = [];
-                    let successAry=[];
-                    for(let i=0;i<this.listData.length;i++){
-                        var mark=0;
-                        for(let j=0;j<res.data.data.errorIdList.length;j++){
-                            if(res.data.data.errorIdList[j] == this.listData[i].lawCaseId){
-                                mark=1
-                                errorAry.push(this.listData[i])//错误案件
-                            }
-                        }
-                        if(mark==0){
-                            successAry.push(this.listData[i])//正确案件
-                        }
+                if (res.data.state == 100) {
+                this.$Notice.success({
+                    title: "",
+                    desc: res.data.message,
+                    duration: 3
+                });
+                this.$emit("cancelEvent", 1);
+                //初始化本组件data数据
+                Object.assign(this.$data, this.$options.data.call(this));
+                } else if (res.data.state == 104) {
+                this.isError = true;
+                this.successNumber = res.data.data.success;
+                this.failedNumber = res.data.data.error;
+                this.reason = res.data.message;
+                let ary = [];
+                for (let i = 0; i < this.listData.length; i++) {
+                    for (let j = 0; j < res.data.data.errorIdList.length; j++) {
+                    if (res.data.data.errorIdList[j] == this.listData[i].id) {
+                        ary.push(this.listData[i]);
                     }
-                    this.listData = errorAry;
-                    this.reSetList(successAry)//重置成功的数据到父组件
-                }else{
-                    this.$Notice.warning({
-                        title: '',
-                        desc: res.data.message,
-                        duration: 5
-                    });
+                    }
                 }
-            })
+                this.listData = ary;
+                } else {
+                this.$Notice.warning({
+                    title: "",
+                    desc: res.data.message,
+                    duration: 5
+                });
+                }
+            });
         },
         /**
          * 单个案件选择开庭地点
          */
-        selCourt2(id){
-            if(id==""){
-            return
-            }
-             batchTtibunalsList(id).then(res => {
-                if(res.data.state == 100){
-                    let that = this;
-                    let ary = res.data.data;
-                    this.listData[this.dexSel].courtId = id;
-                    for(let u=0;u<this.courtList.length;u++){
-                        if(this.courtList[u].id == id){
-                            this.listData[this.dexSel].courtName = this.courtList[u].name;
-                        }
+        selCourt2(id) {
+            batchTtibunalsList(id).then(res => {
+                console.log(this.listData[this.dexSel]);
+                if (res.data.state == 100) {
+                let that = this;
+                let ary = res.data.data;
+                this.listData[this.dexSel].courtId = id;
+                for (let u = 0; u < this.courtList.length; u++) {
+                    if (this.courtList[u].id == id) {
+                    this.listData[this.dexSel].courtName = this.courtList[u].name;
                     }
-                    this.listData[this.dexSel].tribunalList = res.data.data;
-                    Vue.set(this.listData, this.dexSel, this.listData[this.dexSel]);
-                    console.log(this.listData[this.dexSel].tribunalList)
-                    this.modal3 = false;
-                    this.modal2back = false;
-                }else{
-                    this.$Notice.warning({
-                        title: '',
-                        desc: res.data.message,
-                        duration: 5
-                    });
                 }
-            })
-            
+                this.listData[this.dexSel].tribunalList = res.data.data;
+                this.tribunalIds = this.listData[this.dexSel].tribunalId
+                    ? this.listData[this.dexSel].tribunalId
+                    : "";
+                this.tribunalList2 = this.listData[this.dexSel].tribunalList;
+                } else {
+                this.$Notice.warning({
+                    title: "",
+                    desc: res.data.message,
+                    duration: 5
+                });
+                }
+            });
         },
         /**
          * 选择开庭地点
          */
-        selCourt(id){
-            
-            batchTtibunalsList(id).then(res => {
-                if(res.data.state == 100){
-                    let that = this;
-                    this.tribunalList = [];
-                    this.tribunalId = "";
-                    let ary = res.data.data;
-                    ary.map(item => {
-                        this.tribunalList.push(item)
-                    })                     
-                    console.log(res.data.data)
-                    this.tribunalId = '';
-                    this.tribunalList = JSON.parse(JSON.stringify(this.tribunalList));
-                    for(let i=0;i<this.listData.length;i++){
-                            this.listData[i].courtId = id;
-                            for(let u=0;u<this.courtList.length;u++){
-                                if(this.courtList[u].id == id){
-                                    this.listData[i].tribunalName = "";
-                                    this.listData[i].tribunalId = "";
-                                    this.listData[i].courtName = this.courtList[u].name;
-                                }
+        selCourt(id) {
+            if (id) {
+                batchTtibunalsList(id).then(res => {
+                    if (res.data.state == 100) {
+                        let that = this;
+                        this.tribunalList = [];
+                        this.tribunalId = "";
+                        let ary = res.data.data;
+                        ary.map(item => {
+                        this.tribunalList.push(item);
+                        });
+                        console.log(res.data.data);
+                        this.tribunalId = "";
+                        this.tribunalList = JSON.parse(JSON.stringify(this.tribunalList));
+                        for (let i = 0; i < this.listData.length; i++) {
+                        this.listData[i].courtId = id;
+                        for (let u = 0; u < this.courtList.length; u++) {
+                            if (this.courtList[u].id == id) {
+                            this.listData[i].tribunalName = "";
+                            this.listData[i].tribunalId = "";
+                            this.listData[i].courtName = this.courtList[u].name;
                             }
-                            this.listData[i].tribunalList = this.tribunalList;
-                            // Vue.set(this.listData, i, this.listData[i]);
                         }
-                    this.listData = JSON.parse(JSON.stringify(this.listData));
-                    
-                }else{
-                    this.$Notice.warning({
-                        title: '',
+                        this.listData[i].tribunalList = this.tribunalList;
+                        // Vue.set(this.listData, i, this.listData[i]);
+                        }
+                        this.listData = JSON.parse(JSON.stringify(this.listData));
+                    } else {
+                        this.$Notice.warning({
+                        title: "",
                         desc: res.data.message,
                         duration: 5
-                    });
-                }
-            })
+                        });
+                    }
+                });
+            }
         },
         /**
          * 单个案件选择承办法庭
          */
-        selJudge2(id){
+        selJudge2(id) {
             this.listData[this.dexSel].tribunalId = id;
-            for(let u=0;u<this.tribunalList2.length;u++){
-                if(this.tribunalList2[u].id == id){
-                    this.listData[this.dexSel].tribunalName = this.tribunalList2[u].name;
+            for (let u = 0; u < this.tribunalList2.length; u++) {
+                if (this.tribunalList2[u].id == id) {
+                this.listData[this.dexSel].tribunalName = this.tribunalList2[u].name;
                 }
             }
             Vue.set(this.listData, this.dexSel, this.listData[this.dexSel]);
-            this.modal4 = false;
-            this.modal2back = false;
         },
         /**
          * 选择承办法庭
          */
         selJudge(id){
-            
             for(let i=0;i<this.listData.length;i++){
                 this.listData[i].tribunalId = id;
                 for(let u=0;u<this.tribunalList.length;u++){
@@ -863,7 +819,6 @@ export default {
         },
         closeModel2(){
             this.modal2 = false;
-            this.modal2back = false;
         },
         changeList(data,ary){
             console.log(ary)
@@ -874,12 +829,24 @@ export default {
                 }
             }
             this.modal2 = false;
-            this.modal2back = false;
         },
         resetData () { // 更新时调用
            Object.assign(this.$data, this.$options.data.call(this));
         },
     },
+    filters: {
+        formatDate(time) {
+        if (time == "") {
+            return "";
+        }
+        try {
+            var date = new Date(time.replace(/-/g, "/"));
+        } catch (e) {
+            var date = new Date(time);
+        }
+        return formatDate(date, "yyyy-MM-dd");
+        }
+    }
   }
 </script>
 

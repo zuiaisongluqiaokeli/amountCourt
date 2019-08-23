@@ -18,7 +18,22 @@
                 <FormItem label="姓名" class="ft_form ft-plant-chooseType" prop="name">
                     <Input v-model="item.name" placeholder="必填"></Input>
                 </FormItem>
-                  <FormItem label="公民身份证号" class="ft_form ft-plant-chooseType" prop="identityCard">
+                <FormItem label="角色" class="ft_form ft-plant-chooseType" prop="defendantStates">
+                    <Select
+                      v-model="item.defendantStates"
+                      placeholder="请选择角色(多选)"
+                      clearable
+                      filterable
+                      multiple
+                    >
+                      <Option
+                        v-for="(item3,index3) in roleList"
+                        :value="item3"
+                        :key="index3"
+                      >{{ item3 }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem label="公民身份证号" class="ft_form ft-plant-chooseType" prop="identityCard">
                     <Input v-model="item.identityCard" placeholder="必填" @on-blur="mAccused_autoFillId(item,'accusedFromRule'+index)"></Input>
                 </FormItem>
                 <FormItem label="出生日期" class="ft_form ft-plant-chooseType" prop="litigantBirthday">
@@ -31,11 +46,11 @@
                     style="width: 300px"
                     :value="item.litigantBirthday"></DatePicker>
                 </FormItem>
-                  <FormItem label="性别" class="ft_form ft-plant-chooseType"  prop="litigantSex">
+                <FormItem label="性别" class="ft_form ft-plant-chooseType"  prop="litigantSex">
                   <RadioGroup v-model="item.litigantSex" class="ft-confirm-radio">
                         <Radio label="男" class='ft-public-color'>男</Radio>
                         <Radio label="女" class='ft-public-color'>女</Radio>
-                    </RadioGroup>
+                  </RadioGroup>
                 </FormItem>
                   <FormItem label="民族" class="ft_form ft-plant-chooseType" prop="litigantNation">
                     <Select
@@ -66,8 +81,9 @@
                 <FormItem label="个人身份证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="businessLicense">
                     <Input v-model="item.businessLicense" placeholder="选填"></Input>
                     <span>{{item.accused_fileName1}}</span>
-                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'个人身份证明文件',id:item.plantiffId}">
+                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'个人身份证明文件',id:item.plantiffId}">
                         <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                     </Upload>
                 </FormItem>
               </Form>
@@ -78,7 +94,22 @@
                   <FormItem label="名称" class="ft_form ft-plant-chooseType" prop="name">
                       <Input v-model="item.name" placeholder="必填"></Input>
                   </FormItem>
-                    <FormItem label="社会统一信用代码" class="ft_form ft-plant-chooseType" prop="identityCard">
+                  <FormItem label="角色" class="ft_form ft-plant-chooseType" prop="defendantStates">
+                      <Select
+                        v-model="item.defendantStates"
+                        placeholder="请选择角色(多选)"
+                        clearable
+                        filterable
+                        multiple
+                      >
+                        <Option
+                          v-for="(item3,index3) in roleList"
+                          :value="item3"
+                          :key="index3"
+                        >{{ item3 }}</Option>
+                      </Select>
+                  </FormItem>
+                  <FormItem label="社会统一信用代码" class="ft_form ft-plant-chooseType" prop="identityCard">
                       <Input v-model="item.identityCard" placeholder="必填"></Input>
                   </FormItem>
                     <FormItem label="注册地址" class="ft_form ft-plant-chooseType" prop="address">
@@ -87,14 +118,15 @@
                   <FormItem label="单位证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="businessLicense">
                       <Input v-model="item.businessLicense" placeholder="选填"></Input>
                       <span>{{item.accused_fileName2}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
                           <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                          <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
                   <FormItem label="单位固定电话" class="ft_form ft-plant-chooseType" prop="phone">
                       <Input v-model="item.phone" placeholder="选填"></Input>
                   </FormItem>
-                    <FormItem label="单位电子邮箱" class="ft_form ft-plant-chooseType" prop="email">
+                  <FormItem label="单位电子邮箱" class="ft_form ft-plant-chooseType" prop="email">
                       <Input v-model="item.email" placeholder="选填"></Input>
                   </FormItem>
                   <FormItem label="法定代表人" class="ft_form ft-plant-chooseType" prop="legalManName">
@@ -106,14 +138,15 @@
                   <FormItem label="法定代表人手机号" class="ft_form ft-plant-chooseType" prop="legalManPhone">
                       <Input v-model="item.legalManPhone" placeholder="选填"></Input>
                   </FormItem>
-                    <FormItem label="法定代表人身份证号码" class="ft_form ft-plant-chooseType" prop="legalManId">
+                  <FormItem label="法定代表人身份证号码" class="ft_form ft-plant-chooseType" prop="legalManId">
                       <Input v-model="item.legalManId" placeholder="选填"></Input>
                   </FormItem>
                   <FormItem label="法定代表人身份证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="legalIdentity">
                       <Input v-model="item.legalIdentity" placeholder="选填"></Input>
                       <span>{{item.accused_fileName4}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}">
-                          <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
               </Form>
@@ -124,7 +157,22 @@
                   <FormItem label="名称" class="ft_form ft-plant-chooseType" prop="name">
                       <Input v-model="item.name" placeholder="必填"></Input>
                   </FormItem>
-                    <FormItem label="社会统一信用代码" class="ft_form ft-plant-chooseType" prop="identityCard">
+                  <FormItem label="角色" class="ft_form ft-plant-chooseType" prop="defendantStates">
+                      <Select
+                        v-model="item.defendantStates"
+                        placeholder="请选择角色(多选)"
+                        clearable
+                        filterable
+                        multiple
+                      >
+                        <Option
+                          v-for="(item3,index3) in roleList"
+                          :value="item3"
+                          :key="index3"
+                        >{{ item3 }}</Option>
+                      </Select>
+                  </FormItem>
+                  <FormItem label="社会统一信用代码" class="ft_form ft-plant-chooseType" prop="identityCard">
                       <Input v-model="item.identityCard" placeholder="必填"></Input>
                   </FormItem>
                     <FormItem label="注册地址" class="ft_form ft-plant-chooseType" prop="address">
@@ -133,8 +181,9 @@
                   <FormItem label="单位证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="businessLicense">
                       <Input v-model="item.businessLicense" placeholder="选填"></Input>
                       <span>{{item.accused_fileName3}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
                           <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                          <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
                   <FormItem label="单位固定电话" class="ft_form ft-plant-chooseType" prop="phone">
@@ -158,8 +207,9 @@
                   <FormItem label="负责人身份证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="legalIdentity">
                       <Input v-model="item.legalIdentity" placeholder="选填"></Input>
                       <span>{{item.accused_fileName5}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}">
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,accused_confirmList)" :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}">
                           <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                          <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
               </Form>
@@ -243,8 +293,9 @@
                 <FormItem label="个人身份证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="businessLicense">
                     <Input v-model="item.businessLicense" placeholder="选填"></Input>
                     <span>{{item.accused_fileName1}}</span>
-                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'个人身份证明文件',id:item.plantiffId}">
+                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'个人身份证明文件',id:item.plantiffId}">
                         <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                     </Upload>
                 </FormItem>
               </Form>
@@ -264,8 +315,9 @@
                   <FormItem label="单位证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="businessLicense">
                       <Input v-model="item.businessLicense" placeholder="选填"></Input>
                       <span>{{item.accused_fileName2}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
                           <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                          <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
                   <FormItem label="单位固定电话" class="ft_form ft-plant-chooseType" prop="phone">
@@ -289,8 +341,9 @@
                   <FormItem label="法定代表人身份证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="legalIdentity">
                       <Input v-model="item.legalIdentity" placeholder="选填"></Input>
                       <span>{{item.accused_fileName4}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}">
-                          <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
               </Form>
@@ -310,8 +363,9 @@
                   <FormItem label="单位证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="businessLicense">
                       <Input v-model="item.businessLicense" placeholder="选填"></Input>
                       <span>{{item.accused_fileName3}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
-                          <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'单位证明文件',id:item.plantiffId}">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
                   <FormItem label="单位固定电话" class="ft_form ft-plant-chooseType" prop="phone">
@@ -335,8 +389,9 @@
                   <FormItem label="负责人身份证明文件" class="ft_form ft-plant-upload ft-plant-chooseType" prop="legalIdentity">
                       <Input v-model="item.legalIdentity" placeholder="选填"></Input>
                       <span>{{item.accused_fileName5}}</span>
-                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'负责人身份证明文件',id:item.plantiffId}">
-                          <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                      <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="(res)=> accused_uploadSuccess(res,third_confirmList)" :data="{fileType:'负责人身份证明文件',id:item.plantiffId}">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                       </Upload>
                   </FormItem>
               </Form>
@@ -371,6 +426,7 @@ export default {
   data () {
     return {
       nationAry:nation,//民族列表
+      roleList:accusedViald.roleList,//角色列表
       backShow:true,
       orgrin:accusedViald.manType, //当事人类型数组
       orgrin2:accusedViald.thirdManType, //第三人类型数组

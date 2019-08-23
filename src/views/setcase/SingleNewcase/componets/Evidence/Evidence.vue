@@ -1,7 +1,7 @@
 <template>
   <div class='ft-plant-div1'>
     <div class="ft-plant-div2">
-      <Form :model="eviList" label-position="right" :label-width="190" :rules="eviList" ref="eviFromRule" style="margin:50px auto;width:821px">
+      <Form :model="eviList" label-position="right" :label-width="190" :rules="eviList" ref="eviFromRule" style="margin:50px auto;width:920px">
           <!-- <FormItem label="证据列表" class="ft_form ft-plant-chooseType ft-plant-slectType">
               <Tag v-for="(item,key) in eviCount" color="#2F60BD" :key="key">证据{{key+1}}</Tag>
           </FormItem>
@@ -30,8 +30,9 @@
           </FormItem> -->
 
           <FormItem label="证明被告主体信息类证据" :label-width="300" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
-              <Upload action="/api/court/case/upScanning.jhtml" :data="{fileType:'证据文件1'}" :multiple="true" class="ft-plant-upload-button" :on-success="evi_uploadSuccess">
+              <Upload action="/api/court/case/upScanning.jhtml"  :show-upload-list="false" :data="{fileType:'证据文件1'}" :multiple="true" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="evi_uploadSuccess">
                   <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
               </Upload>
           </FormItem>
           <FormItem>
@@ -40,8 +41,9 @@
          
 
           <FormItem label="证明借贷及担保关系存在的证据" :label-width="300" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
-              <Upload action="/api/court/case/upScanning.jhtml" :data="{fileType:'证据文件2'}" :multiple="true" class="ft-plant-upload-button" :on-success="evi_uploadSuccess">
+              <Upload action="/api/court/case/upScanning.jhtml"  :show-upload-list="false" :data="{fileType:'证据文件2'}" :multiple="true" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="evi_uploadSuccess">
                   <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
               </Upload>
           </FormItem>
           <FormItem>
@@ -49,8 +51,9 @@
           </FormItem>
 
           <FormItem label="证明放款、还款及最新欠款金额的证据" :label-width="300" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
-              <Upload action="/api/court/case/upScanning.jhtml" :data="{fileType:'证据文件3'}" :multiple="true" class="ft-plant-upload-button" :on-success="evi_uploadSuccess">
+              <Upload action="/api/court/case/upScanning.jhtml"  :show-upload-list="false" :data="{fileType:'证据文件3'}" :multiple="true" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="evi_uploadSuccess">
                   <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
               </Upload>
           </FormItem>
           <FormItem>
@@ -58,8 +61,9 @@
           </FormItem>
 
           <FormItem label="证明实现债权费用的证据" :label-width="300" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
-              <Upload action="/api/court/case/upScanning.jhtml" :data="{fileType:'证据文件4'}" :multiple="true" class="ft-plant-upload-button" :on-success="evi_uploadSuccess">
+              <Upload action="/api/court/case/upScanning.jhtml"  :show-upload-list="false" :data="{fileType:'证据文件4'}" :multiple="true" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="evi_uploadSuccess">
                   <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
               </Upload>
           </FormItem>
           <FormItem>
@@ -67,16 +71,15 @@
           </FormItem>
 
           <FormItem>
-             <div style="height: 0px;border-top: 2px dashed #4873C5;width: 750px;margin-left: -203px;"></div>                
+             <div style="height: 0px;border-top: 2px dashed #4873C5;width: 850px;margin-left: -203px;"></div>                
           </FormItem>
           
           <FormItem label="诉前案件材料" :label-width="300" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
-              <Upload action="/api/court/case/importEvidence.jhtml" :data="{fileType:'诉前案件材料'}" :multiple="true" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="suqian_uploadSuccess">
-                  <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+              <Upload action="/api/court/case/importEvidence.jhtml" :data="{fileType:'诉前案件材料'}" :show-upload-list="false" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="suqian_uploadSuccess">
+                  <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（压缩包单文件）</Button>
               </Upload>
-              <span class="fileName" style="width:70px">{{evi_fileName5}}</span>
+              <span class="fileName" style="width:70px;line-height: 10px;">{{evi_fileName5}}</span><a v-if="evi_fileName5=='已上传'" @click="delFile('file5')">删除</a>
           </FormItem>
-
           <!-- <FormItem>
             <div class='ft_public1'>
               <a href="javascript:void(0)" style="" class="ft_public2" @click="ft_evi_addEvidence('eviFromRule')">添加证据</a>
@@ -135,6 +138,7 @@ export default {
    
     //上传成功事件
     evi_uploadSuccess (response,file,fileList) {
+      this.$Notice.destroy()
       if(response.state === 100) {
         this.$Message.success('上传成功!');
         let data=response.data.result[0];
@@ -168,7 +172,7 @@ export default {
     },
     //诉前案件材料上传前事件
     sucai_UpBefore(){
-      this.$Notice.info({'title':"正在上传材料，请稍后...！",duration: 0})
+      this.$Notice.info({'title':"正在上传文件，请稍后...！",duration: 0})
     },
     //诉前案件材料上传成功事件
     suqian_uploadSuccess (response,file,fileList) {

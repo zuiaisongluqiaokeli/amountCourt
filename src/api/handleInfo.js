@@ -208,3 +208,29 @@ export function processNote (lawCaseId) {
         params
     });
 }
+// 添加调解记录
+export function addRecords (data) {
+    return service({
+        url: '/court/case/addRecords.jhtml',
+        method: 'POST',
+        data
+    });
+}
+
+// 获取调解记录
+export function getRecords (params) {
+    return service({
+        url: '/court/case/getRecords.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+//获取要下载的调解协议/送达回证
+export function downSdTj (params) {
+    return service({
+        url: '/court/case/downSdTj.jhtml',
+        method: 'GET',
+        params
+    });
+}

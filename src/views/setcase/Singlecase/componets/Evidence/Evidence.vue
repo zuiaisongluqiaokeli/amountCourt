@@ -7,7 +7,7 @@
         :label-width="190"
         :rules="eviList"
         ref="eviFromRule"
-        style="margin:40px auto;width:821px"
+        style="margin:40px auto;width:920px"
       >
         <!-- <FormItem label="证据列表" class="ft_form ft-plant-chooseType ft-plant-slectType">
               <Tag v-for="(item,key) in eviCount" color="#2F60BD" :key="key">证据{{key+1}}</Tag>
@@ -31,7 +31,7 @@
         <!-- <FormItem label="证据文件" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
               <span>{{evi_fileName}}</span>
               <Input v-model="eviList.evidenceFile" placeholder="请上证据文件" style="visibility:hidden;"></Input>
-              <Upload action="/api/court/case/upScanning.jhtml" :data="{fileType:'证据文件'}" class="ft-plant-upload-button" :on-success="evi_uploadSuccess">
+              <Upload action="/api/court/case/upScanning.jhtml" :data="{fileType:'证据文件'}" class="ft-plant-upload-button" :show-upload-list="false" :on-success="evi_uploadSuccess">
                   <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
               </Upload>
         </FormItem>-->
@@ -48,14 +48,17 @@
             :multiple="true"
             class="ft-plant-upload-button"
             :on-success="evi_uploadSuccess"
+            :show-upload-list="false"
+            :before-upload="sucai_UpBefore"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+            <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
           </Upload>
         </FormItem>
         <FormItem>
-          <div v-for="item in evi_fileName1">
+          <div v-for="(item,key) in evi_fileName1" :key="key">
             <span class="fileName">{{item}}</span>
-            <a @click="delFile("file1",item)">删除</a>
+            <a @click="delFile('file1',item)">删除</a>
           </div>
         </FormItem>
 
@@ -71,14 +74,17 @@
             :multiple="true"
             class="ft-plant-upload-button"
             :on-success="evi_uploadSuccess"
+            :show-upload-list="false"
+            :before-upload="sucai_UpBefore"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+            <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
           </Upload>
         </FormItem>
         <FormItem>
-          <div v-for="item in evi_fileName2">
+          <div v-for="(item,key) in evi_fileName2" :key="key">
             <span class="fileName">{{item}}</span>
-            <a @click="delFile("file2",item)">删除</a>
+            <a @click="delFile('file2',item)">删除</a>
           </div>
         </FormItem>
 
@@ -94,14 +100,17 @@
             :multiple="true"
             class="ft-plant-upload-button"
             :on-success="evi_uploadSuccess"
+            :show-upload-list="false"
+            :before-upload="sucai_UpBefore"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+            <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
           </Upload>
         </FormItem>
         <FormItem>
-          <div v-for="item in evi_fileName3">
+          <div v-for="(item,key) in evi_fileName3" :key="key">
             <span class="fileName">{{item}}</span>
-            <a @click="delFile("file3",item)">删除</a>
+            <a @click="delFile('file3',item)">删除</a>
           </div>
         </FormItem>
 
@@ -117,26 +126,29 @@
             :multiple="true"
             class="ft-plant-upload-button"
             :on-success="evi_uploadSuccess"
+            :show-upload-list="false"
+            :before-upload="sucai_UpBefore"
           >
             <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+            <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
           </Upload>
         </FormItem>
         <FormItem>
-          <div v-for="item in evi_fileName4">
+          <div v-for="(item,key) in evi_fileName4" :key="key">
             <span class="fileName">{{item}}</span>
-            <a @click="delFile("file4",item)">删除</a>
+            <a @click="delFile('file4',item)">删除</a>
           </div>
         </FormItem>
 
         <FormItem>
-            <div style="height: 0px;border-top: 2px dashed #4873C5;width: 750px;margin-left: -203px;"></div>                
+            <div style="height: 0px;border-top: 2px dashed #4873C5;width: 850px;margin-left: -203px;"></div>                
         </FormItem>
         
         <FormItem label="诉前案件材料" :label-width="300" class="ft_form ft-plant-chooseType  ft-plant-upload"  prop="evidenceFile">
-            <Upload action="/api/court/case/importEvidence.jhtml" :data="{fileType:'诉前案件材料'}" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="suqian_uploadSuccess">
-                <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（可多选）</Button>
+            <Upload action="/api/court/case/importEvidence.jhtml" :data="{fileType:'诉前案件材料'}" :show-upload-list="false" class="ft-plant-upload-button" :before-upload="sucai_UpBefore" :on-success="suqian_uploadSuccess">
+                <Button type="ghost" style="width:200px" icon="ios-cloud-upload-outline">选择文件（压缩包单文件）</Button>
             </Upload>
-            <span class="fileName" style="width:70px">{{evi_fileName5}}</span>
+            <span class="fileName" style="width:70px;line-height: 10px;">{{evi_fileName5}}</span><a v-if="evi_fileName5=='已上传'" @click="delFile('file5')">删除</a>
         </FormItem>
         <!-- <FormItem>
           <div class="ft_public1">
@@ -166,7 +178,6 @@ export default {
     return {
       keyList: {},
       isNatureInfo: true,
-
       eviList: evidenceRule.eviList,
       eviCount: [], //证据列表
       evi_fileName: "",
@@ -220,6 +231,7 @@ export default {
     },
     //上传成功事件
     evi_uploadSuccess(response, file, fileList) {
+      this.$Notice.destroy()
       if (response.state === 100) {
         this.$Message.success("上传成功!");
         let data = response.data.result[0];
@@ -253,7 +265,7 @@ export default {
     },
     //诉前案件材料上传前事件
     sucai_UpBefore(){
-      this.$Notice.info({'title':"正在上传材料，请稍后...！",duration: 0})
+      this.$Notice.info({'title':"正在上传文件，请稍后...！",duration: 0})
     },
     //诉前案件材料上传成功事件
     suqian_uploadSuccess (response,file,fileList) {

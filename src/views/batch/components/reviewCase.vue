@@ -6,7 +6,7 @@
         <Row>
             <Col span="24" style="min-height:100%">
                     <Row class="operation" style="margin-bottom:15px;">
-                        <!-- <Button size='large' @click="showRject" style="background:#F54C4C;color:#fff;float:right;margin-right:15px;" >驳回选中的案件</Button> -->
+                        <Button size='large' @click="showRject" style="background:#F54C4C;color:#fff;float:right;margin-right:15px;" >退回选中的案件</Button>
                         <Button size='large' @click="showGO" style="background:rgb(32, 131, 216);float:right;margin-right:15px;"  type="primary" >为选中的案件分配案号</Button>
                         <Button size='large' @click="addBatchList" style="background:#2083D8;color:#fff;margin-right:15px;float:left;" >添加案件到批量工作列表</Button>
                         <Dropdown  class="dropMenu"  @on-click="handleDropdown">
@@ -61,7 +61,7 @@
         </Modal>
         <Modal
             v-model="modal3"
-            title="驳回申请"
+            title="退回申请"
             :mask-closable="false"
             :styles="{top: '20px'}"
             :width="modalWidth">
@@ -211,28 +211,28 @@ export default {
                 },
                 "分配案号"
               ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "error",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.$refs.table.selectAll(false);//取消选择，清空数据
-              //         this.selectList.push(params.row);  //选择的数据
-              //         let that = this;
-              //         window.setTimeout(function(){
-              //           that.$refs.handleReject.getList();
-              //           that.modal3 = true;
-              //         },300)
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.$refs.table.selectAll(false);//取消选择，清空数据
+                      this.selectList.push(params.row);  //选择的数据
+                      let that = this;
+                      window.setTimeout(function(){
+                        that.$refs.handleReject.getList();
+                        that.modal3 = true;
+                      },300)
                       
-              //       }
-              //     }
-              //   },
-              //   "驳回申请"
-              // )
+                    }
+                  }
+                },
+                "退回申请"
+              )
             ]);
           }
         }
@@ -310,7 +310,7 @@ export default {
       this.modal2 = true;
     },
     /**
-     * 打开驳回模态框
+     * 打开退回模态框
      */
     showRject(){
       if (this.selectCount <= 0) {
@@ -340,7 +340,7 @@ export default {
       }
     },
     /**
-     * 关闭驳回申请
+     * 关闭退回申请
      */
     closeModel3(dex){
       if(dex == 1){ //表示立案成功 刷新

@@ -31,7 +31,7 @@ module.exports = merge(webpackBaseConfig, {
         },
         proxy: {
             '/upload': {
-                target: 'https://courtfinancedev.ptnetwork001.com',
+                target: 'http://192.168.86.59',
                 secure:false,
                 changeOrigin: true,
             },
@@ -62,7 +62,7 @@ module.exports = merge(webpackBaseConfig, {
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
-            title: '厦门金融司法协同中心' + package.version,
+            title: '厦门金融司法协同中心',
             filename: '../index.html',
             inject: false
         }),

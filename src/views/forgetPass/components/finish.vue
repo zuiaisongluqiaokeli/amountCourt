@@ -26,7 +26,7 @@
         nextStep(){//下一步点击事件
             this.$router.push('/courtfinance/login');
             //重置步骤
-            // this.$emit('nextStep',2);
+            this.$emit('nextStep',1);
         },
     },
  }

@@ -82,9 +82,13 @@
       width="250"
     >
       <div style="text-align:center">
-        <Upload action="/api/court/judgement_result/uploadSign.jhtml" ref="uploadFile" :on-success="plant_uploadSuccess" :data="{type:'陪审员',id:nowId}" multiple>
+        <Upload action="/api/court/judgement_result/uploadSign.jhtml" ref="uploadFile" :show-upload-list="false" :default-file-list="nowUploadSign ? [{name:'已上传',url:nowUploadSign}] : []" :on-success="plant_uploadSuccess" :data="{type:'陪审员',id:nowId}">
             <Button icon="ios-cloud-upload-outline">上传电子签章</Button>
         </Upload>
+        <div v-if="nowUploadSign">
+          <p>预览：</p>
+          <iframe :src="nowUploadSign"></iframe>
+        </div>
       </div>
     </Modal>
   </div>
@@ -204,7 +208,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                          this.showUpBox(params.row.id);
+                          this.showUpBox(params.row.id,params.row.uploadSign);
                       }
                     }
                 }, '上传电子签章'),
@@ -241,6 +245,7 @@ export default {
       },
       nowId:"",//当前选择项id
       nowState:"",//当前状态
+      nowUploadSign:"",//当前起诉状
       upMod:false,
       ruleList:{
         name: [
@@ -292,25 +297,41 @@ export default {
         break;
       }
     },
-    getNowPageContent(){//获取当前页内容
+    getNowPageContent(id){//获取当前页内容
       this.loading=true;
       getJurorInfo(this.pageData).then(res=>{
         console.log(res);
         if(res.data.state==100){
           this.loading=false;
-          let data = res.data.data;
-          this.tableData = data.peopleAssessorList;
-          this.setPageData(data.pageNum, data.pageSize, data.total);
+          let data = res.data.data[0];
+          this.tableData = data.content;
+          if(id){//获取对应的电子签章
+             this.tableData.forEach((item,index) => {
+              if(item.id==id){
+                this.nowUploadSign=item.uploadSign;
+              }
+             });
+          }
+          this.setPageData(data.pageNumber, data.pageSize, data.total);
         }else{
             this.$Message.error(res.data.message);
         }
       });
     },
+    //上传之前
+    mAgent_beforeUpload() {
+      this.$refs.upload.clearFiles();
+      this.$Message.info({
+        content: "文件上传中...",
+        duration: 0
+      });
+    },
     plant_uploadSuccess (res,item) {//文件上传成功事件
       console.log("888888888888888888888",item)
+      this.$Message.destroy()
       if(res.state === 100) {
         this.$Message.success(res.message);
-        this.getNowPageContent();
+        this.getNowPageContent(this.nowId);
       }else{
         this.$Message.error(res.message);
       }
@@ -360,8 +381,9 @@ export default {
       }
       this.boxInfo.show=true;
     },
-    showUpBox(id){//上传电子签章的模态框
+    showUpBox(id,uploadSign){//上传电子签章的模态框
       this.$refs.uploadFile.clearFiles()
+      this.nowUploadSign= uploadSign ? uploadSign : '';
       this.nowId=id;
       this.upMod=true;
     },

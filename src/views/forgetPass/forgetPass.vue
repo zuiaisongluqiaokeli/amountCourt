@@ -20,9 +20,9 @@
     <div class="reg_content">
       <Card class="reg_card">
             <!-- 身份验证 -->
-            <check-info v-if="myStep==1"></check-info>
+            <check-info v-if="myStep==1" @nextStep="nextStep"></check-info>
             <!-- 完成找回 -->
-            <finish v-if="myStep==2"></finish>
+            <finish v-if="myStep==2" @nextStep="nextStep"></finish>
       </Card>
     </div>
  </div>
@@ -41,8 +41,13 @@
        myStep:1,//步骤
      }
    },
+   methods: {
+     nextStep(num){
+       this.myStep=num;
+     }
+   },
  }
 </script>
 
-<style lang='css' scoped src="./forgetPass.css">
+<style lang='css' src="./forgetPass.css">
 </style>

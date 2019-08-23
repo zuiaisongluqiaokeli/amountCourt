@@ -122,6 +122,7 @@
                           :on-format-error="handleFormatError"
                           :on-exceeded-size="handleMaxSize"
                           :before-upload="beforeUpload"
+                          :show-upload-list="false"
                           ref="up"
                           class="upload">
                     <Button icon="ios-cloud-upload-outline">上传图片</Button>

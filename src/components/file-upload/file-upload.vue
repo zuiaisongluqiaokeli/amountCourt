@@ -15,7 +15,7 @@
                     </p>
                     <div class="height-120px">
                         <Row type="flex" justify="center" align="middle" class="height-100">
-                            <Upload action="//jsonplaceholder.typicode.com/posts/">
+                            <Upload action="//jsonplaceholder.typicode.com/posts/" :show-upload-list="false">
                                 <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
                         </Row>
@@ -30,7 +30,7 @@
                     </p>
                     <div class="height-120px">
                         <Row type="flex" justify="center" align="middle" class="height-100">
-                            <Upload multiple action="//jsonplaceholder.typicode.com/posts/">
+                            <Upload multiple action="//jsonplaceholder.typicode.com/posts/" :show-upload-list="false">
                                 <span>多选文件上传&nbsp;&nbsp;</span>
                                 <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
@@ -50,6 +50,7 @@
                                 action="//jsonplaceholder.typicode.com/posts/"
                                 :format="['jpg', 'png', 'jpeg', 'gif', 'bmp', 'svg']"
                                 :on-format-error="handleFormatError"
+                                :show-upload-list="false"
                             >
                                 <span>选择图片上传&nbsp;&nbsp;</span>
                                 <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
@@ -77,6 +78,7 @@
                                         :on-progress="handleProgress"
                                         :on-success="handleSuccess"
                                         :on-error="handleError"
+                                        :show-upload-list="false"
                                     >
                                         <span>请选择文件&nbsp;&nbsp;</span>
                                         <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
@@ -96,6 +98,7 @@
                             <Upload
                                 multiple
                                 type="drag"
+                                :show-upload-list="false"
                                 action="//jsonplaceholder.typicode.com/posts/">
                                 <div style="padding: 60px 0;height: 200px;">
                                     <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>

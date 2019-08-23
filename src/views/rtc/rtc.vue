@@ -26,8 +26,6 @@
 </div>
 </template>
 <script>
-import { formatDate } from '@/libs/date'
-
 import rtcState from "./components/rtcState.vue";
 import rtctj from "./components/rtctj.vue";
 
@@ -38,9 +36,6 @@ export default {
     },
     data(){
         return{
-            caseInfo:{
-
-            },
             showComponents:'rtcState',
             caseId:this.$store.getters.caseId,
         }
@@ -56,22 +51,6 @@ export default {
             addClassN.classList.add('tabOn');
             this.showComponents = idName;
         },
-    },
-    filters: {
-      formatDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd');
-      },
-      formatStartDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd hh:mm');
-      }
     },
     computed: {
         changeMemberTab() {

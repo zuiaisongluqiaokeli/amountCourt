@@ -5,6 +5,7 @@
     :id="viewerId"
     v-if="fileUrls.length>0 && showBox"
     v-model="nowIndex"
+    @on-change="carouselChange"
     >
         <CarouselItem v-for="(item,index) in PTFurls " :key="index">
             <div style="text-align: center;">
@@ -126,6 +127,14 @@ export default {
                 this.nowIndex=0;
             }, 2000);
         },
+        carouselChange(oldValue, value){//轮播图切换
+           //按顺序合并打印数组
+           let fileAry=[...this.PTFurls,...this.DOCurls,...this.Imgurls]//顺序按照上面渲染循序来不能乱，否则找不到当前页的文件路径
+           console.log("carouselChange",oldValue, value)
+           console.log("fileAry",fileAry[value])
+           //获取当前页文件路径
+           this.$emit("setNowItem",fileAry[value].url)
+        }
     },
     mounted() {
     },
@@ -149,7 +158,8 @@ export default {
             //筛选文件分别显示
             this.fileUrls.forEach((item,index) => {
                 let fileType=item.split('.')[item.split('.').length-1];//获取文件类型
-                let url=item.indexOf('http://')>=0 || item.indexOf('https://')>=0 ? item : this.allHost+item;//过滤文件路径
+                // let url=item.indexOf('http://')>=0 || item.indexOf('https://')>=0 ? item : this.allHost+item;//过滤文件路径
+                let url=item;
                 switch (fileType) {
                     case 'pdf':
                         this.PTFurls.push({url:url,loading:true,id:Math.random().toString(36).substr(2)});

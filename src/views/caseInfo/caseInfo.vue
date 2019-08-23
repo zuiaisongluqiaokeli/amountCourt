@@ -4,9 +4,12 @@
 <template>
 <div class="caseInfo">
     <Row >
-        <Col span="24" class="change-tab">
+        <Col span="24" class="change-tab" style="display:flex">
             <div @click="changeMenu('lian')" id="lian" class="selTab  tabOn" ref="lian">
                 <span>立案信息</span>
+            </div>
+            <div @click="changeMenu('essential')" id="essential" class="selTab  tabOn" ref="essential">
+                <span>要素修改</span>
             </div>
             <div @click="changeMenu('payfor')" id="payfor" class="selTab ">
                 <span>诉费缴交</span>
@@ -29,10 +32,16 @@
             <div @click="changeMenu('timeAxis')" id="timeAxis" class="selTab">
                 <span>案件时间轴</span>
             </div>
+            <div @click="changeMenu('tjAgreementSend')" id="tjAgreementSend" class="selTab">
+                <span>调解协议与送达回执</span>
+            </div>
         </Col>
     </Row>
     <div v-show="showComponents == 'lian'">
         <setCaseInfo ref="setCaseInfo"/>
+    </div>
+    <div v-show="showComponents == 'essential'">
+        <essential  ref="essential"/>
     </div>
     <div v-show="showComponents == 'litigantInfo'">
         <litigantInfo ref="litigantInfo"/>
@@ -55,12 +64,17 @@
     <div v-show="showComponents == 'timeAxis'">
         <timeAxis ref="timeAxis"/>
     </div>
+    <div v-show="showComponents == 'tjAgreementSend'">
+        <tjAgreementSend ref="tjAgreementSend"/>
+    </div>
 </div>
 </template>
 <script>
 import { formatDate } from '@/libs/date'
 //立案信息
 import setCaseInfo from "./components/setCaseInfo.vue";
+// 要素修改
+import essential from "@/views/caseInfo/components/essential.vue";
 // 当事人与代理人信息
 import litigantInfo from "./components/litigantInfo.vue";
 // 诉费缴交
@@ -75,17 +89,21 @@ import evidences from "./components/evidences.vue";
 import refund from "./components/refund.vue";
 // 立案时间轴
 import timeAxis from "./components/timeAxis.vue";
+// 调解协议与送达回执
+import tjAgreementSend from "@/views/handleInfo/components/tjAgreementSend.vue";
 
 export default {
     components: {
         setCaseInfo,
+        essential,
         payfor,
         litigantInfo,
         indictment,
         materials,
         evidences,
         refund,
-        timeAxis
+        timeAxis,
+        tjAgreementSend
     },
     data(){
         return{
@@ -115,6 +133,9 @@ export default {
                 //     this.$refs.evidences.getEvidenceList();
                 // }
             }
+            if(idName == 'essential'){
+                this.$refs.essential.getEssential();
+            }
             if(idName == 'litigantInfo'){
                 this.$refs.litigantInfo.getLawyerList()
             }
@@ -136,35 +157,11 @@ export default {
             if(idName == 'timeAxis'){
                 this.$refs.timeAxis.getProcessNote();
             }
+            if(idName == 'timeAxis'){
+                this.$refs.tjAgreementSend.init();
+            }
         },
     },
-    filters: {
-      formatDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd');
-      },
-      whether(boole) {
-          return boole ? '是' : '否';
-      },
-      filCheck(boole) {
-          return boole == 0 ? '未确认' : '已确认';
-      },
-      formatStartDate(time) {
-          if (time == '') {
-              return '';
-          }
-          var date = new Date(time);
-          return formatDate(date, 'yyyy-MM-dd hh:mm');
-      }
-    },
-    // computed: {
-    //     changeMemberTab() {
-    //     return this.$store.getters.caseId;
-    //     }
-    // },
     watch:{
         "$store.getters.caseId":function(){
             let that = this;

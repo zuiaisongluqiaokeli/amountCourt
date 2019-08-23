@@ -124,5 +124,58 @@ export function institutionalmediatorList (params) {
     });
 }
 
+/**
+ * 预立案
+ */
+export function preFiling (data) {
+    return service({
+        url: '/court/case/preFiling.jhtml',
+        method: 'post',
+        data
+    });
+}
 
+/**
+ * 案件退回
+ */
+export function backLawCase (data) {
+    return service({
+        url: '/court/case/backLawCase.jhtml',
+        method: 'post',
+        data
+    });
+}
+
+/**
+ * 案管添加用户
+ * @param {*} params 
+ */
+export function addAnGuanUser (data) {
+    return service({
+        url: '/court/case/addAnGuanUser.jhtml',
+        method: 'post',
+        data
+    });
+}
+/**
+ * 案管修改用户
+ * @param {*} params 
+ */
+export function changeAnGuanUser (data) {
+    return service({
+        url: '/court/case/changeAnGuanUser.jhtml',
+        method: 'post',
+        data
+    });
+}
+/**
+ * 案管用户列表
+ * @param {*} params 
+ */
+export function findAnGuanUser () {
+    return service({
+        url: '/court/case/findAnGuanUser.jhtml',
+        method: 'get',
+    });
+}
 

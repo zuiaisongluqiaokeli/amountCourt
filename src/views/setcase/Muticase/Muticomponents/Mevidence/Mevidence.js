@@ -1,5 +1,14 @@
 const mStep2 = {
-  //表单文件
+  //证据表单
+  mEvidenceList: {
+    mKeyInfoPath: '', //要素信息文件
+    name: '', //证据名称
+    object: '', //证明对象
+    source: '', //证据来源
+    // number: '', //证据数量
+    pageNumber:'',// 证据页数
+  },
+  //诉前表单
   mEvidenceList: {
     mKeyInfoPath: '', //要素信息文件
     name: '', //证据名称

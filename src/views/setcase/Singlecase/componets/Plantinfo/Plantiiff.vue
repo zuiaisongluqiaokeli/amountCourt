@@ -85,13 +85,13 @@
                 <Input v-model="item.litigantPermanentAddress" placeholder="必填" clearable></Input>
               </FormItem>
               <FormItem label="常住地址" class="ft_form ft-plant-chooseType" prop="address">
-                <Input v-model="item.address" placeholder="必填(请加上省份)" clearable></Input>
+                <Input v-model="item.address" placeholder="选填（请加上省份）" clearable></Input>
               </FormItem>
               <FormItem label="文书送达地址" class="ft_form ft-plant-chooseType" prop="serviceAddress">
-                <Input v-model="item.serviceAddress" placeholder="选填" clearable></Input>
+                <Input v-model="item.serviceAddress" placeholder="必填" clearable></Input>
               </FormItem>
               <FormItem label="手机号" class="ft_form ft-plant-chooseType" prop="phone">
-                <Input v-model="item.phone" placeholder="选填" clearable></Input>
+                <Input v-model="item.phone" placeholder="必填" clearable></Input>
               </FormItem>
               <FormItem label="电子邮箱" class="ft_form ft-plant-chooseType" prop="email">
                 <Input v-model="item.email" placeholder="选填" clearable></Input>
@@ -106,10 +106,12 @@
                 <Upload
                   action="/api/court/case/upScanning.jhtml"
                   class="ft-plant-upload-button"
+                  :show-upload-list="false"
                   :on-success="plant_uploadSuccess"
                   :data="{fileType:'个人身份证明文件',id:item.plantiffId}"
                 >
                   <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                 </Upload>
               </FormItem>
             </div>
@@ -133,6 +135,9 @@
               <FormItem label="注册地址" class="ft_form ft-plant-chooseType" prop="address">
                 <Input v-model="item.address" placeholder="必填" clearable></Input>
               </FormItem>
+              <FormItem label="文书送达地址" class="ft_form ft-plant-chooseType" prop="serviceAddress">
+                <Input v-model="item.serviceAddress" placeholder="必填" clearable></Input>
+              </FormItem>
               <FormItem
                 label="单位证明文件"
                 class="ft_form ft-plant-upload ft-plant-chooseType"
@@ -143,17 +148,19 @@
                 <Upload
                   action="/api/court/case/upScanning.jhtml"
                   class="ft-plant-upload-button"
+                  :show-upload-list="false"
                   :on-success="plant_uploadSuccess"
                   :data="{fileType:'单位证明文件',id:item.plantiffId}"
                 >
                   <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                 </Upload>
               </FormItem>
               <FormItem label="单位固定电话" class="ft_form ft-plant-chooseType" prop="phone">
-                <Input v-model="item.phone" placeholder="必填" clearable></Input>
+                <Input v-model="item.phone" placeholder="选填" clearable></Input>
               </FormItem>
               <FormItem label="单位电子邮箱" class="ft_form ft-plant-chooseType" prop="email">
-                <Input v-model="item.email" placeholder="必填" clearable></Input>
+                <Input v-model="item.email" placeholder="选填" clearable></Input>
               </FormItem>
               <FormItem label="法定代表人" class="ft_form ft-plant-chooseType" prop="legalManName">
                 <Input v-model="item.legalManName" placeholder="必填" clearable></Input>
@@ -177,10 +184,12 @@
                 <Upload
                   action="/api/court/case/upScanning.jhtml"
                   class="ft-plant-upload-button"
+                  :show-upload-list="false"
                   :on-success="plant_uploadSuccess"
                   :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}"
                 >
                   <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                 </Upload>
               </FormItem>
             </Form>
@@ -204,6 +213,9 @@
               <FormItem label="注册地址" class="ft_form ft-plant-chooseType" prop="address">
                 <Input v-model="item.address" placeholder="必填" clearable></Input>
               </FormItem>
+              <FormItem label="文书送达地址" class="ft_form ft-plant-chooseType" prop="serviceAddress">
+                <Input v-model="item.serviceAddress" placeholder="必填" clearable></Input>
+              </FormItem>
               <FormItem
                 label="单位证明文件"
                 class="ft_form ft-plant-upload ft-plant-chooseType"
@@ -214,17 +226,19 @@
                 <Upload
                   action="/api/court/case/upScanning.jhtml"
                   class="ft-plant-upload-button"
+                  :show-upload-list="false"
                   :on-success="plant_uploadSuccess"
                   :data="{fileType:'单位证明文件',id:item.plantiffId}"
                 >
                   <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                 </Upload>
               </FormItem>
               <FormItem label="单位固定电话" class="ft_form ft-plant-chooseType" prop="phone">
-                <Input v-model="item.phone" placeholder="必填" clearable></Input>
+                <Input v-model="item.phone" placeholder="选填" clearable></Input>
               </FormItem>
               <FormItem label="单位电子邮箱" class="ft_form ft-plant-chooseType" prop="email">
-                <Input v-model="item.email" placeholder="必填" clearable></Input>
+                <Input v-model="item.email" placeholder="选填" clearable></Input>
               </FormItem>
               <FormItem label="负责人" class="ft_form ft-plant-chooseType" prop="legalManName">
                 <Input v-model="item.legalManName" placeholder="必填" clearable></Input>
@@ -248,10 +262,12 @@
                 <Upload
                   action="/api/court/case/upScanning.jhtml"
                   class="ft-plant-upload-button"
+                  :show-upload-list="false"
                   :on-success="plant_uploadSuccess"
                   :data="{fileType:'法定代表人身份证明文件',id:item.plantiffId}"
                 >
                   <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                  <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
                 </Upload>
               </FormItem>
             </Form>

@@ -113,7 +113,7 @@
                 </FormItem>
                 <FormItem label="法定代表人身份证明文件" style="width: 505px"  v-show="addFormItem.litigantType != '自然人'">
                     <span>{{legalIdentity}}</span>
-                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'法定代表人身份证明文件'}">
+                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'法定代表人身份证明文件'}">
                         <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                     </Upload>
                 </FormItem>
@@ -134,7 +134,7 @@
                 </FormItem>
                 <FormItem :label="addFormItem.litigantType == '自然人' ? '个人身份证明文件' : '单位证明文件'" style="width: 505px">
                     <span>{{businessLicense}}</span>
-                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:addFormItem.litigantType == '自然人' ? '个人身份证明文件' : '单位证明文件'}">
+                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:addFormItem.litigantType == '自然人' ? '个人身份证明文件' : '单位证明文件'}">
                         <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                     </Upload>
                 </FormItem>
@@ -167,19 +167,19 @@
                     </FormItem>
                     <FormItem label="律所函" v-show="!lawyerT1" style="width: 505px;">
                         <span>{{lawFirmLetter1}}</span>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'代理人一律所函'}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'代理人一律所函'}">
                             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                         </Upload>
                     </FormItem>
                     <FormItem label="律师执业证" v-show="!lawyerT1" style="width: 505px;">
                         <span>{{lawerCardUrl1}}</span>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'代理人一律师执业证'}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'代理人一律师执业证'}">
                             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                         </Upload>
                     </FormItem>
                     <FormItem label="委托书" v-show="!lawyerT1" style="width: 505px;">
                         <span>{{commission1}}</span>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'代理人一委托书'}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'代理人一委托书'}">
                             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                         </Upload>
                     </FormItem>
@@ -213,19 +213,19 @@
                     </FormItem>
                     <FormItem label="律所函" v-show="!lawyerT2" style="width: 505px;">
                         <span>{{lawFirmLetter2}}</span>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'代理人二律所函'}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'代理人二律所函'}">
                             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                         </Upload>
                     </FormItem>
                     <FormItem label="律师执业证" v-show="!lawyerT2" style="width: 505px;">
                         <span>{{lawerCardUrl2}}</span>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'代理人二律师执业证'}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'代理人二律师执业证'}">
                             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                         </Upload>
                     </FormItem>
                     <FormItem label="委托书" v-show="!lawyerT2" style="width: 505px;">
                         <span>{{commission2}}</span>
-                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :on-success="plant_uploadSuccess" :data="{fileType:'代理人二委托书'}">
+                        <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="plant_uploadSuccess" :data="{fileType:'代理人二委托书'}">
                             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
                         </Upload>
                     </FormItem>

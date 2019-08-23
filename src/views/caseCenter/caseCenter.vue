@@ -180,14 +180,18 @@
         </div>
         <div>
           <div class="single-page" style="height:100%">
-            <!-- <keep-alive> -->
             <router-view></router-view>
-            <!-- </keep-alive> -->
           </div>
         </div>
       </Card>
     </Row>
     <BackTop></BackTop>
+    <Modal v-model="preRegisterModal" title="预立案号" :mask-closable="false" width="250">
+      <Input v-model="preRegisterInput" placeholder="输入预立案号" />
+      <div slot="footer">
+        <Button type="primary" size="large" long @click="preRegister(preRegisterID)">确认</Button>
+      </div>
+    </Modal>
     <Modal
       v-model="pushBoxShow"
       title="推送调解员"
@@ -210,7 +214,9 @@ import { findLawCaseList,
          distributioncourtMediate,//法院端推送给法院调解员
          distributionInstitutionMediate,//法院调解员案件推送给机构调解员
          courtmediatorList,//获取法院调解员列表
-         institutionalmediatorList //获取机构调解员列表
+         institutionalmediatorList, //获取机构调解员列表
+         backLawCase, //退回
+         preFiling, //预立案号
 } from "@/api/case";
 import { getBrief } from "@/api/global";
 import { formatDate } from "@/libs/date";
@@ -236,6 +242,9 @@ export default {
       selectDep: [],
       dataDep: [],
       pushBoxShow:false,
+      preRegisterModal: false, //预立案号弹框
+      preRegisterInput: "", //预立案号
+      preRegisterID: "", //预立案号案件
       tjList:[],
       sendSelectClass:"",
       sendData:{
@@ -330,11 +339,52 @@ export default {
         {
           title: "操作",
           key: "",
-          width: 200,
+          width: 300,
           align: "center",
           render: (h, params) => {
-            if(params.row.progress=='立案申请' && (this.$store.getters.roLeName=="法官" || this.$store.getters.roLeName=="法院调解员")){
+            if((params.row.progress == "立案申请" || params.row.progress == "预立案") && (this.$store.getters.roLeName == "庭长" || this.$store.getters.roLeName == "法官" || this.$store.getters.roLeName == "法官助理" || this.$store.getters.roLeName == "书记员")){
               return h('div', [
+                  h(
+                    "Button",
+                    {
+                      props: {
+                        type: "primary",
+                        size: "small"
+                      },
+                      style: {
+                        marginRight: "5px"
+                      },
+                      on: {
+                        click: () => {
+                          //阻止事件冒泡
+                          this.stopPropagation();
+                          this.preRegisterModal = true;
+                          this.preRegisterID = params.row;
+                        }
+                      }
+                    },
+                    "预立案号"
+                  ),
+                  h(
+                    "Button",
+                    {
+                      props: {
+                        type: "primary",
+                        size: "small"
+                      },
+                      style: {
+                        marginRight: "5px"
+                      },
+                      on: {
+                        click: () => {
+                          //阻止事件冒泡
+                          this.stopPropagation();
+                          this.backoff(params.row.lawCaseId);
+                        }
+                      }
+                    },
+                    "退回"
+                  ),
                   h('Button', {
                       props: {
                           type: 'primary',
@@ -363,13 +413,7 @@ export default {
   methods: {
     init() {
       this.isClick = false;
-      // if(this.$store.getters.caseId != ''){
-      //   this.selectCase = true;
-      // }else{
-      //   this.selectCase = false;
-      // }
       this.getUserList();
-      // console.log(this.$store.getters.caseId)
     },
     changeSelect(flag){
         alert(flag)
@@ -466,13 +510,53 @@ export default {
     //选中一个案件
     selCase(dex) {
       this.$store.commit("SET_CASEID", dex.lawCaseId);
+      this.$store.commit("SET_BREIFNAME", dex.briefName); //获取案由并保存（子选项卡需要用到，勿删）
       console.log("dex.id", dex.id);
+      // if (dex.progress == "立案申请") {
+      //   this.$refs.info.init();
+      //   this.modal4 = true;
+      //   this.selectCase = false;
+      //   return false;
+      // }
       this.selectCase = true;
       this.isClick = true;
       this.onedata = [];
       this.onedata.push(dex);
       this.$router.push({
         name: "Info_index"
+      });
+    },
+    //预立案号
+    preRegister(row) {
+      if (this.preRegisterInput == "") {
+        this.$Message.error("请输入预立案号");
+        return;
+      }
+      preFiling([
+        { lawCaseId: row.lawCaseId, yLCaseNo: this.preRegisterInput }
+      ]).then(res => {
+        if (res.data.state == 100) {
+          this.preRegisterInput == "";
+          this.preRegisterModal = false;
+          this.$Message.success("成功");
+          this.getUserList()
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
+    //调解退回
+    backoff(caseID){
+      let ary=[]
+      let obj={lawCaseId:caseID}
+      ary.push(obj)
+      backLawCase(ary).then(res => {
+        if (res.data.state == 100) {
+          this.$Message.success(res.data.message);
+          this.getUserList()
+        } else {
+          this.$Message.error(res.data.message);
+        }
       });
     },
     pushIt(row){//推送调解员

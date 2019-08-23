@@ -49,13 +49,6 @@
         <!-- <Button type="primary" shape="circle" class="zh-addModelBtn" @click="addModel">添加</Button> -->
         <!-- <Button type="primary" shape="circle" class="zh-downModelBtn" @click="mEvidenceDownMuti">本次批量案件证据模板包下载</Button>
       </div> -->
-      <FormItem label="下载证据模板包"
-        :label-width="180"
-        class="ft-plant-chooseType ft-plant-upload"
-        style="margin:10px 0"
-      >
-        <Button type="primary" shape="circle" class="zh-downModelBtn" @click="NewmEvidenceDownMuti">点击下载至本地</Button>
-      </FormItem>
       <!-- <Table
         border
         style="margin-top:20px"
@@ -63,8 +56,16 @@
         :columns="modeColumns"
         :data="modelInfoList"
       ></Table> -->
+      <!-- 上传证据 -->
+      <FormItem label="下载证据模板包"
+        :label-width="180"
+        class="ft-plant-chooseType ft-plant-upload"
+        style="margin:10px 0"
+      >
+        <Button type="primary" shape="circle" class="zh-downModelBtn" @click="NewmEvidenceDownMuti">点击下载至本地</Button>
+      </FormItem>
       <FormItem
-        label="上传统一证据包"
+        label="上传证据压缩包"
         :label-width="180"
         class="ft-plant-chooseType ft-plant-upload"
         prop="mKeyInfoPath"
@@ -72,10 +73,10 @@
       >
         <Input
           v-model="mEvidenceList.mKeyInfoPath"
-          placeholder="请上传要素信息表"
+          placeholder="请上传证据包"
         ></Input>
         <span class='mEvidence-span'>{{mEvidence_fileName1}}</span>
-        <!-- 清流云上传 -->
+        <!-- 七牛云上传 -->
         <zh-upload 
         ref="myupload" 
         :refid="'myfile'" 
@@ -83,6 +84,43 @@
         @next="fileNext(arguments)" 
         @complete="fileComplete" 
         @error="fileError"></zh-upload>
+      </FormItem>
+
+      <FormItem>
+          <div style="height: 0px;border-top: 2px dashed #4873C5;width: 750px;margin-left: -203px;margin-top: 50px;"></div>                
+      </FormItem>
+
+      <!-- 上传诉前材料 -->
+      <FormItem label="下载诉前材料模板包"
+        :label-width="180"
+        class="ft-plant-chooseType ft-plant-upload"
+        style="margin:10px 0"
+      >
+        <Button type="primary" shape="circle" class="zh-downModelBtn" @click="downPic">点击下载至本地</Button>
+      </FormItem>
+      <FormItem
+        label="上传诉前材料压缩包"
+        :label-width="180"
+        class="ft-plant-chooseType ft-plant-upload"
+        style="margin:10px 0"
+      >
+        <Input
+          placeholder="请上传诉前材料压缩包"
+        ></Input>
+        <span class='mEvidence-span'>{{mEvidence_fileName2}}</span>
+        <Upload
+          action="/api/court/case/importEviPicList.jhtml "
+          :on-success="picMaterialsUpload"
+          :before-upload="picBeforeUpload"
+          :show-upload-list="false"
+          ref="up2"
+          style="display: inline-block;"
+        >
+          <Button
+          type="ghost"
+          icon="ios-cloud-upload-outline"
+          >选择文件</Button>
+        </Upload>
       </FormItem>
     </Form>
     <div
@@ -111,7 +149,7 @@ import mStep2 from "./Mevidence.js";
 import {ftDowntemplate} from "@/api/setcase.js";
 import {tools_downLoad,formatSeconds} from "@/libs/tools.js";
 import {getQiniuToken} from "@/api/setcase.js";
-import {hUpload} from "@/api/setcase.js";
+import {hUpload,downloadPic} from "@/api/setcase.js";
 import ZhUpload from '@/components/qiniu-upload/quick-upload.vue';
 
 export default {
@@ -124,6 +162,7 @@ export default {
       mEvidenceList: mStep2.mEvidenceList, //表单绑定数据
       mEvidenceRule: mStep2.mEvidenceRule, //表单验证规则
       mEvidence_fileName1: "暂未上传任何文件",
+      mEvidence_fileName2: "暂未上传任何文件",
       mEvidenceKeyInfoList: mStep2.mEvidenceKeyInfoList, //表格绑定数据
       modelInfoList:{},//模板数据表格绑定数据
       mEviPath: mStep2.mEvidenceList.mKeyInfoPath,//文件是否上传规则
@@ -131,6 +170,7 @@ export default {
       mEvidenceStatus: false, //全选反选状态
       mEvidenceHasSelectList: [], //已经要素列表
       mEvidence_subType: false, //提交状态（暂存or直接提交)
+      uploadDataPicList:"",//诉前文件上传后返回的数据
       flieFalg:true,//文件上传按钮控制
       flieProgress:0,//上传进度
       leastTime:0,//剩余时间
@@ -155,7 +195,6 @@ export default {
         },
         {
           title: "原告姓名",
-          width: 220,
           align: "center",
           render: (h, params) => {
             return h("span", params.row.caseInfo.plaintiffs[0].name);
@@ -163,7 +202,6 @@ export default {
         },
         {
           title: "被告姓名",
-          width: 220,
           align: "center",
           render: (h, params) => {
             let arrTemp = [];
@@ -196,7 +234,7 @@ export default {
         {
           title: "证据包是否上传",
           align: "center",
-          width: 150,
+          width: 100,
           render: (h, params) => {
             return h(
               "span",
@@ -209,9 +247,24 @@ export default {
           }
         },
         {
-          title: "证据操作",
+          title: "诉前材料是否上传",
           align: "center",
-          width:300,
+          width: 100,
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: { color: "#4873C5", cursor: "pointer" },
+                class: {'ft-change-index':true},
+              },
+              params.row.picZip
+            );
+          }
+        },
+        {
+          title: "文件操作",
+          align: "center",
+          width:400,
           render: (h, params) => {
             return h("div", [
               h(
@@ -219,6 +272,7 @@ export default {
                 {
                   props: {
                     action: "/api/court/case/importEvidence.jhtml",
+                    "show-upload-list":false,
                     "on-success": res => {
                       if (res.state === 100) {
                         this.$Notice.destroy();
@@ -243,7 +297,6 @@ export default {
                     color: "#4873C5",
                     cursor: "pointer",
                     margin: "0 10px 0 5px",
-                    float: "left"
                   }
                 },
                 "上传证据包"
@@ -322,11 +375,28 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.mEvidenceClearSingle(params.row.orderNo);
+                      this.mEvidenceClearSingle(params.row.orderNo,'evidence');
                     }
                   }
                 },
                 "清除证据"
+              ),
+
+              h(
+                "span",
+                {
+                  style: {
+                    color: "#F54C4C",
+                    cursor: "pointer",
+                    margin: "0 10px 0 5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.mEvidenceClearSingle(params.row.orderNo,'pic');
+                    }
+                  }
+                },
+                "清除诉前材料"
               )
             ]);
           }
@@ -403,6 +473,7 @@ export default {
       //用于显示证据包用
       this.mEvidenceKeyInfoList.forEach(val => {
         val.evidenceZip = "暂无";
+        val.picZip = "暂无";
         val._checked = false;
       });
     },
@@ -460,26 +531,17 @@ export default {
           this.$Notice.destroy();
       });
     },
-     //显示证据文件
+    //添加证据文件到每个案件
     mEvidenceShow(orderArr) {
       console.log("ccccc",orderArr)
       for (let i = 0; i < this.mEvidenceKeyInfoList.length; i++) {
         for (let j = 0; j < orderArr.length; j++) {
           if ( this.mEvidenceKeyInfoList[i].orderNo.indexOf(orderArr[j].orderNo) > -1 ) {
             this.mEvidenceKeyInfoList[i].caseInfo.evidence = [];
-            // this.modelInfoList.forEach((item1,index1) => {
-            //   //增加三个缺失字段
-            //   orderArr[j].evidence.forEach((item,index) => {
-            //       if(item.evidenceNo.replace("证据","")==item1.evidenceId.toString()){
-            //         item.evidenceTarget=item1.object;
-            //         item.evidenceSource=item1.source;
-            //         item.pagesNum=item1.pageNumber;
-            //       }
-            //   });
-            // });
             this.mEvidenceKeyInfoList[i].caseInfo.evidence = orderArr[j].evidence;
             this.mEvidenceKeyInfoList[i].caseInfo.indictmentScanning = orderArr[j].indictmentScanning;
             this.mEvidenceKeyInfoList[i].evidenceZip = '已上传';
+            this.$set(this.mEvidenceKeyInfoList, i, this.mEvidenceKeyInfoList[i]); //dom更新数据
           }
         }
       }
@@ -585,46 +647,7 @@ export default {
         this.$Notice.warning({title:'您还未选中任何案件'});
       }
       else {
-          let eviListArr = [];
-          //已选案件列表
-          this.mEvidenceHasSelectList.forEach(val=>{
-            console.log(val)
-            let obj={};
-
-            //添加案件类型
-            obj.lawCaseType=val.caseInfo.lawCaseType;
-            //添加流水号
-            obj.flowNumber=val.caseInfo.orderNo;
-
-            //添加案件号
-            //判断是保险保证还是金融案件
-            if(val.caseInfo.hasOwnProperty("policyNo")){
-              //保险
-              obj.policyNo=val.caseInfo.policyNo;
-            }else{
-              //金融
-              obj.caseNumber =val.caseInfo.caseNumber;
-            }
-
-            //添加被告姓名（多个组合）
-            val.caseInfo.defendants.forEach((item,index)=>{
-              if(index>0){
-                obj.defendantName+=','+item.name
-              }else{
-                obj.defendantName=item.name
-              }
-            });
-
-            //追加数组
-            eviListArr.push(obj);
-          })
-
-          //循环添加type和orderNo
-          // this.modelInfoList.forEach((item,index) => {
-          //   item.type='2';
-          //   item.orderNo=eviListArr;
-          // });
-          this.modelInfoList=eviListArr;
+          this.modelInfoList=this.getEviListArr();
           console.log(this.modelInfoList)
           this.$Message.loading({content: '获取文件中,请稍后...', duration: 0});
           ftDowntemplate({evidence:this.modelInfoList})
@@ -638,18 +661,123 @@ export default {
           })
       }
     },
+    //获取处理的证据
+    getEviListArr(){
+      let eviListArr = [];
+      //已选案件列表
+      this.mEvidenceHasSelectList.forEach(val=>{
+        console.log(val)
+        let obj={};
+
+        //添加案件类型
+        obj.lawCaseType=val.caseInfo.lawCaseType;
+        //添加流水号
+        obj.flowNumber=val.caseInfo.orderNo;
+
+        //添加案件号
+        //判断是保险保证还是金融案件
+        if(val.caseInfo.hasOwnProperty("policyNo")){
+          //保险
+          obj.policyNo=val.caseInfo.policyNo;
+        }else{
+          //金融
+          obj.caseNumber =val.caseInfo.caseNumber;
+        }
+
+        //添加被告姓名（多个组合）
+        val.caseInfo.defendants.forEach((item,index)=>{
+          if(index>0){
+            obj.defendantName+=','+item.name
+          }else{
+            obj.defendantName=item.name
+          }
+        });
+
+        //追加数组
+        eviListArr.push(obj);
+      })
+      return eviListArr
+    },
     //清除单个证据
-    mEvidenceClearSingle(orderNo) {
+    mEvidenceClearSingle(orderNo,type) {
       this.mEvidenceKeyInfoList.forEach((val, index) => {
         if (val.orderNo === orderNo) {
-          this.mEvidenceKeyInfoList[index].evidenceZip = "暂无";
           this.mEvidenceKeyInfoList[index]._checked = false;
-          this.mEvidenceKeyInfoList[index].caseInfo.evidence = [];
-          this.$Notice.success({ title: "清除成功" });
+          switch (type) {
+            case "evidence":
+              this.mEvidenceKeyInfoList[index].evidenceZip = "暂无";
+              this.mEvidenceKeyInfoList[index].caseInfo.evidence = [];
+              this.$Notice.success({ title: "清除成功" });
+            break;
+            case "pic":
+              this.mEvidenceKeyInfoList[index].picZip = "暂无";
+              this.mEvidenceKeyInfoList[index].caseInfo.pic = [];
+              this.$Notice.success({ title: "清除成功" });
+            break;
+          }
+
         }
       });
     },
-
+    //下载诉前案件
+    downPic() {
+      //诉前案件材料的参数
+      let picListArr=this.getEviListArr();
+      let params = {
+        evidence: picListArr//被告订单流水号
+      };
+      this.$Message.loading("获取中,请稍后....");
+      downloadPic(params).then(res => {
+        if (res.data.state === 100) {
+          this.$Message.destroy();
+          this.$Message.success("获取成功");
+          tools_downLoad(res.data.data);
+        } else {
+          this.$Message.error(res.data.mesaage);
+        }
+      });
+    },
+    //诉前案件资料上传前
+    picBeforeUpload() {
+      this.$refs.up2.clearFiles();
+      this.$Notice.info({
+        title: "正在上传文件请稍后",
+        duration: 0
+      });
+    },
+    //诉前案件资料上传
+    picMaterialsUpload(res) {
+      this.$Notice.destroy(); //关闭上传提示
+      console.log(res)
+      if(res.state==100){
+          this.$Message.success("上传成功！");
+          this.mEvidence_fileName2 = "已上传";
+          this.uploadDataPicList=res.data;
+          //判断哪一个上传成功
+          this.mPicShow(this.uploadDataPicList)
+      }else{//文件上传失败提示
+        this.$Notice.warning({
+          title: res.message,
+          duration: 5
+        });
+      }
+    },
+    //添加诉前文件到每个案件
+    mPicShow(orderArr) {
+      console.log("ccccc",orderArr)
+      for (let i = 0; i < this.mEvidenceKeyInfoList.length; i++) {
+        for (let j = 0; j < orderArr.length; j++) {
+          if ( this.mEvidenceKeyInfoList[i].orderNo.indexOf(orderArr[j].orderNo) > -1 ) {
+            this.mEvidenceKeyInfoList[i].caseInfo.pic = [];
+            this.mEvidenceKeyInfoList[i].caseInfo.pic = orderArr[j].fileList;
+            this.mEvidenceKeyInfoList[i].picZip = '已上传';
+            this.$set(this.mEvidenceKeyInfoList, i, this.mEvidenceKeyInfoList[i]); //dom更新数据
+          }
+        }
+      }
+      console.log("b",this.mEvidenceKeyInfoList)
+      this.$forceUpdate();
+    },
     //提交案件，前提判断是否都有上传案件
     mEvidence_addMany() {
       console.log("ccc",this.mEvidenceHasSelectList)

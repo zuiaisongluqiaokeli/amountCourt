@@ -40,10 +40,12 @@ span.mProve-span {
           <Upload
             action="/api/court/case/importCase.jhtml"
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="mAgent_uploadSuccess"
             :before-upload="mAgent_beforeUpload"
             :data="{fileType:'要素表'}"
             v-show="active_id==1"
+            ref="up1"
           >
             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
           </Upload>
@@ -65,20 +67,21 @@ span.mProve-span {
             @error="fileError"
             v-show="active_id==3"
           ></zh-upload>
-          <!-- <Upload
-            action="/api/court/case/importEvidence.jhtml"
+          <Upload
+            action="/api/court/case/importEviPicList.jhtml "
             class="ft-plant-upload-button"
+            :show-upload-list="false"
             :on-success="picMaterialsUpload"
             :before-upload="picBeforeUpload"
-            :data="{fileType:'诉前案件材料'}"
             v-show="active_id==4"
+            ref="up2"
           >
             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
-          </Upload> -->
+          </Upload>
           <span class="mProve-span" v-show="active_id==1">{{mProve_fileName0}}</span>
           <span class="mProve-span" v-show="active_id==2">{{mProve_fileName1}}</span>
           <span class="mProve-span" v-show="active_id==3">{{mProve_fileName2}}</span>
-          <!-- <span class="mProve-span" v-show="active_id==4">{{mProve_fileName3}}</span> -->
+          <span class="mProve-span" v-show="active_id==4">{{mProve_fileName3}}</span>
         </Form-item>
       </Form>
     </Row>
@@ -206,9 +209,7 @@ export default {
       flieFalg: true, //文件上传按钮控制
       flieProgress: 0, //上传进度
       leastTime: 0, //剩余时间
-      searchForm: {
-        // brief:'金融借款合同纠纷'
-      },
+      searchForm: {},
       materialType: [
         {
           id: 1,
@@ -222,10 +223,10 @@ export default {
           id: 3,
           title: "证据文件"
         },
-        // {
-        //   id: 4,
-        //   title: "诉前案件材料"
-        // }
+        {
+          id: 4,
+          title: "诉前案件材料"
+        }
       ],
       lawCaseID: [],
       plaintiffName: "",
@@ -239,7 +240,7 @@ export default {
       uploadData4: [], //诉前案件上传成功暂存的数据
       commit2:[],//证明提交数据
       commit3:[],//证据提交数据
-      //commit4:[],//诉前案件提交数据
+      commit4:[],//诉前案件提交数据
       active_id: 1,
       materialInfo: "",
       searchForm2: {},
@@ -346,15 +347,15 @@ export default {
             return "div", [h("span", params.row.eviUp ? "已上传" : "未上传")];
           }
         },
-        // {
-        //   title: "诉前案件材料",
-        //   key: "appealUp",
-        //   align: "center",
-        //   // fixed:'right',
-        //   render: (h, params) => {
-        //     return "div", [h("span", params.row.appealUp ? "已上传" : "未上传")];
-        //   }
-        // },
+        {
+          title: "诉前案件材料",
+          key: "appealUp",
+          align: "center",
+          // fixed:'right',
+          render: (h, params) => {
+            return "div", [h("span", params.row.appealUp ? "已上传" : "未上传")];
+          }
+        },
       ],
       listData: this.listDatas
     };
@@ -429,24 +430,24 @@ export default {
             }
           });
           break;
-        //   case 4: //诉前案件提交
-        // addPic(this.commit4).then(res => {
-        //     this.buttonLoading = false;
-        //     if (res.data.state == 100) {
-        //       this.$Notice.success({
-        //         title: "",
-        //         desc: res.data.message,
-        //         duration: 3
-        //       });
-        //       this.$emit("cancelEvent", this.listData);
-        //     } else {
-        //       this.isError = true;
-        //       this.successNumber = res.data.data.success;
-        //       this.failedNumber = res.data.data.error;
-        //       this.reason = res.data.message;
-        //     }
-        //   });
-          //break;
+          case 4: //诉前案件提交
+            addPic(this.commit4).then(res => {
+              this.buttonLoading = false;
+              if (res.data.state == 100) {
+                this.$Notice.success({
+                  title: "",
+                  desc: res.data.message,
+                  duration: 3
+                });
+                this.$emit("cancelEvent", this.listData);
+              } else {
+                this.isError = true;
+                this.successNumber = res.data.data.success;
+                this.failedNumber = res.data.data.error;
+                this.reason = res.data.message;
+              }
+            });
+          break;
       }
     },
     fileComplete(result, type) {
@@ -597,66 +598,48 @@ export default {
         });
       }
     },
-    mAgent_beforeUpload() {
+    mAgent_beforeUpload(name) {
+      this.$refs.up1.clearFiles();
+      this.$Notice.info({
+        title: "正在上传文件请稍后",
+        duration: 0
+      });
+    },
+    //诉前案件资料上传前
+    picBeforeUpload() {
+      this.$refs.up2.clearFiles();
       this.$Notice.info({
         title: "正在上传文件请稍后",
         duration: 0
       });
     },
     //诉前案件资料上传
-    // picMaterialsUpload(res) {
-    //   this.$Notice.destroy(); //关闭上传提示
-    //   if(res.state==100){
-    //     //要素上传成功回调
-    //     if (res.data.content.length != 0) {
-    //       this.mProve_fileName3 = "已上传";
-    //       this.uploadData4 = res.data.content; //接收上传成功的数据
-    //       //匹对上传成功的案件
-    //       this.uploadData4.forEach((item, index) => {
-    //         this.listData.forEach((item1, index1) => {
-    //           if (item.flow == item1.flowNumber) {
-    //             item1.appealUp = true; //设置当前列表项对应的案件的上传转状态
-    //             item.appealUp = true; //
-    //             this.$set(this.listData, index1, item1); //dom更新数据
-    //           }
-    //         });
-    //       });
-    //     } else {
-    //       this.$Notice.open({
-    //         title: "上传提示",
-    //         render: (h, params) => {
-    //           return h(
-    //             "div",
-    //             res.data.error.map(function(item, index) {
-    //               return h(
-    //                 "p",
-    //                 {
-    //                   style: {
-    //                     color: "red",
-    //                     marginTop: "10px"
-    //                   }
-    //                 },
-    //                 item
-    //               );
-    //             })
-    //           );
-    //         },
-    //         duration: 0
-    //       });
-    //     }
-    //   }else{//文件上传失败提示
-    //     this.$Notice.warning({
-    //       title: res.message,
-    //       duration: 5
-    //     });
-    //   }
-    // },
-    // picBeforeUpload() {
-    //   this.$Notice.info({
-    //     title: "正在上传文件请稍后",
-    //     duration: 0
-    //   });
-    // },
+    picMaterialsUpload(res) {
+      this.$Notice.destroy(); //关闭上传提示
+      console.log(res)
+      if(res.state==100){
+          this.$Message.success("上传成功！");
+          this.mProve_fileName3 = "已上传";
+          this.uploadData4=res.data;
+          this.commit4=res.data;
+          //判断哪一个上传成功
+          this.uploadData4.forEach((item, index) => {
+            this.listData.forEach((item1, index1) => {
+              if (item.orderNo == item1.flowNumber) {
+                //如果流水号匹对的上说明上传成功
+                item1.appealUp = true; //设置当前列表项对应的案件的上传状态
+                item.appealUp = true;
+                this.$set(this.listData, index1, item1); //dom更新数据
+              }
+            });
+          });
+      }else{//文件上传失败提示
+        this.$Notice.warning({
+          title: res.message,
+          duration: 5
+        });
+      }
+    },
     /**
      * 选中案由
      */
@@ -759,9 +742,9 @@ export default {
         case 3:
           this.downEviFile();
           break;
-        // case 4:
-        //   this.downPic();
-        //   break;
+        case 4:
+          this.downPic();
+          break;
       }
     },
 
@@ -803,21 +786,21 @@ export default {
     },
 
     //下载诉前案件
-    // downPic() {
-    //   let params = {
-    //     evidence: this.picListArr//被告订单流水号
-    //   };
-    //   this.$Message.loading("获取中,请稍后....");
-    //   downloadPic(params).then(res => {
-    //     if (res.data.state === 100) {
-    //       this.$Message.destroy();
-    //       this.$Message.success("获取成功");
-    //       tools_downLoad(res.data.data);
-    //     } else {
-    //       this.$Message.error(res.data.mesaage);
-    //     }
-    //   });
-    // },
+    downPic() {
+      let params = {
+        evidence: this.picListArr//被告订单流水号
+      };
+      this.$Message.loading("获取中,请稍后....");
+      downloadPic(params).then(res => {
+        if (res.data.state === 100) {
+          this.$Message.destroy();
+          this.$Message.success("获取成功");
+          tools_downLoad(res.data.data);
+        } else {
+          this.$Message.error(res.data.mesaage);
+        }
+      });
+    },
     /**
      * 选择书记员
      */
@@ -955,19 +938,19 @@ export default {
         let obj = {};
         obj.defendantName = item.defendantName; //被告
         obj.caseNumber = ""; //订单号
-        obj.lawCaseType = item.lawCaseType.toString() //案件类型
-
+        obj.lawCaseType = item.lawCaseType //案件类型
         obj.flowNumber = item.flowNumber; //流水号
         this.eviListArr.push(obj);
       });
+      
       //诉前案件材料的参数
-      // this.listData.forEach((item, index) => {
-      //   let obj = {};
-      //   obj.defendantName = item.defendantName; //被告
-      //   obj.caseNumber = item.caseNo;//订单号
-      //   obj.flowNumber = item.flowNumber; //流水号
-      //   this.picListArr.push(obj);
-      // });
+      this.listData.forEach((item, index) => {
+        let obj = {};
+        obj.defendantName = item.defendantName; //被告
+        obj.caseNumber = item.caseNo;//订单号
+        obj.flowNumber = item.flowNumber; //流水号
+        this.picListArr.push(obj);
+      });
       let ds  = {
         lawCaseList: ary
       };

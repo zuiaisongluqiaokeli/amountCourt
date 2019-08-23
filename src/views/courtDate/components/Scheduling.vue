@@ -11,7 +11,7 @@
                 </Col>
             </Row>
             <div class="schTitle">
-                <h3>本案第{{caseInfo.times ? caseInfo.times : 0}}次排期</h3>
+                <h3>当前排期</h3>
             </div>
             <div class="contain">
                 
@@ -91,7 +91,7 @@
                     </Col>
                 </Row>
             </div>
-            <div class="button-clas">
+            <div class="button-clas" v-if="allowRole.indexOf(this.$store.getters.roLeName)>-1">
                 <Button size='large' @click="edit" :loading="buttunLoading" v-show="!isAddp" style="background:#2083D8;color:#fff;padding: 6px 31px;" >{{editState ? '保存排期' : (isOneTime ? '排期' : '修改排期') }}</Button>
                 <Button size='large' @click="edit" :loading="buttunLoading" v-show="isAddp" style="background:#2083D8;color:#fff;padding: 6px 31px;" >保存排期</Button>
                 <Button size='large' @click="cancel" v-show="editState" style="background:#F54C4C;color:#fff;padding: 6px 31px;" >取消</Button>
@@ -123,6 +123,7 @@ export default {
         return{
             caseInfo:{},
             caseNoList:[],
+            allowRole:["法官","法官助理"],//允许排期操作的角色
             tribunalId:"",
             tribunalList:[
                 {

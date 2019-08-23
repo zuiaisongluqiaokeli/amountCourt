@@ -33,7 +33,7 @@
                 </FormItem>
                 <FormItem label="单位证明文件" class="zh_form zh-plant-chooseType" prop="reg_groupfile">
                     <Input placeholder="请上传文件" v-model="groupList.reg_groupfile" :disabled="true"></Input>
-                    <Upload action="/api/court/register/addProvePath.jhtml" :data="{imgAddress:''}" accept="image/*" :on-success="upGroupfileSuccess" style="display:inline">
+                    <Upload action="/api/court/register/addProvePath.jhtml" :data="{imgAddress:''}" accept="image/*" :show-upload-list="false" :on-success="upGroupfileSuccess" style="display:inline">
                         <Button type="primary" shape="circle" class="zh-getCodeBtn">上传文件</Button>
                     </Upload>
                 </FormItem>
@@ -63,7 +63,7 @@
                     </FormItem>
                     <FormItem label="法定代表人委托书" class="zh_form zh-plant-chooseType" prop="reg_clientfile">
                         <Input placeholder="请上传文件" v-model="groupList.reg_clientfile" :disabled="true"></Input>
-                        <Upload action="/api/court/register/addPrincipalPath.jhtml" :data="{imgAddress:''}" accept="image/*" :on-success="upClientfileSuccess" style="display:inline">
+                        <Upload action="/api/court/register/addPrincipalPath.jhtml" :data="{imgAddress:''}" accept="image/*" :show-upload-list="false" :on-success="upClientfileSuccess" style="display:inline">
                             <Button type="primary" shape="circle" class="zh-getCodeBtn">上传文件</Button>
                         </Upload>
                     </FormItem>
