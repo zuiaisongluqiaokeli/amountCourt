@@ -55,6 +55,7 @@ export default {
       break;
       case "Muticase":
           this.nowTab = '3'
+          this.$refs.Muticase.$refs.Magenttype.init();
       break;
     }
   },
@@ -63,6 +64,9 @@ export default {
       switch(name){
         case '2':
           this.$refs.SingleNewcase.init();
+        break;
+        case '3':
+          this.$refs.Muticase.$refs.Magenttype.init();
         break;
       }
     },

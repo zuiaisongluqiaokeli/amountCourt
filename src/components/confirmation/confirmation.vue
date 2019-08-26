@@ -228,7 +228,7 @@ export default {
       if(JSON.parse(window.localStorage.getItem("nowCase"))){
         caseType=JSON.parse(window.localStorage.getItem("nowCase")).nowCaseType;
       }
-      console.log(caseType)
+      console.log("caseTypecaseType",caseType)
       return caseType;
     }
   }

@@ -34,9 +34,6 @@
         </Form>
       </Card>
       <!-- 送达内容 -->
-
-
-
       <Collapse v-model="openPandel">
         <Panel :name="item.orderNo" v-for="(item,index) in mSendList" :key="index">
           <span>被告:</span>
@@ -135,7 +132,6 @@ export default {
       this.meSendDeal2();
       this.meSendDeal();
     },
-
     //处理数据，动态绑定表单规则
     meSendDeal () {
       let cnt = 0;

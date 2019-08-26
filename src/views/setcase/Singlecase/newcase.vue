@@ -140,6 +140,7 @@ export default {
         this.nowIndex = 1;
       }else{
         this.nowIndex = 3;
+        this.$refs.ftKeyinfo4.init();//获取案由
       }
       this.defendants = payload.data.accused_confirmList;
       this.thirdPeople = payload.data.third_confirmList;

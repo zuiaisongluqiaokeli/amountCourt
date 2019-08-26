@@ -333,3 +333,15 @@ export function changeLawCaseToNormal(params) {
     data:params,
   });
 }
+
+/**
+ *@description [获取案由列表]
+ *@returns {stream}
+ */
+export function briefList(params) {
+  return service({
+    url: '/court/case/briefList.jhtml',
+    method: 'get',
+    params,
+  });
+}

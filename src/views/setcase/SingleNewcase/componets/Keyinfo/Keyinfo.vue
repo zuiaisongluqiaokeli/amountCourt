@@ -18,12 +18,7 @@
           prop="lawCaseType"
         >
           <Select v-model="keyList.lawCaseType" style="width:300px" placeholder="请选择案件类型" filterable>
-            <Option value="1">金融借款合同纠纷</Option>
-            <Option value="2">保证保险合同追偿</Option>
-            <Option value="3">信用卡纠纷</Option>
-            <Option value="4">融资租赁合同纠纷</Option>
-            <Option value="5">保险人代位求偿</Option>
-            <Option value="6">金融不良债权追偿</Option>
+            <Option v-for="(item,index) in briefAry" :key="index" :value="item.type">{{item.name}}</Option>
             <Option value="0">其他案件</Option>
           </Select>
         </FormItem>
@@ -64,7 +59,7 @@
           </Upload>
         </FormItem>
         <FormItem>
-          <div v-for="item in plant_fileName">
+          <div v-for="(item,index) in plant_fileName" :key="index">
             <span class="fileName">{{item}}</span>
             <a @click="delFile('file1',item)">删除</a>
           </div>
@@ -100,6 +95,7 @@
 <script>
 import keyInfoRule from "./keyinfo.js";
 import { tools_transDate, tools_objHasStr } from "@/libs/tools.js";
+import { briefList} from '@/api/setcase.js'
 import Finance from "./componets/finance.vue"; //金融借款
 import Insurance from "./componets/insurance.vue"; //保险保证
 import Creditcard from "./componets/creditcard.vue"; //信用卡纠纷
@@ -125,11 +121,26 @@ export default {
       impawnList: {}, //质押合同数据
       loanList: {}, //借贷合同数据
       secureList: {}, //保证保险合同追偿
-      plant_fileName: [] //起诉状扫描件
+      plant_fileName: [], //起诉状扫描件
+      //案由列表 {名称、案由类型ID、支持的文件类型}
+      briefAry:[],
     };
   },
   mounted() {},
   methods: {
+    init(){//初始化
+      console.log("init")
+      //获取案由
+      briefList().then(res=>{
+        if(res.data.state === 100) {
+          let data=res.data.data;
+          console.log("data",data)
+          this.briefAry=data;
+        }else{
+          this.$Message.error(res.data.message);
+        }
+      })
+    },
     // 表单验证
     ft_keyinfo_toStep5(name) {
       this.$refs[name].validate(valid => {
@@ -173,12 +184,8 @@ export default {
         reason: this.keyList.reason,//事实理由
         indictmentScanning: this.keyList.indictmentScanning//起诉状
       }
-      //一般案件
-      if (this.keyList.lawCaseType === "0") {
-        let newData=Object.assign({},baseData)
-        this.$emit("toNextStep",{newData:newData,type:"要素信息"});
       //金融案件
-      } else if (this.keyList.lawCaseType === "1") { 
+      if (this.keyList.lawCaseType === "1") { 
 
         let keyList=this.$refs.finance.keyList
 
@@ -262,16 +269,7 @@ export default {
         })
         let newData=Object.assign(baseData,keyList)
         this.$emit("toNextStep",{newData:newData,type:"要素信息"});
-      }else if (this.keyList.lawCaseType === "4") {//融资租赁合同纠纷
-        // let keyList= this.$refs.financial.baseData
-        let newData=Object.assign({},baseData)
-        this.$emit("toNextStep",{newData:newData,type:"要素信息"});
-      }else if (this.keyList.lawCaseType === "5") {//保险人代位求偿
-        // let keyList=this.$refs.subrogation.baseData
-        let newData=Object.assign({},baseData)
-        this.$emit("toNextStep",{newData:newData,type:"要素信息"});
-      }else if (this.keyList.lawCaseType === "6") {//金融不良债权追偿
-        // let keyList=this.$refs.subrogation.baseData
+      }else if (this.keyList.lawCaseType) {//其他案件和只需要基础要素的案件类型
         let newData=Object.assign({},baseData)
         this.$emit("toNextStep",{newData:newData,type:"要素信息"});
       }

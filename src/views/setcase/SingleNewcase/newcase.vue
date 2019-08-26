@@ -141,6 +141,7 @@ export default {
           this.thirdPeople = payload.data.third_confirmList;//获取第三人列表
           if(payload.state=='next'){
             this.nowIndex=2;
+            this.$refs.ftKeyinfo4.init();//初始化获取案由
           }else if(payload.state=='back'){
             this.nowIndex=0;
           }

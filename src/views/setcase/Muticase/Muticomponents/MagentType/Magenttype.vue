@@ -22,12 +22,7 @@
       </FormItem>
       <FormItem  label="选择案件类型" class="ft_form ft-plant-chooseType ft-plant-slectType" prop="lawCaseType">
         <RadioGroup v-model="caseType" @on-change="caseTypeChange">
-            <Radio label="1"><span>保证保险合同追偿</span></Radio>
-            <Radio label="2"><span>金融借款合同纠纷</span></Radio>
-            <Radio v-show="fileType == 2" label="3"><span>信用卡纠纷</span></Radio>
-            <Radio v-show="fileType == 1" label="4"><span>融资租赁合同纠纷</span></Radio>
-            <Radio v-show="fileType == 1" label="5"><span>保险人代位求偿</span></Radio>
-            <Radio v-show="fileType == 1" label="6"><span>金融不良债权追偿</span></Radio>
+            <Radio v-for="(item,index) in briefAry" :key="index" v-show="item.fileType.split(',').indexOf(fileType.toString())>-1" :label="item.type"><span>{{item.name}}</span></Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="下载要素模板包"
@@ -147,7 +142,7 @@
 
 <script>
 import mStep1 from "./Magenttype.js";
-import { ftAddkeyInfoMany,downloadFact } from "@/api/setcase.js";
+import { ftAddkeyInfoMany,downloadFact,briefList } from "@/api/setcase.js";
 import {tools_downLoad} from "@/libs/tools.js";
 export default {
   data() {
@@ -165,6 +160,8 @@ export default {
       mAgent_subType: false, //提交状态（暂存or直接提交)
       upErrorShow:false,//上传文件错误提示开关
       errorMsgs:["暂无错误信息"],//部分文件上传错误信息
+      //案由列表 {名称、案由类型ID、支持的文件类型}
+      briefAry:[],
       mColumns: [
         {
           type: "selection",
@@ -237,11 +234,20 @@ export default {
       deep:true,
     }
   },
-  //不是很清楚这里保存这个字段的含义
-  mounted() {
-    this.setLocalStorage("保证保险合同追偿");
-  },
   methods: {
+    init(){//初始化
+      console.log("init")
+      //获取案由
+      briefList().then(res=>{
+        if(res.data.state === 100) {
+          let data=res.data.data;
+          console.log("data",data)
+          this.briefAry=data;
+        }else{
+          this.$Message.error(res.data.message);
+        }
+      })
+    },
     //下载
     downDemo(){
       this.$Message.loading({content: '获取要素模板中,请稍后...', duration: 0});
@@ -388,17 +394,9 @@ export default {
     },
     //文件类型改变
     caseTypeChange(e){
-      switch (e) {
-        case "1":
-          this.setLocalStorage("保证保险合同追偿");
-        break;
-        case "2":
-          this.setLocalStorage("金融借款合同纠纷");
-        break;
-        case "3":
-          this.setLocalStorage("信用卡纠纷");
-        break;
-      }
+       let nowCaseType=this.briefAry.filter((item)=> {return item.type === e;}) 
+       console.log("nowCaseType",nowCaseType)
+       this.setLocalStorage(nowCaseType[0].name);
     },
     //设置本地存储
     setLocalStorage(nowCaseType){
