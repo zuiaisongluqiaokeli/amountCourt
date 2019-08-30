@@ -63,14 +63,7 @@
                     placeholder="请选择"
                     style="width: 180px"
                   >
-                    <Option value="立案">立案</Option>
-                    <Option value="排班">排班</Option>
-                    <Option value="送达">送达</Option>
-                    <Option value="举证">举证</Option>
-                    <Option value="质证">质证</Option>
-                    <Option value="开庭">开庭</Option>
-                    <Option value="已开庭">已开庭</Option>
-                    <Option value="已结案">已结案</Option>
+                    <Option v-for="(item,index) in progressList" :value="item" :key="index">{{item}}</Option>
                   </Select>
                 </Form-item>
                 <Form-item label="时间范围">
@@ -218,7 +211,7 @@ import { findLawCaseList,
          backLawCase, //退回
          preFiling, //预立案号
 } from "@/api/case";
-import { getBrief } from "@/api/global";
+import { getBrief,getProgress } from "@/api/global";
 import { formatDate } from "@/libs/date";
 export default {
   name: "user-manage",
@@ -233,7 +226,8 @@ export default {
       loading: true,
       selectCase: false,
       drop: false,
-      briefList: [],
+      briefList: [],//案由列表
+      progressList:[],//案件状态列表
       dropDownContent: "展开",
       dropDownIcon: "ios-arrow-down",
       selectCount: 0,
@@ -337,93 +331,99 @@ export default {
            width: 120,
         },
         {
+          title: "是否同步内网",
+          key: "exportInfo",
+          align: "center",
+          render: (h, params) => {
+            return h(
+              "span",
+              {},
+              params.row.exportInfo ? params.row.exportInfo : "未同步"
+            );
+          }
+        },
+        {
           title: "操作",
           key: "",
           width: 300,
           align: "center",
           render: (h, params) => {
-            if((this.allowProgress.indexOf(params.row.progress)>-1) && (this.allowRole.indexOf(this.$store.getters.roLeName)>-1)){
-              return h('div', [
-                  h(
-                    "Button",
-                    {
-                      props: {
-                        type: "primary",
-                        size: "small"
-                      },
-                      style: {
-                        marginRight: "5px"
-                      },
-                      on: {
-                        click: () => {
-                          //阻止事件冒泡
-                          this.stopPropagation();
-                          this.preRegisterModal = true;
-                          this.preRegisterID = params.row;
-                        }
-                      }
-                    },
-                    "预立案号"
-                  ),
-                  h(
-                    "Button",
-                    {
-                      props: {
-                        type: "primary",
-                        size: "small"
-                      },
-                      style: {
-                        marginRight: "5px"
-                      },
-                      on: {
-                        click: () => {
-                          //阻止事件冒泡
-                          this.stopPropagation();
-                          this.backoff(params.row.lawCaseId);
-                        }
-                      }
-                    },
-                    "退回"
-                  ),
-                  h('Button', {
-                      props: {
-                          type: 'primary',
-                          size: 'small',
-                      },
-                      on: {
-                          click: () => {
-                            //阻止事件冒泡
-                            this.stopPropagation()
-                            this.pushIt(params.row);
-                          }
-                      }
-                  }, "推送调解员")
-              ]);
-            }else if((this.allowProgress.indexOf(params.row.progress)>-1) && (this.allowRole2.indexOf(this.$store.getters.roLeName)>-1)){
-              return h('div', [
-                  h('Button', {
-                      props: {
-                          type: 'primary',
-                          size: 'small',
-                      },
-                      on: {
-                          click: () => {
-                            //阻止事件冒泡
-                            this.stopPropagation()
-                            this.pushIt(params.row);
-                          }
-                      }
-                  }, "推送调解员")
-              ]);
-            }else{
-              return h('span','暂无操作');
+            let beforeSetCaseBtn=h(
+              "Button",
+              {
+                props: {
+                  type: "primary",
+                  size: "small"
+                },
+                style: {
+                  marginRight: "5px"
+                },
+                on: {
+                  click: () => {
+                    //阻止事件冒泡
+                    this.stopPropagation();
+                    this.preRegisterModal = true;
+                    this.preRegisterID = params.row;
+                  }
+                }
+              },
+              "预立案号"
+            )
+            let backBtn=h(
+              "Button",
+              {
+                props: {
+                  type: "primary",
+                  size: "small"
+                },
+                style: {
+                  marginRight: "5px"
+                },
+                on: {
+                  click: () => {
+                    //阻止事件冒泡
+                    this.stopPropagation();
+                    this.backoff(params.row.lawCaseId);
+                  }
+                }
+              },
+              "退回"
+            )
+            let pushBtn=h('Button', {
+              props: {
+                type: 'primary',
+                size: 'small',
+              },
+              on: {
+                click: () => {
+                  //阻止事件冒泡
+                  this.stopPropagation()
+                  this.pushIt(params.row);
+                }
+              }
+            }, "推送调解员")
+
+            let btnAry=[];
+
+            //法官类型可以预立案、退回、推送
+            if(this.allowRole.indexOf(this.$store.getters.roLeName)>-1){
+              //判断是否是立案申请，立案申请时才能预立案和退回
+              if(params.row.progress=='立案申请'){
+                btnAry.push(beforeSetCaseBtn,backBtn)
+              }else{//立案申请后才能推送
+                btnAry.push(pushBtn)
+              }
+            //调解员类型可以推送
+            }else if((this.allowRole2.indexOf(this.$store.getters.roLeName)>-1)){
+              btnAry.push(pushBtn)
             }
+
+            return btnAry.length>0 ?  h('div',btnAry) : h('span','暂无操作');
           }
         },
       ],
       data: [],
       exportData: [],
-      allowProgress:["立案申请","预立案"],//允许的案件状态
       allowRole:["庭长","法官助理","法官","书记员"],//允许的角色1
       allowRole2:["法院调解员"],//允许的角色2
       total: 0
@@ -477,10 +477,18 @@ export default {
         } else {
           this.$Message.info(res.data.message);
         }
-      }); 
+      });
+      //获取案由
       getBrief().then(res => {
         if (res.data.state == 100) {
           this.briefList = res.data.data;
+        }
+      });
+      //获取案件状态
+      getProgress().then(res => {
+        if (res.data.state == 100) {
+          this.progressList = res.data.data.split(',');
+          console.log("progressList",this.progressList)
         }
       });
     },

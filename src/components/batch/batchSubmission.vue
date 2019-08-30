@@ -32,11 +32,18 @@ span.mProve-span {
             <Button shape="circle" :class="i.id==active_id?'bg-blue':''">{{i.title}}</Button>
           </div>
         </Form-item>
-        <Form-item label="下载材料模板包">
+        <Form-item label="选择文件类型">
+          <RadioGroup v-model="fileType">
+              <Radio label="压缩文件">{{active_id==1 ? "world压缩文件": "压缩文件"}}</Radio>
+              <Radio label="excel文件" v-if="active_id==1">excel文件（个人信息不能修改）</Radio>
+          </RadioGroup>
+        </Form-item>
+        <Form-item label="下载材料模板">
           <Button shape="circle" style="width:190px;" type="primary" @click="download">点击下载至本地</Button>
         </Form-item>
         <Form-item label="导入材料文件">
           <!-- 要素普通上传，剩下两个七牛云上传 -->
+          <!-- 要素表 压缩文件上传 -->
           <Upload
             action="/api/court/case/importCase.jhtml"
             class="ft-plant-upload-button"
@@ -44,11 +51,25 @@ span.mProve-span {
             :on-success="mAgent_uploadSuccess"
             :before-upload="mAgent_beforeUpload"
             :data="{fileType:'要素表'}"
-            v-show="active_id==1"
+            v-show="active_id==1 && fileType=='压缩文件'"
             ref="up1"
           >
             <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
           </Upload>
+          <!-- 要素表 excel文件上传 -->
+          <Upload
+            action="/api/court/case/uploadExcel.jhtml"
+            class="ft-plant-upload-button"
+            :show-upload-list="false"
+            :on-success="mAgent_uploadSuccess"
+            :before-upload="mAgent_beforeUpload"
+            :data="{fileType:'要素表'}"
+            v-show="active_id==1 && fileType=='excel文件'"
+            ref="up12"
+          >
+            <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+          </Upload>
+          <!-- 证明文件 压缩文件上传 -->
           <zh-upload
             ref="mproveUpload1"
             :refid="'mproveFile1'"
@@ -58,6 +79,7 @@ span.mProve-span {
             @error="fileError"
             v-show="active_id==2"
           ></zh-upload>
+          <!-- 证据文件 压缩文件上传 -->
           <zh-upload
             ref="mproveUpload2"
             :refid="'mproveFile2'"
@@ -67,6 +89,7 @@ span.mProve-span {
             @error="fileError"
             v-show="active_id==3"
           ></zh-upload>
+          <!-- 诉前案件材料 压缩文件上传 -->
           <Upload
             action="/api/court/case/importEviPicList.jhtml "
             class="ft-plant-upload-button"
@@ -186,6 +209,7 @@ import {
   assistantJudgeList,
   clerkList,
   essential,
+  downloadFactExcel,
   addProveFile,
   updataLawCase,
   addEvidence,
@@ -241,7 +265,8 @@ export default {
       commit2:[],//证明提交数据
       commit3:[],//证据提交数据
       commit4:[],//诉前案件提交数据
-      active_id: 1,
+      active_id: 1,//材料类型id
+      fileType:'压缩文件',//材料文件格式
       materialInfo: "",
       searchForm2: {},
       selRow: {},
@@ -375,23 +400,41 @@ export default {
       this.buttonLoading = true;
       switch (this.active_id) {
         case 1: //要素提交
-          updataLawCase(this.uploadData1).then(res => {
-            this.buttonLoading = false;
-            if (res.data.state == 100) {
+          if(this.fileType=='压缩文件'){
+            updataLawCase(this.uploadData1).then(res => {
+              this.buttonLoading = false;
+              if (res.data.state == 100) {
+                this.$Notice.success({
+                  title: "",
+                  desc: res.data.message,
+                  duration: 3
+                });
+                this.$emit("cancelEvent", 1);
+              } else {
+                //对应的alert错误提示
+                this.isError = true;
+                this.successNumber = res.data.data.success;
+                this.failedNumber = res.data.data.error;
+                this.reason = res.data.message;
+              }
+            });
+          }
+          if(this.fileType=='excel文件'){
+            if(mProve_fileName0=='已上传'){
               this.$Notice.success({
-                title: "",
-                desc: res.data.message,
-                duration: 3
+                    title: "",
+                    desc: "提交成功！",
+                    duration: 3
               });
               this.$emit("cancelEvent", 1);
-            } else {
-              //对应的alert错误提示
-              this.isError = true;
-              this.successNumber = res.data.data.success;
-              this.failedNumber = res.data.data.error;
-              this.reason = res.data.message;
+            }else{
+              this.$Notice.info({
+                    title: "",
+                    desc: "未上传要素文件！",
+                    duration: 3
+              });
             }
-          });
+          }
           break;
         case 2: //证明提交
            addProveFile(this.commit2).then(res => {
@@ -550,46 +593,30 @@ export default {
     //要素表上传
     mAgent_uploadSuccess(res) {
       this.$Notice.destroy(); //关闭上传提示
+      console.log("resres",res)
       if(res.state==100){
+        this.mProve_fileName0 = "已上传";
         //要素上传成功回调
         if (res.data.content.length != 0) {
-          this.mProve_fileName0 = "已上传";
           this.uploadData1 = res.data.content; //接收上传成功的数据
           //匹对上传成功的案件
           this.uploadData1.forEach((item, index) => {
             this.listData.forEach((item1, index1) => {
-              if (item.flow == item1.flowNumber) {
+              if (item.flow == item1.flowNumber || item.orderNo == item1.flowNumber) {
                 //如果流水号匹对的上说明该案件要素上传成功
                 item1.keyInfoUp = true; //设置当前列表项对应的案件的上传转状态
-                item.keyInfoUp = true; //
+                item.keyInfoUp = true; 
                 this.$set(this.listData, index1, item1); //dom更新数据
               }
             });
           });
           console.log("6666", this.listData);
-        } else {
-          // 要素有误提示
-          this.$Notice.open({
-            title: "上传提示",
-            render: (h, params) => {
-              return h(
-                "div",
-                res.data.error.map(function(item, index) {
-                  return h(
-                    "p",
-                    {
-                      style: {
-                        color: "red",
-                        marginTop: "10px"
-                      }
-                    },
-                    item
-                  );
-                })
-              );
-            },
-            duration: 0
-          });
+          //部分层失败的案件
+          if(res.data.error.length !=0){
+            this.showErroMsg(res.data.error)
+          }
+        }else {
+          this.showErroMsg(res.data.error)
         }
       }else{//文件上传失败提示
         this.$Notice.warning({
@@ -597,6 +624,30 @@ export default {
           duration: 5
         });
       }
+    },
+    showErroMsg(errorAry){//显示错误信息
+      // 要素有误提示
+      this.$Notice.open({
+        title: "上传提示",
+        render: (h, params) => {
+          return h(
+            "div",
+            errorAry.map(function(item, index) {
+              return h(
+                "p",
+                {
+                  style: {
+                    color: "red",
+                    marginTop: "10px"
+                  }
+                },
+                item
+              );
+            })
+          );
+        },
+        duration: 0
+      });
     },
     mAgent_beforeUpload(name) {
       this.$refs.up1.clearFiles();
@@ -729,12 +780,22 @@ export default {
       switch (this.active_id) {
         case 1:
           console.log(sendObj);
-          essential(sendObj).then(res => {
-            if (res.data.state == 100) {
-              let path = res.data.data.filePath;
-              tools_downLoad(path);
-            }
-          });
+          if(this.fileType=="压缩文件"){
+            essential(sendObj).then(res => {
+              if (res.data.state == 100) {
+                let path = res.data.data.filePath;
+                tools_downLoad(path);
+              }
+            });
+          }
+          if(this.fileType=="excel文件"){
+            downloadFactExcel(sendObj).then(res => {
+              if (res.data.state == 100) {
+                let path = res.data.data.filePath;
+                tools_downLoad(path);
+              }
+            });
+          }
           break;
         case 2:
           this.downProveFile();

@@ -79,16 +79,16 @@
             </div>
             <div style="margin-left:50px">
                 <div style="padding-left:10px">
-                  <a style="padding-right:20px" href="/courtfinance/mycase">待审核</a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase"></a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase">待排期</a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase">待送达</a>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '预立案'}}">预立案</router-link>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '立案申请'}}">待审核</router-link>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '排班'}}">待排期</router-link>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '送达'}}">待送达</router-link>
                 </div>
                 <div style="padding-left:10px">
-                  <a style="padding-right:20px" href="/courtfinance/mycase">待举证</a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase">待质证</a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase">待庭审</a>
-                  <a style="padding-right:20px" href="/courtfinance/mycase">已庭审</a>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '退回'}}">被退回</router-link>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '已开庭'}}">已开庭</router-link>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '已调解'}}">已调解</router-link>
+                  <router-link style="padding-right:20px" :to="{path: '/courtfinance/mycase', query: {progress: '已结案'}}">已结案</router-link>
                 </div>
             </div>
         </Card>

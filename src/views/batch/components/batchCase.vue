@@ -491,20 +491,30 @@ export default {
       if (this.selectCount <= 0) {
         this.$Notice.warning({
           title: "",
-          desc: "您还未选择需要操作案件",
+          desc: "您还未选择需要操作案件！",
           duration: 5
         });
         return;
       }
-      let firstBriefName = this.selectList[0].briefName;
       for (var x of this.selectList) {
-        if (x.briefName.indexOf(firstBriefName) < 0) {
+        if(!x.briefName){//是否有案由
           this.$Notice.warning({
-            title: "请选择同类型的案由",
+            title: "请选择有案由的案件！",
             desc: "",
             duration: 5
           });
-          return;
+          return
+        }else{
+          let firstBriefName = this.selectList[0].briefName;
+          //是否符合案由
+          if (x.briefName.indexOf(firstBriefName) < 0) {
+            this.$Notice.warning({
+              title: "请选择同类型的案由！",
+              desc: "",
+              duration: 5
+            });
+            return;
+          }
         }
       }
       this.modal2 = true;

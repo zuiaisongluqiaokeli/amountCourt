@@ -14,11 +14,22 @@ export function getBrief () {
 }
 
 /**
- * [下载要素表接口]
+ * [下载要素表接口 压缩包]
  */					
 export function essential (data) {
     return service({
         url: 'court/case/downloadLawCaseFact.jhtml',
+        method: 'post',
+        data
+    });
+}
+
+/**
+ * [下载要素表接口 excel]
+ */					
+export function downloadFactExcel (data) {
+    return service({
+        url: 'court/case/downloadFactExcel.jhtml',
         method: 'post',
         data
     });
@@ -276,6 +287,15 @@ export function searchCase (kw) {
     };
     return service({
         url: '/court/infoManage/lawCaseInfo.jhtml',
+        method: 'GET',
+        params
+    });
+}
+
+//获取案件状态列表
+export function getProgress (params) {
+    return service({
+        url: '/court/case/getProgress.jhtml',
         method: 'GET',
         params
     });

@@ -364,6 +364,27 @@ export default {
     selectType(){
       switch(this.myType){
          case '立案':
+            let firstBriefName = this.selectList[0].briefName;
+            if(firstBriefName){
+              for (var x of this.selectList) {
+                console.log("x.briefName",x.briefName,"firstBriefName",firstBriefName)
+                if (firstBriefName.indexOf(x.briefName) < 0) {
+                  this.$Notice.warning({
+                    title: "请选择同类型的案由！",
+                    desc: "",
+                    duration: 5
+                  });
+                  return;
+                }
+              }
+            }else{
+              this.$Notice.warning({
+                title: "请选择有案由的案件！",
+                desc: "",
+                duration: 5
+              });
+              return
+            }
             this.$refs.handle.$refs.setCase.getList();
          break
          case '分案':

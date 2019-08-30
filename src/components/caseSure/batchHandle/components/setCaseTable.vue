@@ -8,10 +8,11 @@
           @on-change="selBrief"
           clearable
           filterable
+          disabled
           placeholder="请选择"
           style="width: 170px"
         >
-          <Option v-for="(item) in briefList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in briefList" :value="item.id" :key="index">{{item.name}}</Option>
         </Select>
       </FormItem>
       <FormItem label="承办部门" prop="mkk">
@@ -23,7 +24,7 @@
           @on-change="selCourt"
           style="width: 170px"
         >
-          <Option v-for="(item) in courtList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in courtList" :value="item.id" :key="index">{{item.name}}</Option>
         </Select>
       </FormItem>
       <!-- <Form-item label="承办法官">
@@ -164,7 +165,7 @@
           @on-change="selCourt2"
           style="width: 170px"
         >
-          <Option v-for="(item) in courtList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in courtList" :value="item.id" :key="index">{{item.name}}</Option>
         </Select>
       </div>
       <div class="ivu-modal-footer">
@@ -188,7 +189,7 @@
           placeholder="请选择"
           style="width: 170px"
         >
-          <Option v-for="(item) in briefList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in briefList" :value="item.id" :key="index">{{item.name}}</Option>
         </Select>
       </div>
       <div class="ivu-modal-footer">
@@ -386,30 +387,30 @@ export default {
                 h(
                   "span",
                   {
-                    props: {
-                      // href:'javascript:void(0)',
-                    },
-                    style: {
-                      color: "#2d8cf0",
-                      cursor: "pointer"
-                    },
-                    on: {
-                      click: () => {
-                        console.log(1115);
-                        this.modal2 = true;
-                        this.modal2back = true;
-                        this.selRow = this.listData[params.index];
-                        this.searchForm2.briefs = this.selRow.briefId
-                          ? this.selRow.briefId
-                          : "";
-                        console.log(this.modal2back);
-                        // return false;
-                      }
-                    }
+                    // props: {
+                    //   // href:'javascript:void(0)',
+                    // },
+                    // style: {
+                    //   color: "#2d8cf0",
+                    //   cursor: "pointer"
+                    // },
+                    // on: {
+                    //   click: () => {
+                    //     console.log(1115);
+                    //     this.modal2 = true;
+                    //     this.modal2back = true;
+                    //     this.selRow = this.listData[params.index];
+                    //     this.searchForm2.briefs = this.selRow.briefId
+                    //       ? this.selRow.briefId
+                    //       : "";
+                    //     console.log(this.modal2back);
+                    //     // return false;
+                    //   }
+                    // }
                   },
                   this.listData[params.index].briefName
                     ? this.listData[params.index].briefName
-                    : "请选择"
+                    : "暂无"
                 )
               ]
             );
@@ -886,6 +887,7 @@ export default {
               }
             }
           }
+          this.searchForm.brief=this.listData[0].briefId;
         }
       });
       //获取法院部门列表

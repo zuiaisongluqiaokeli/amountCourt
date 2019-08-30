@@ -8,12 +8,12 @@
             <Form ref="searchForm" :model="searchForm" inline :label-width="80" class="search-form">
                 <Form-item label="案由" prop="brief">
                     <Select v-model="searchForm.brief" @on-change="selBrief" clearable filterable placeholder="请选择" style="width: 170px">
-                        <Option v-for="(item) in briefList" :value="item.id">{{item.name}}</Option>
+                        <Option v-for="(item,index) in briefList" :value="item.id" :key='index'>{{item.name}}</Option>
                     </Select>
                 </Form-item>
                 <Form-item label="承办部门" prop="mkk">
                     <Select v-model="searchForm.mkk" clearable filterable placeholder="请选择" @on-change="selCourt" style="width: 170px">
-                        <Option v-for="(item) in courtList" :value="item.id">{{item.name}}</Option>
+                        <Option v-for="(item,index) in courtList" :value="item.id" :key='index'>{{item.name}}</Option>
                     </Select>
                 </Form-item>
                 <!-- <Form-item label="承办法官" prop="people>
@@ -92,8 +92,8 @@
                 <div class="ivu-modal-header-inner">单个案件选择承办部门</div>
             </div>
             <div class="ivu-modal-body">
-                <Select v-model="searchForm.mkks" clearable filterable placeholder="请选择" @on-change="selCourt2" clearable style="width: 170px">
-                    <Option v-for="(item) in courtList" :value="item.id">{{item.name}}</Option>
+                <Select v-model="searchForm.mkks" clearable filterable placeholder="请选择" @on-change="selCourt2" style="width: 170px">
+                    <Option v-for="(item,index) in courtList" :value="item.id" :key='index'>{{item.name}}</Option>
                 </Select>
             </div>
             <div class="ivu-modal-footer">
@@ -105,8 +105,8 @@
                 <div class="ivu-modal-header-inner">单个案由选择</div>
             </div>
             <div class="ivu-modal-body">
-                <Select v-model="searchForm2.briefs" @on-change="selBrief2" clearable filterable placeholder="请选择" clearable style="width: 170px">
-                    <Option v-for="(item) in briefList" :value="item.id">{{item.name}}</Option>
+                <Select v-model="searchForm2.briefs" @on-change="selBrief2" clearable filterable placeholder="请选择" style="width: 170px">
+                    <Option v-for="(item,index) in briefList" :value="item.id" :key='index'>{{item.name}}</Option>
                 </Select>
             </div>
             <div class="ivu-modal-footer">

@@ -271,7 +271,7 @@ export default {
         })
         let newData=Object.assign(baseData,keyList)
         this.$emit("toNextStep",{newData:newData});
-      }else if (this.keyList.lawCaseType) {//其他案件和只需要基础要素的案件类型
+      }else {//其他案件和目前只需要基础要素的案件类型
         let newData=Object.assign({},baseData)
         this.$emit("toNextStep",{newData:newData});
       }

@@ -155,10 +155,10 @@ export default {
   }
 
   .ft-elect-index {
-    width: 18%;
+    width: 10%;
     height: 600px;
     float: left;
-    margin:0 10px 0 0;
+    margin-right: 10px;
     border: 1px solid #dddee1;
     border-color: #e9eaec;
   }
@@ -166,23 +166,24 @@ export default {
   .ft-elect-index-content {
     width: 100%;
     height: calc(600px - 40px);
+    overflow-y: auto;
   }
 
   .ft-elect-index-header-content{
     width: 100%;
     height: calc(600px - 40px);
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .ft-elect-list {
-    width: 18%;
+    width: 13%;
     height: 600px;
     float: left;
-    margin:0 20px 0 20px;
+    margin-right: 10px;
     border: 1px solid #dddee1;
     border-color: #e9eaec;
   }
   .ft-elect-showArea{
-    width: 60%;
+    width: 75%;
     height: 600px;
     float: left;
     border: 1px solid #dddee1;

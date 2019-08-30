@@ -47,8 +47,8 @@ import { tools_downLoad } from "@/libs/tools.js";
         active_name:"调解协议",//当前选中的类型
         tjFileUrl:"",
         sendFileUrl:"",
-        allowUp:["法院调解员","机构调解员"],//允许上传文件的角色
-        unAllowDown:[],//允许下载文件的角色
+        allowUp:["庭长","法官助理","法官","书记员","法院调解员","机构调解员"],//允许上传文件的角色
+        unAllowDown:[],//不允许下载文件的角色
      }
    },
    computed: {

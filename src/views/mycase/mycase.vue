@@ -52,6 +52,17 @@
                   <Option v-for="(item) in briefList" :value="item.name">{{item.name}}</Option>
                 </Select>
               </Form-item>
+              <Form-item label="案件状态" prop="sex">
+                <Select
+                  v-model="searchForm.progress"
+                  clearable
+                  filterable
+                  placeholder="请选择"
+                  style="width: 185px"
+                >
+                  <Option v-for="(item,index) in progressList" :value="item" :key="index">{{item}}</Option>
+                </Select>
+              </Form-item>
               <Form-item label="当事人姓名" prop="department">
                 <Input
                   type="text"
@@ -61,7 +72,6 @@
                   style="width: 185px"
                 />
               </Form-item>
-
               <span v-if="drop">
                 <Form-item label="时间范围">
                   <DatePicker
@@ -73,25 +83,6 @@
                     placeholder="选择起始时间"
                     style="width: 200px"
                   ></DatePicker>
-                </Form-item>
-                <Form-item label="案件状态" prop="sex">
-                  <Select
-                    v-model="searchForm.progress"
-                    clearable
-                    filterable
-                    placeholder="请选择"
-                    style="width: 185px"
-                  >
-                    <Option value="立案申请">立案申请</Option>
-                    <Option value="立案">立案</Option>
-                    <Option value="排班">排班</Option>
-                    <Option value="送达">送达</Option>
-                    <Option value="举证">举证</Option>
-                    <Option value="质证">质证</Option>
-                    <Option value="开庭">开庭</Option>
-                    <Option value="已开庭">已开庭</Option>
-                    <Option value="已结案">已结案</Option>
-                  </Select>
                 </Form-item>
               </span>
               <Form-item style="margin-left:-35px;" class="br">
@@ -233,7 +224,7 @@
 import circleLoading from "@/components/circleLoad/circle-loading.vue";
 import caseInfo from "@/components/batch/reviewCase/caseInfo2.vue";
 import { findLawCaseList, checkSendAddress, addSendAddress } from "@/api/case";
-import { getBrief } from "@/api/global";
+import { getBrief,getProgress } from "@/api/global";
 import { formatDate } from "@/libs/date";
 export default {
   name: "user-manage",
@@ -247,7 +238,8 @@ export default {
       loading: true,
       modalWidth: width,
       onedata: [],
-      briefList: [],
+      briefList: [],//案由列表
+      progressList:[],//案件状态列表
       isClick: false,
       selectCase: false,
       modal4: false,
@@ -268,6 +260,7 @@ export default {
         litigantName: "", //当事人姓名
         submitType: "已提交", //提交类型
         type: "所有案件", //案件类型
+        progress:this.$route.query.progress,//案件状态
         pageSize: 10,
         pageNumber: 1,
         briefName: ""
@@ -351,13 +344,23 @@ export default {
           width: 140
         },
         {
+          title: "是否同步内网",
+          key: "exportInfo",
+          align: "center",
+          render: (h, params) => {
+            return h(
+              "span",
+              {},
+              params.row.exportInfo ? params.row.exportInfo : "未同步"
+            );
+          }
+        },
+        {
           title: "操作",
           key: "action",
           width: 150,
           align: "center",
           render: (h, params) => {
-            this.$store.commit("SET_CASEID", params.row.lawCaseId);
-            this.$store.commit("SET_BREIFNAME", params.row.briefName); //获取案由并保存（子选项卡需要用到，勿删）
             return h("div", [
               h(
                 "Button",
@@ -369,6 +372,7 @@ export default {
                   on: {
                     click: () => {
                       this.stopPropagation();//阻止事件冒泡
+                      this.setInfo(params.row.lawCaseId,params.row.plaintiffName,params.row.briefName);//设置案件信息
                       this.$refs.info.init();
                       this.modal4 = true;
                     }
@@ -449,6 +453,13 @@ export default {
           this.briefList = res.data.data;
         }
       });
+      //获取案件状态
+      getProgress().then(res => {
+        if (res.data.state == 100) {
+          this.progressList = res.data.data.split(',');
+          console.log("progressList",this.progressList)
+        }
+      });
     },
     //搜索的时候需要只显示表格1
     handleSearch() {
@@ -505,10 +516,7 @@ export default {
     },
     //选中一个案件
     selCase(dex) {
-      // this.$store.commit("SET_CASEID", dex.idCard);
-      //记录选中案件的ID，其余tabs请求数据用此ID
-      this.$store.commit("SET_CASEID", dex.lawCaseId);
-      this.$store.commit("SET_BREIFNAME", dex.briefName); //获取案由并保存（子选项卡需要用到，勿删）
+      this.setInfo(dex.lawCaseId,dex.plaintiffName,dex.briefName);//设置案件信息
       console.log("item88889999", dex);
       //只有立案申请会打开弹窗，其余都是下部展示
       if (dex.progress == "立案申请") {
@@ -525,6 +533,12 @@ export default {
       this.$router.push({
         name: "caseInfo_index"
       });
+    },
+    setInfo(lawCaseId,litigantType,briefName){//设置案件信息
+      //记录选中案件的ID，其余tabs请求数据用此ID
+      this.$store.commit("SET_CASEID", lawCaseId);
+      this.$store.commit("SET_litigantType", litigantType); //获取原告类型并保存（子选项卡需要用到，勿删）
+      this.$store.commit("SET_BREIFNAME", briefName); //获取案由并保存（子选项卡需要用到，勿删）
     },
     showSelect(e) {
       this.selectList = e;
