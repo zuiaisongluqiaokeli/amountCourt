@@ -95,8 +95,8 @@ export default {
       }
     },
 
-    //提交表单
-    ft_confirmFinalInfo () {
+    //提交表单数据到父级
+    ft_confirmFinalInfo (toIntranet) {
         this.ft_clearSendChoice();
         this.confirm_bindData.forEach((val,index)=>{
           //选择送达的对象为原告
@@ -123,7 +123,7 @@ export default {
             })
           }
         })
-        this.$emit('ft_toFinalStep',this.confirm_plantiff);
+        this.$emit('ft_toFinalStep',{plaintiffs:this.confirm_plantiff,toIntranet});
         this.$Notice.success({'title':'添加成功'});
     },
 

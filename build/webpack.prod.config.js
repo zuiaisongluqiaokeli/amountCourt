@@ -13,8 +13,8 @@ const package = require('../package.json');
 
 fs.open('./build/env.js', 'w', function (err, fd) {
     const buf = 'export default "production";';
-    // fs.write(fd, buf, 0, buf.length, 0, function (err, written, buffer) {});
     fs.write(fd, buf, 0, 'utf-8', function(err, written, buffer) {});
+    // fs.write(fd, buf, 0, buf.length, 0, function (err, written, buffer) {});
 });
 
 module.exports = merge(webpackBaseConfig, {
@@ -71,7 +71,7 @@ module.exports = merge(webpackBaseConfig, {
             },
             {
                 from: 'static',
-                to: '../static'
+                to: './static'
             },
         ], {
             ignore: [
@@ -79,7 +79,7 @@ module.exports = merge(webpackBaseConfig, {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: '厦门金融司法协同中心',
+            title: '厦门金融司法协同中心' + package.version,
             favicon: './td_icon.ico',
             filename: '../index.html',
             template: '!!ejs-loader!./src/template/index.ejs',

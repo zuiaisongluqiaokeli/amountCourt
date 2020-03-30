@@ -301,7 +301,6 @@ export default {
         setTimeout(function(){
 					that.$refs.table.selectAll(ys);
 				}, 500)
-        // this.getRoleList();
       }else{
         this.modal2 = false;
       }
@@ -315,45 +314,6 @@ export default {
           });
         return;
       }
-      // console.log(this.selectList[0].checkboxValue);
-      // let ary = ['调解协议','民事裁定书'];
-      // let arr = R.difference(ary,this.selectList[0].checkboxValue);
-      // console.log(arr)
-      // if(arr.length < 2){
-      //   if(arr.length == 0){
-      //       console.log(1111)
-      //       // return false;
-      //       let eleLink = document.createElement('a')
-      //       // let arr = res.data.result.split('/')
-      //       eleLink.download = '2019-04-23_6ONYO5QMD4.zip'
-      //       eleLink.style.display = 'none';
-      //       eleLink.href = "http://fin.smcourt.com/upload/fact/2019-04-23_6ONYO5QMD4.zip";
-      //       // 触发点击
-      //       document.body.appendChild(eleLink)
-      //       eleLink.click();
-      //   }else{
-      //     if(arr[0] == '民事裁定书'){
-      //       let eleLink2 = document.createElement('a')
-      //       // let arr = res.data.result.split('/')
-      //       eleLink2.download = '调解协议（肖志忠-工行）20190424.doc'
-      //       eleLink2.style.display = 'none';
-      //       eleLink2.href = "http://fin.smcourt.com/upload/fact/调解协议（肖志忠-工行）20190424.doc";
-      //       // 触发点击
-      //       document.body.appendChild(eleLink2)
-      //       eleLink2.click()
-      //     }else{
-      //       let eleLink = document.createElement('a')
-      //       // let arr = res.data.result.split('/')
-      //       eleLink.download = '2019-确185调解确认裁定（肖志忠）.doc'
-      //       eleLink.style.display = 'none';
-      //       eleLink.href = "http://fin.smcourt.com/upload/fact/2019-确185调解确认裁定（肖志忠）.doc";
-      //       // 触发点击
-      //       document.body.appendChild(eleLink)
-      //       eleLink.click();
-      //     }
-      //   }
-      //   return false;
-      // }
       this.proLoading = true;
       this.isError = false;
       let data = [];
@@ -361,7 +321,8 @@ export default {
         const da = {
           lawCaseId:this.selectList[i].lawCaseId.toString(),
           briefName:this.selectList[i].briefName,
-          templateName:this.selectList[i].checkboxValue ? this.selectList[i].checkboxValue.join(",") : ""
+          templateName:this.selectList[i].checkboxValue ? this.selectList[i].checkboxValue.join(",") : "",
+          buildType:this.selectList[i].buildType
         }
         data.push(da)
       }

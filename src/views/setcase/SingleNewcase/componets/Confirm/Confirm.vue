@@ -96,7 +96,7 @@ export default {
     },
 
     //提交表单
-    ft_confirmFinalInfo () {
+    ft_confirmFinalInfo (toIntranet) {
         this.ft_clearSendChoice();
         let sendObj={
           lawyer:[],//代理人信息
@@ -133,7 +133,7 @@ export default {
           }
         })
         console.log("666666999999",sendObj)
-        this.$emit('toNextStep',{type:'送达事项',state:'next',sendChoice:sendObj});
+        this.$emit('toNextStep',{type:'送达事项',state:'next',sendChoice:sendObj,toIntranet});
         this.$Notice.success({'title':'添加成功'});
     },
 
@@ -150,7 +150,7 @@ export default {
             delete item['sendChoice'];
             delete item['serviceType'];
             }
-         })
+        })
       })
     },
 

@@ -17,20 +17,9 @@
           class="ft_form ft-plant-chooseType ft-plant-slectType"
           prop="lawCaseType"
         >
-          <Select
-            :disabled="true"
-            v-model="keyList.lawCaseType"
-            style="width:300px"
-            placeholder="请选择案件类型"
-            filterable
-          >
-            <!-- <Option value="0">一般案件/其他</Option> -->
-            <Option value="金融借款合同纠纷">金融借款合同纠纷</Option>
-            <Option value="保证保险合同纠纷">保证保险合同纠纷</Option>
-            <Option value="一般案件">保证保险合同纠纷</Option>
-            <Option value="信用卡纠纷">信用卡纠纷</Option>
-            <Option value="融资租赁合同纠纷">融资租赁合同纠纷</Option>
-            <Option value="保险人代位求偿">保险人代位求偿</Option>
+          <Select v-model="keyList.lawCaseType" style="width:300px" placeholder="请选择案件类型" :disabled="true" filterable>
+            <Option v-for="(item,index) in briefAry" :key="index" :value="item.type">{{item.name}}</Option>
+            <Option value="0">其他案件</Option>
           </Select>
         </FormItem>
         <FormItem label="诉讼标的(元)" class="ft_form ft-plant-chooseType" prop="applyStandard">
@@ -63,24 +52,24 @@
         </FormItem>
 
         <!-- 金融案件 -->
-        <Finance v-show="keyList.lawCaseType==='金融借款合同纠纷'" ref="finance" :keyList="keyList"></Finance>
+        <Finance v-show="keyList.lawCaseType==='1'" ref="finance" :keyList="keyList"></Finance>
 
         <!-- 保证保险合同追偿 -->
         <Insurance
-          v-show="keyList.lawCaseType==='保证保险合同纠纷'||keyList.lawCaseType==='一般案件'"
+          v-show="keyList.lawCaseType==='2'"
           ref="insurance"
           :secureList="secureList"
         ></Insurance>
 
         <!-- 信用卡纠纷 -->
         <Creditcard
-          v-show="keyList.lawCaseType==='信用卡纠纷'"
+          v-show="keyList.lawCaseType==='3'"
           ref="creditcard"
           :creditCaseBaseInfo="creditCaseBaseInfo"
         ></Creditcard>
       </Form>
 
-      <div class="ft-agent-footer" v-if="keyList.lawCaseType=='信用卡纠纷' || keyList.lawCaseType=='金融借款合同纠纷' ||keyList.lawCaseType=='保证保险合同纠纷' ||keyList.lawCaseType==='一般案件'">
+      <div class="ft-agent-footer">
         <a
           href="javascript:void(0)"
           class="ft_public3"
@@ -98,6 +87,7 @@ import Finance from "./keyinfo/componets/finance.vue"; //金融借款
 import Insurance from "./keyinfo/componets/insurance.vue"; //保险保证
 import Creditcard from "./keyinfo/componets/creditcard.vue"; //信用卡纠纷
 import { essential, essentialSave } from "@/api/caseInfo";
+import { briefList} from '@/api/setcase.js'
 export default {
   data() {
     return {
@@ -109,9 +99,10 @@ export default {
         litigationRequest: "", //诉讼请求
         reason: "", //事实与理由
       }, //信息列表
-
       secureList: {}, //保证保险合同追偿
-      creditCaseBaseInfo: {} //信用卡纠纷
+      creditCaseBaseInfo: {},//信用卡纠纷
+      //案由列表 {名称、案由类型ID、支持的文件类型}
+      briefAry:[],
     };
   },
   components: {
@@ -121,6 +112,20 @@ export default {
   },
   mounted() {},
   methods: {
+    init(){//初始化
+      console.log("init")
+      //获取案由
+      briefList().then(res=>{
+        if(res.data.state === 100) {
+          let data=res.data.data;
+          console.log("data",data)
+          this.briefAry=data;
+          this.getEssential();
+        }else{
+          this.$Message.error(res.data.message);
+        }
+      })
+    },
     getEssential() {
       let data = [];
       data.push(this.$store.getters.caseId);
@@ -182,7 +187,7 @@ export default {
           }
           if (
             keyList.lawCaseType === "保证保险合同纠纷" ||
-            keyList.lawCaseType === "一般案件"
+            keyList.lawCaseType === "其他案件"
           ) {
             let arr = [
               "claimsDate",
@@ -268,6 +273,13 @@ export default {
             });
             this.creditCaseBaseInfo = keyList;
           }
+          // 获取lawCaseType
+          let lawCaseType=keyList.lawCaseType;
+          this.briefAry.forEach((item,index) => {
+             if(lawCaseType==item.name){
+                keyList.lawCaseType=item.type;
+             }
+          });
           this.keyList = keyList;
           console.log("keylist", this.keyList);
         } 
@@ -347,20 +359,16 @@ export default {
     ft_handle_dealAgentTotalData(index) {
       //普通要素信息
       let baseData = {
-        //state: index, // 0上一步 1下一步
         caseNo: this.keyList.caseNo,
         lawCaseType: this.keyList.lawCaseType, //案件类型
         litigationRequest: this.keyList.litigationRequest, //诉讼请求
         applyStandard: this.keyList.applyStandard, //标的
         reason: this.keyList.reason, //事实理由
       };
-      //0是一般案件
-      if (this.keyList.lawCaseType === "0") {
-        let newData = Object.assign({}, baseData);
-        //金融案件
-      } else if (this.keyList.lawCaseType === "金融借款合同纠纷") {
+      let arr=[];
+      //金融借款案件
+      if (this.keyList.lawCaseType === "1") {
         let keyList = JSON.parse(JSON.stringify(this.$refs.finance.keyList));
-        keyList.lawCaseType = "1";
         keyList.creditContract.forEach((item, index) => {
           item.money = item.money ? item.money.toString() : "";
         });
@@ -422,46 +430,22 @@ export default {
         });
         this.characterObject(keyList);
         let newData = Object.assign(baseData, keyList);
-        let arr = [];
         arr.push(newData);
-        essentialSave(arr).then(res => {
-          if (res.data.state == 100) {
-            this.$Notice.success({
-              title: "修改成功",
-              desc: res.data.message,
-              duration: 5
-            });
-          }
-        });
-        //this.$emit("toNextStep", { newData: newData });
+        console.log(arr)
         //保障保险案件
-      } else if (
-        this.keyList.lawCaseType === "保证保险合同纠纷" ||
-        this.keyList.lawCaseType === "一般案件"
-      ) {
+      } else if (this.keyList.lawCaseType === "2") {
         let keyList = JSON.parse(
           JSON.stringify(this.$refs.insurance.secureList)
         );
         this.characterObject(keyList);
-        keyList.lawCaseType = "2";
         let newData = Object.assign(baseData, keyList);
-        let arr = [];
         arr.push(newData);
-        essentialSave(arr).then(res => {
-          if (res.data.state == 100) {
-            this.$Notice.success({
-              title: "修改成功",
-              desc: res.data.message,
-              duration: 5
-            });
-          }
-        });
+        console.log(arr)
         //信用卡案件
-      } else if (this.keyList.lawCaseType === "信用卡纠纷") {
+      } else if (this.keyList.lawCaseType === "3") {
         let keyList = JSON.parse(
           JSON.stringify(this.$refs.creditcard.creditCaseBaseInfo)
         );
-
         this.characterObject(keyList);
         keyList.cridtCardList.forEach((item, index, arr) => {
           for (const key in item) {
@@ -480,7 +464,6 @@ export default {
             }
           }
         });
-        keyList.lawCaseType = "3";
         //判断信用卡是否填写
         keyList.cridtCardList.forEach((item, index) => {
           if (item.creditCardId == "") {
@@ -518,51 +501,22 @@ export default {
           });
         });
         let newData = Object.assign(baseData, keyList);
-        let arr = [];
         arr.push(newData);
-        console.log(arr);
-        essentialSave(arr).then(res => {
-          if (res.data.state == 100) {
-            this.$Notice.success({
-              title: "修改成功",
-              desc: res.data.message,
-              duration: 5
-            });
-          }
-        });
-      } else if (this.keyList.lawCaseType === "融资租赁合同纠纷") {
-        //融资租赁合同纠纷
-        // let keyList= this.$refs.financial.baseData
+        console.log(arr)
+      }else{//其他案件
         let newData = Object.assign({}, baseData);
-        newData.lawCaseType = "4";
-        let arr = [];
         arr.push(newData);
-        essentialSave(arr).then(res => {
-          if (res.data.state == 100) {
-            this.$Notice.success({
-              title: "修改成功",
-              desc: res.data.message,
-              duration: 5
-            });
-          }
-        });
-      } else if (this.keyList.lawCaseType === "保险人代位求偿") {
-        //保险人代位求偿
-        // let keyList=this.$refs.subrogation.baseData
-        let newData = Object.assign({}, baseData);
-        newData.lawCaseType = "5";
-        let arr = [];
-        arr.push(newData);
-        essentialSave(arr).then(res => {
-          if (res.data.state == 100) {
-            this.$Notice.success({
-              title: "修改成功",
-              desc: res.data.message,
-              duration: 5
-            });
-          }
-        });
+        console.log(arr)
       }
+      essentialSave(arr).then(res => {
+        if (res.data.state == 100) {
+          this.$Notice.success({
+            title: "修改成功",
+            desc: res.data.message,
+            duration: 5
+          });
+        }
+      });
     },
     //清空表单
     ft_step4_restForm() {

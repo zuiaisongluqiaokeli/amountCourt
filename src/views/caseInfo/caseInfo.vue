@@ -134,7 +134,7 @@ export default {
                 // }
             }
             if(idName == 'essential'){
-                this.$refs.essential.getEssential();
+                this.$refs.essential.init();
             }
             if(idName == 'litigantInfo'){
                 this.$refs.litigantInfo.getLawyerList()

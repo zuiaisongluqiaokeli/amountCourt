@@ -81,7 +81,7 @@
                     </FormItem>
 
                     <FormItem label="联系地址" prop="agentAddress">
-                        <Input v-model="lawyerList.agentAddress" placeholder="请输入代理人联系地址"></Input>
+                        <Input v-model="lawyerList.agentAddress" placeholder="请输入联系地址"></Input>
                     </FormItem>
 
                     <FormItem label="邮箱地址" prop="agentMail">
@@ -167,7 +167,7 @@
                         <Input v-model="workerList.agentAddress" placeholder="请输入户籍地址"></Input>
                     </FormItem>
                     <FormItem label="常住地址" prop="agentAddress1">
-                        <Input v-model="workerList.agentAddress1" placeholder="请输入经常居住地址"></Input>
+                        <Input v-model="workerList.agentAddress1" placeholder="请输入常住地址"></Input>
                     </FormItem>
                     <FormItem label="手机号" prop="agentMobile">
                         <Input v-model="workerList.agentMobile" placeholder="请输入手机号"></Input>
@@ -221,7 +221,7 @@
                         <Input v-model="citizenList.agentAddress" placeholder="请输入户籍地址"></Input>
                     </FormItem>
                     <FormItem label="常住地址" prop="agentAddress1">
-                        <Input v-model="citizenList.agentAddress1" placeholder="请输入经常居住地址"></Input>
+                        <Input v-model="citizenList.agentAddress1" placeholder="请输入常住地址"></Input>
                     </FormItem>
                     <FormItem label="手机号" prop="agentMobile">
                         <Input v-model="citizenList.agentMobile" placeholder="请输入手机号"></Input>

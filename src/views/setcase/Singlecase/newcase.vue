@@ -96,6 +96,7 @@ export default {
       caseStep:caseStep,
       nowIndex:0,
       submitType:false,
+      toIntranet:true,//是否导入内网
       // 原告与被告
       plaintiffs:[], //原告列表
       defendants:[], //被告列表
@@ -175,7 +176,8 @@ export default {
 
     //第六步进入第七步
     ft_toFinalStep (payload) {
-      this.plaintiffs = payload;
+      this.plaintiffs = payload.plaintiffs;
+      this.toIntranet = payload.toIntranet;
       this.nowIndex = 6;
     },
 
@@ -201,6 +203,7 @@ export default {
         defendants:this.defendants,
         thirdPeople:this.thirdPeople,
         evidence:this.evidence,
+        toIntranet:this.toIntranet,
         pic:this.pic,
         //要素信息
         ...this.keyInfo,

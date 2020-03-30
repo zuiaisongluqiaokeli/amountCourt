@@ -6,13 +6,19 @@
 <div>
     <div class="batchModel">
         <Row>
-            <Form ref="searchForm" :model="searchForm" style="text-align:left" inline :label-width="80" class="search-form">
-                
+            <Form ref="searchForm" :model="searchForm" style="text-align:left" :label-width="80" class="search-form">
                 <Form-item label="文书列表：">
                     <Checkbox @on-change="ckeckAllLiti" v-model="allCkeckLiti">全选/取消全选</Checkbox>
                     <CheckboxGroup v-model="disabledGroup" @on-change="checkValue">
-                        <Checkbox v-for="(item) in dipmosList" :label="item"></Checkbox>
+                        <Checkbox v-for="(item,index) in dipmosList" :key="index" :label="item"></Checkbox>
                     </CheckboxGroup>
+                </Form-item>
+                <Form-item label="分类方式：">
+                    <RadioGroup v-model="buildType">
+                        <Radio v-for="item in buildTypeList" :label="item.value" :key="item.value">
+                            <span>{{item.label}}</span>
+                        </Radio>
+                    </RadioGroup>
                 </Form-item>
             </Form>
         </Row>
@@ -48,6 +54,21 @@ export default {
         return{
             searchForm:{},
             allCkeckLiti:false,
+            buildType:'0',//分类类型
+            buildTypeList:[//分类类型列表
+               {
+                   label:"不分类",
+                   value:'0'
+               },
+               {
+                   label:"案号分类",
+                   value:'1'
+               },
+               {
+                   label:"模板名分类",
+                   value:'2'
+               },
+            ],
             loading:false,
             buttonLoading:false,
             isError:false,
@@ -178,6 +199,10 @@ export default {
                 });
                 return false;
             }
+            //添加分类方式
+            this.listData.forEach((item,index) => {
+               item.buildType=this.buildType;
+            });
             this.$emit('cancelEvent',this.listData);
             this.resetData();//重置数据
         },
@@ -218,8 +243,6 @@ export default {
             docxTemplatesName(this.briefName).then(res => {
                 if(res.data.state == 100){
                     this.dipmosList = res.data.data;
-                    // this.dipmosList.push('调解协议','民事裁定书')
-                    // this.dipmosList.push("测试");
                     console.log(this.dipmosList)
                 }
             })

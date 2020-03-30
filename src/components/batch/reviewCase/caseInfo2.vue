@@ -134,7 +134,7 @@ export default {
                 this.$refs.evidences.getEvidenceList();
             }
             if(idName == '要素修改'){
-                this.$refs.essential.getEssential();
+                this.$refs.essential.init();
             }
         },
     },

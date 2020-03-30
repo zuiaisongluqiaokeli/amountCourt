@@ -58,6 +58,9 @@
   border-radius: 30px;
 }
 
+.ft_form .ivu-select-dropdown {
+  width: auto !important;
+}
 
 .ft_public1 {
   width: 100%;
@@ -149,4 +152,9 @@
   border-top: none;
   background-color: #fff;
   margin-top:15px;
+}
+
+.ivu-date-picker .ivu-select-dropdown {
+  width: auto!important;
+  color: red
 }

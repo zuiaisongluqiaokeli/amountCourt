@@ -108,6 +108,9 @@ export default {
                     ellipsis: true,
                     render: (h, params) => {
                         return h('a', {
+                            style: {
+                                paddingLeft: '15px'
+                            },
                             on: {
                                 click: () => {
                                     this.showMesTitleList = false;

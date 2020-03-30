@@ -149,10 +149,10 @@ export default {
   },
   methods: {
     //接收上一步骤的list
-    mreReceiveList(payload) {
-      console.log("66666",payload)
+    mreReceiveList(mKeyInfoList) {
+      console.log("66666",mKeyInfoList)
       this.mEviTableShow = 1;
-      this.mEvidenceKeyInfoList = payload;
+      this.mEvidenceKeyInfoList = mKeyInfoList;
     },
 
     //按钮触发全选和反选

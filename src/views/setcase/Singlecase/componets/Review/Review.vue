@@ -14,6 +14,8 @@
     <div class='ft-review-notice'>
       <img src="@/images/reviewnotice.png" alt="" style="margin:50px 100px 0 0">
       <h3 style="margin:20px 100px 0 0">请确保信息确认无误后提交</h3>
+      <div style="text-align:center;margin-right: 100px;margin-top: 10px">  
+      </div>
     </div>
     <div class='ft-agent-footer'>
           <a href="javascript:void(0)" class="ft-agent-btn1" style="margin-left:-110px" @click="ft_review_backToStep6">返回上一步</a>
@@ -28,7 +30,6 @@
 export default {
   data () {
     return {
-
     }
   },
   methods:{

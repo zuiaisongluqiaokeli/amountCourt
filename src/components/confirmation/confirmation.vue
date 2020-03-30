@@ -10,20 +10,6 @@
       <div style="height:500px;overflow-x:hidden; overflow-y:visible">
         <div style="border-top:1px solid #e9eaec;border-left:1px solid #e9eaec;">
           <Row>
-            <!-- <Col
-              span="2"
-              class="maininfo-col top-col"
-              style="min-height: 50px;background-color: #f7f7f7;line-height: 50px;text-align: center;"
-            >
-            <span>案号</span>
-            </Col>
-            <Col
-              span="10"
-              class="maininfo-col"
-              style="min-height: 50px;"
-            >
-            <span>暂无</span>
-            </Col> -->
             <Col
               span="2"
               class="maininfo-col  top-col"
@@ -146,13 +132,13 @@
             v-model="agree_check"
             @on-change="agree_btnStatus=!agree_check"
           >我已阅读并同意以上内容</Checkbox>
+          <Checkbox v-model="toIntranet" ><span class="into">案件是否自动导入内网</span></Checkbox>
         </p><br />
         <p style="text-align: right;"><Button
             type="info"
             :disabled="agree_btnStatus"
             @click="nextStepSure"
           >{{buttonStr}}</Button></p>
-
       </div>
     </Modal>
   </div>
@@ -167,6 +153,7 @@ export default {
       sureMoInfo:{},
       loading: true,
       agree_check: true,
+      toIntranet:true,//自动导入内网
       agree_btnStatus:false, //按钮同意状态
       buttonStr: "同意并继续",
       agreeList:[], //得到的送达列表
@@ -182,36 +169,35 @@ export default {
       await this.showAgreeCountTime()
     },
 
-  //处理数据
-  showAgreeDealData (payload) {
-    this.agreeList = payload;
-  },
+    //处理数据
+    showAgreeDealData (payload) {
+      this.agreeList = payload;
+    },
 
-  //倒计时
-  showAgreeCountTime () {
-    let cnt = 5;
-    this.$Message.destroy();
-    this.agreeModalStatus = true;
-    this.agree_btnStatus = true;
-    let timer = setInterval(() => {
-      this.buttonStr = `同意并继续(${cnt}s)`;
-      cnt  = cnt - 1;
-      if(cnt <= 0) {
-        clearInterval(timer);
-        this.agree_btnStatus = false;
-        this.buttonStr = '同意并继续';
+    //倒计时
+    showAgreeCountTime () {
+      let cnt = 5;
+      this.$Message.destroy();
+      this.agreeModalStatus = true;
+      this.agree_btnStatus = true;
+      let timer = setInterval(() => {
+        this.buttonStr = `同意并继续(${cnt}s)`;
+        cnt  = cnt - 1;
+        if(cnt <= 0) {
+          clearInterval(timer);
+          this.agree_btnStatus = false;
+          this.buttonStr = '同意并继续';
+        }
+      }, 1000);
+    },
+    nextStepSure(){
+      if (this.agree_receiveType === 0) {
+        this.agreeModalStatus = false;
+        this.$emit('backtoSingle',this.toIntranet);
+      } else {
+        this.agreeModalStatus = false;
+        this.$emit('backtoMuti',this.toIntranet);
       }
-    }, 1000);
-  },
-
-  nextStepSure(){
-    if (this.agree_receiveType === 0) {
-      this.agreeModalStatus = false;
-      this.$emit('backtoSingle');
-    } else {
-      this.agreeModalStatus = false;
-      this.$emit('backtoMuti');
-    }
     },
   },
 

@@ -4,37 +4,92 @@
     <Collapse simple v-for="(value, key) in infos.formValidate" v-model="openAry" :key="key" >
       <Panel :name="item.agPlantId" class="ft-plant-div2" v-for="(item,ind) in value" :key="ind">  
         {{item.agentName}}
-        <Form slot="content" :model="item" label-position="right" :label-width="190" :rules="infos.agentRule" :ref="'agFromRule' + key + ind" style="margin:0 auto;width:821px">
+        <Form slot="content" :model="item" label-position="right" :label-width="220" :rules="infos.agentRule" :ref="'agFromRule' + key + ind" style="margin:0 auto;width:821px">
             <Tooltip content="删除当前原告代理人" v-show="item.agPlantId != 'agent_0'" @click.native="delAgPlant(item)" class="" placement="bottom">
               <Icon type="ios-close"  class="iconSet"/>
             </Tooltip>
+            <!-- 基本信息1 -->
               <FormItem label="代理人类型" class="ft_form ft-plant-chooseType ft-plant-slectType" prop="agentType">
                 <Select v-model="item.agentType" style="width:300px" filterable clearable>
                     <Option v-for="item in agType" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
               </FormItem>
-            
               <FormItem label="姓名" class="ft_form ft-plant-chooseType" prop="agentName">
                   <Input v-model="item.agentName" placeholder="请输入姓名"></Input>
               </FormItem>
-
-              <FormItem label="公民身份证号" class="ft_form ft-plant-chooseType" prop="agentIdentiCard">
-                <Input v-model="item.agentIdentiCard" placeholder="请输入公民身份证号"></Input>
-              </FormItem>
-
               <FormItem label="手机号" class="ft_form ft-plant-chooseType"  prop="agentMobile">
                   <Input v-model="item.agentMobile" placeholder="请输入手机号"></Input>
               </FormItem>
 
-              <FormItem label="联系地址" class="ft_form ft-plant-chooseType" prop="agentAddress">
-                  <Input v-model="item.agentAddress" placeholder="请输入联系地址"></Input>
+              <FormItem label="常住地址" class="ft_form ft-plant-chooseType" prop="agentAddress">
+                  <Input v-model="item.agentAddress" placeholder="请输入常住地址"></Input>
               </FormItem>
 
               <FormItem label="邮箱地址" class="ft_form ft-plant-chooseType" prop="agentMail">
                   <Input v-model="item.agentMail" placeholder="请输入邮箱地址"></Input>
               </FormItem>
+              <FormItem label="公民身份证号" class="ft_form ft-plant-chooseType" prop="agentIdentiCard">
+                <Input v-model="item.agentIdentiCard" placeholder="请输入公民身份证号" @on-change="plant_autoFillId(item,'agFromRule' + key + ind)"></Input>
+              </FormItem>
 
-              <div v-show="item.agentType=='律师'">
+              <!-- 职员、公民信息 -->
+              <div v-if="item.agentType=='职员' || item.agentType=='公民'" :key="item.agentType">
+                <FormItem label="出生日期" class="ft_form ft-plant-chooseType" prop="birthday">
+                  <DatePicker
+                  type="date"
+                  :editable="false"
+                  placeholder="请选择出生年月"
+                  :clearable="false"
+                  format="yyyy年MM月dd日"
+                  :value="item.birthday"
+                  @on-change="ft_plant_chgBirth($event,item)"></DatePicker>
+                </FormItem>
+                <FormItem label="性别" class="ft_form ft-plant-chooseType" prop="sex">
+                  <RadioGroup v-model="item.sex">
+                      <Radio label="男">男</Radio>
+                      <Radio label="女">女</Radio>
+                  </RadioGroup>
+                </FormItem>
+                <FormItem label="民族" class="ft_form ft-plant-chooseType" prop="nation">
+                  <Select
+                    v-model="item.nation"
+                    placeholder="请选择民族"
+                    clearable
+                    filterable
+                  >
+                    <Option
+                      v-for="(item,index) in nationAry"
+                      :value="item.name"
+                      :key="index"
+                    >{{ item.name }}</Option>
+                  </Select>
+                </FormItem>
+                <FormItem label="户籍地址" class="ft_form ft-plant-chooseType " prop="agentAddress1">
+                    <Input v-model="item.agentAddress1" placeholder="请输入户籍地址"></Input>
+                </FormItem>
+                <FormItem label="劳动合同/公积金缴交证明" class="ft_form ft-plant-chooseType ft-plant-upload" prop="commission">
+                    <Input v-model="item.commission" placeholder="请上传劳动合同或公积金缴交证明"></Input>
+                    <span>{{item.agent_fileName4}}</span>
+                    <Upload action="/api/court/case/upScanning.jhtml" class="ft-plant-upload-button" :show-upload-list="false" :on-success="agent_uploadSuccess" :data="{fileType:'劳动合同或公积金缴交证明',id:item.agPlantId}">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">选择文件</Button>
+                        <span>请上传*.jpg/png/bmp/pdf后缀格式的文件</span>
+                    </Upload>
+                </FormItem>
+              </div>
+              <!-- 律师信息 -->
+              <div v-if="item.agentType=='律师'" :key="item.agentType">
+                <FormItem label="律师执业资格" class="ft_form ft-plant-chooseType ft-plant-slectType" prop="lawyerType">
+                  <Select v-model="item.lawyerType" style="width:300px" filterable clearable>
+                      <Option v-for="item in lawyerType" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                  </Select>
+                </FormItem>
+
+                <FormItem label="授权类型" class="ft_form ft-plant-chooseType ft-plant-slectType" prop="empowerType">
+                  <Select v-model="item.empowerType" style="width:300px" filterable clearable>
+                      <Option v-for="item in empowerType" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                  </Select>
+                </FormItem>
+
                 <FormItem label="律师执业证号" class="ft_form ft-plant-chooseType" prop="lawerNum">
                     <Input v-model="item.lawerNum" placeholder="请输入律师执业证号"></Input>
                 </FormItem>
@@ -71,10 +126,7 @@
                 </FormItem>
               </div>
         </Form>
-        
-      
       </Panel>
-      <!-- </div> -->
     </Collapse>
     <!-- 提交按钮 -->
     <Form  label-position="right"    style="margin:0 auto;width: 441px;margin-top:15px">
@@ -97,17 +149,19 @@
 import '../../casecommon/casereset.css';
 import plantAgentRule from './agentRule';
 import Eventbus from '../Eventbus/Eventbus.js';
+import {tools_transDate,tools_calcIdentiyInfo}  from '@/libs/tools.js';
+import nation from "@/api/nations.js";
 export default {
   data () {
     return {
       agType:plantAgentRule.agType, //代理人类型
+      lawyerType:plantAgentRule.lawyerType, //律师执业资格
+      empowerType:plantAgentRule.empowerType, //律师授权类型
       agentList:plantAgentRule.agentList, //表单数据
       agentRule:plantAgentRule.agentRule, //表单规则
       agPlantConfirmList:[],
+      nationAry:nation,//民族列表
       openAry:['agent_0'],
-      agent_fileName1:'', //律师函名称
-      agent_fileName2:'', //律师函名称
-      agent_fileName3:'', //律师函名称
       //所有的填写信息共用info
       infos:{
         formValidate:[
@@ -120,17 +174,29 @@ export default {
               agentName: '', // 代理人姓名
               agentIdentiCard: '', // 身份证号
               agentMobile: '', // 手机号
-              agentAddress: '', // 联系人地址
+              agentAddress: '', // 联系人送达地址
+
+              //律师
+              lawyerType:'',//律师执业资格
+              empowerType:'',//律师授权类型
               lawerNum: '', // 律师执业证号
               lawFirmLetter: '', // 律师函
               lawerCardUrl: '', // 律师执业证
-              commission: '', // 委托书
               lawFirm:'', //律师所（住处）
 
-              // 上传的文件
+              //公民、职员
+              birthday:'',
+              sex:'',
+              nation:'',
+              agentAddress1:'',
+
+              commission: '', // 律师委托书/公民、职员劳动合同或公积金缴交证明
+
+              // 上传的文件名称
               agent_fileName1:'', //律师函名称
               agent_fileName2:'', //律师函名称
               agent_fileName3:'', //律师函名称
+              agent_fileName4:'', //律师函名称
             }
           ],         
         ],
@@ -161,7 +227,6 @@ export default {
     ft_getStep1_list (payLoad){
       this.agPlantConfirmList = payLoad;
     },
-
     //表单验证,并添加到原告layers当中,注意此方法涉及到浅拷贝问题，可用过json格式转换和assign解决
     ft_agent_handleAddNature (name) {
       this.$store.commit('addAgentId');
@@ -173,17 +238,30 @@ export default {
           agentType: '律师', // 代理人类型
           agentName: '', // 代理人姓名
           agentIdentiCard: '', // 身份证号
-          lawerNum: '', // 律师执业证号
           agentMobile: '', // 手机号
-          agentAddress: '', // 联系人地址
+          agentAddress: '', // 联系人送达地址
+
+          //律师
+          lawyerType:'',//律师执业资格
+          empowerType:'',//律师授权类型
+          lawerNum: '', // 律师执业证号
           lawFirmLetter: '', // 律师函
           lawerCardUrl: '', // 律师执业证
-          commission: '', // 委托书
           lawFirm:'', //律师所（住处）
-          // 上传的文件
+
+          //公民、职员
+          birthday:'',
+          sex:'',
+          nation:'',
+          agentAddress1:'',
+
+          commission: '', // 律师委托书/公民、职员劳动合同或公积金缴交证明
+
+          // 上传的文件名称
           agent_fileName1:'', //律师函名称
           agent_fileName2:'', //律师函名称
           agent_fileName3:'', //律师函名称
+          agent_fileName4:'', //律师函名称
         }
       ]
        //为了使得每次打开都是最后一次添加的
@@ -312,6 +390,10 @@ export default {
                 item[0].commission = data.filePath;
                 item[0].agent_fileName3 = data.fileName;
                 break;
+              case "劳动合同或公积金缴交证明":
+                item[0].commission = data.filePath;
+                item[0].agent_fileName4 = data.fileName;
+                break;
               default:
                 break;
             }
@@ -323,12 +405,28 @@ export default {
         }
       },
 
+      //代理人获取日期
+      ft_plant_chgBirth (event,data) {
+        let plantBirthTemp = tools_transDate(event);
+        data.birthday = plantBirthTemp;
+      },
+      // 代理人计算出生年月和日期
+      plant_autoFillId (data,name) {
+        let obj =  tools_calcIdentiyInfo(data.agentIdentiCard);
+        data.sex = obj.sex;
+        data.birthday = obj.birth;
+        return false;
+        this.$refs[name].validateField('agentIdentiCard',(res)=>{
+          if(res == '') {
+            let obj =   tools_calcIdentiyInfo(data.agentIdentiCard);
+            data.sex = obj.sex;
+            data.birthday = obj.birth;
+          }
+        })
+      },
       //清空表单
       ft_step2_restForm () {
         this.$refs['agFromRule'].resetFields();
-        this.agent_fileName1 = '';
-        this.agent_fileName2 = '';
-        this.agent_fileName3 = '';
         this.agPlantConfirmList = [];
       }
     }

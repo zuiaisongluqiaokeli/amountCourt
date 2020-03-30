@@ -204,6 +204,7 @@ export default {
               let obj={
                 lawCaseId:item.lawCaseId,
                 flowNumber:item.flowNumber,
+                toIntranet:payload.toIntranet,//是否导入内网
                 ...this.sendChoice
               }
               sendAry.push(obj)

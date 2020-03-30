@@ -11,8 +11,8 @@ const proxy = require('http-proxy-middleware');
 
 fs.open('./build/env.js', 'w', function (err, fd) {
     const buf = 'export default "development";';
-    // fs.write(fd, buf, 0, 'utf-8', function(err, written, buffer) {});
-    fs.write(fd, buf, 0, buf.length, 0, function (err, written, buffer) {});
+    fs.write(fd, buf, 0, 'utf-8', function(err, written, buffer) {});
+    // fs.write(fd, buf, 0, buf.length, 0, function (err, written, buffer) {});
 });
 
 module.exports = merge(webpackBaseConfig, {
@@ -31,7 +31,7 @@ module.exports = merge(webpackBaseConfig, {
         },
         proxy: {
             '/upload': {
-                target: 'http://192.168.86.59',
+                target: 'https://courtfinancedev.ptnetwork001.com',
                 secure:false,
                 changeOrigin: true,
             },
@@ -43,6 +43,7 @@ module.exports = merge(webpackBaseConfig, {
                 // target: '120.78.223.114：8868',
                 // target: 'http://47.105.189.44:8880',
                 target: 'http://192.168.86.59:8888',
+				//target: 'http://192.168.87.36:8080',
                 // target: 'http://47.105.189.44:8918',
                 //路径重写
                 pathRewrite: {
@@ -62,7 +63,7 @@ module.exports = merge(webpackBaseConfig, {
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
-            title: '厦门金融司法协同中心',
+            title: '厦门金融司法协同中心' + package.version,
             filename: '../index.html',
             inject: false
         }),

@@ -320,7 +320,7 @@ const workerRule = {
     { required: true, message: '请输入户籍地址', trigger: 'blur' }
   ],
   agentAddress1: [
-    { required: true, message: '请输入经常居住地址', trigger: 'blur' }
+    { required: true, message: '请输入送达地址', trigger: 'blur' }
   ],
   agentMobile: [
     { required: true, message: '请输入手机号', trigger: 'blur' },

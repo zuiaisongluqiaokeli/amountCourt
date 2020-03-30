@@ -26,7 +26,8 @@ span.mProve-span {
         <Form-item label="材料类型">
           <div
             style="margin-right:20px;display:inline-block;"
-            v-for="i in materialType"
+            v-for="(i,index) in materialType"
+            :key="index"
             @click="changeType(i.id)"
           >
             <Button shape="circle" :class="i.id==active_id?'bg-blue':''">{{i.title}}</Button>
@@ -167,7 +168,7 @@ span.mProve-span {
           @on-change="selCourt2"
           style="width: 170px"
         >
-          <Option v-for="(item) in courtList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in courtList" :key="index" :value="item.id">{{item.name}}</Option>
         </Select>
       </div>
       <div class="ivu-modal-footer">
@@ -191,7 +192,7 @@ span.mProve-span {
           placeholder="请选择"
           style="width: 170px"
         >
-          <Option v-for="(item) in briefList" :value="item.id">{{item.name}}</Option>
+          <Option v-for="(item,index) in briefList" :key="index" :value="item.id">{{item.name}}</Option>
         </Select>
       </div>
       <div class="ivu-modal-footer">
@@ -420,7 +421,8 @@ export default {
             });
           }
           if(this.fileType=='excel文件'){
-            if(mProve_fileName0=='已上传'){
+            this.buttonLoading = false;
+            if(this.mProve_fileName0=='已上传'){
               this.$Notice.success({
                     title: "",
                     desc: "提交成功！",

@@ -351,10 +351,14 @@ export default {
           });
         return;
       }
-      this.selectType();//选择对应流程
       //清空表单
       this.$refs.handle.resetData();
-      this.modal2 = true;
+      let result =this.selectType();//选择对应流程
+      if(!result){
+        this.modal2 = false;
+      }else{
+        this.modal2 = true;
+      }
     },
     //关闭窗口1 
     closeModel(){
@@ -374,7 +378,7 @@ export default {
                     desc: "",
                     duration: 5
                   });
-                  return;
+                  return false;
                 }
               }
             }else{
@@ -383,7 +387,7 @@ export default {
                 desc: "",
                 duration: 5
               });
-              return
+              return false;
             }
             this.$refs.handle.$refs.setCase.getList();
          break
@@ -394,6 +398,7 @@ export default {
             this.$refs.handle.$refs.courtDate.getList();
          break
       }
+      return true;
     },
     
     /**

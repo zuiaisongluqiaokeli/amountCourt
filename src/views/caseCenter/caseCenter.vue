@@ -182,7 +182,13 @@
     <Modal v-model="preRegisterModal" title="预立案号" :mask-closable="false" width="250">
       <Input v-model="preRegisterInput" placeholder="输入预立案号" />
       <div slot="footer">
-        <Button type="primary" size="large" long @click="preRegister(preRegisterID)">确认</Button>
+        <Button type="primary" size="large" long @click="preRegister(preRegisterID)">确认提交</Button>
+      </div>
+    </Modal>
+    <Modal v-model="backResonModal" title="退回原因"  :mask-closable="false" width="250">
+      <Input v-model="backReson" placeholder="输入退回原因" type="textarea"/>
+      <div slot="footer">
+        <Button type="primary" size="large" long @click="backoff(backCase)">确认退回</Button>
       </div>
     </Modal>
     <Modal
@@ -191,7 +197,7 @@
       :mask-closable="false"
       width="250"
     >
-      <Select clearable multiple :placeholder="this.$store.getters.roLeName=='法官'? '请选择法院调解员' : '请选择机构调解员'"  :class="sendSelectClass" v-model="sendData.tjIds" @click.native="onOpen">
+      <Select clearable multiple :placeholder="this.$store.getters.roLeName=='法官'? '请选择法院调解员' : '请选择机构调解员'" v-model="sendData.tjIds" class="preStyle">
           <Option v-for="item in tjList" :value="item.id" :key="item.index">{{ item.name }}</Option>
       </Select>
       <div slot="footer">
@@ -239,8 +245,10 @@ export default {
       preRegisterModal: false, //预立案号弹框
       preRegisterInput: "", //预立案号
       preRegisterID: "", //预立案号案件
+      backResonModal:false,//退回原因弹框
+      backReson:"",//退回原因
+      backCase:"",//退回案件
       tjList:[],
-      sendSelectClass:"",
       sendData:{
          lawCaseId:"",
          tjIds:[],
@@ -383,7 +391,9 @@ export default {
                   click: () => {
                     //阻止事件冒泡
                     this.stopPropagation();
-                    this.backoff(params.row.lawCaseId);
+                    this.backResonModal=true;//显示退回原因弹窗
+                    this.backCase = params.row
+                    this.backReson="";
                   }
                 }
               },
@@ -573,9 +583,12 @@ export default {
       });
     },
     //调解退回
-    backoff(caseID){
+    backoff(row){
       let ary=[]
-      let obj={lawCaseId:caseID}
+      let obj={
+        lawCaseId: row.lawCaseId,
+        reson: this.backReson,
+      }
       ary.push(obj)
       backLawCase(ary).then(res => {
         if (res.data.state == 100) {
@@ -593,6 +606,11 @@ export default {
       this.pushBoxShow=true;
       switch (this.$store.getters.roLeName) {
         case "法官":
+        case "法官助理":
+        case "庭长":
+        case "审判长":
+        case "书记员":
+        case "代理书记员":
           //获取法院调解员列表
           courtmediatorList().then(res=>{
             if(res.data.state==100){
@@ -628,6 +646,11 @@ export default {
       }
       switch (this.$store.getters.roLeName) {
         case "法官":
+        case "法官助理":
+        case "庭长":
+        case "审判长":
+        case "书记员":
+        case "代理书记员":
           this.sendData.tjIds.forEach((item,index) => {
             data.courtmediatorId=item;
             ary.push(data);
@@ -670,12 +693,6 @@ export default {
           });
         break;
       }
-    },
-    onOpen(){
-      console.log("1111")
-      this.$nextTick(()=>{
-        this.sendSelectClass="senModal"
-      })
     },
     showSelect(e) {
       this.selectList = e;

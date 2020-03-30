@@ -259,23 +259,24 @@ export default {
       let flag = true
       console.log(this.mSendBindData)
       this.mSendBindData.forEach((item,index)=>{
-          let form = 'mSendFromRule' + index;
-          console.log(this.$refs[form][0])
-          this.$refs[form][0].validate((valid) => {
-            console.log(valid)
-            if (!valid) {
-               flag = false;
-            }
+        let form = 'mSendFromRule' + index;
+        console.log(this.$refs[form][0])
+        this.$refs[form][0].validate((valid) => {
+          console.log(valid)
+          if (!valid) {
+              flag = false;
+          }
         });
       })
       return flag
     },
 
     //提交数据到下一步
-    mSendFinalConfirm () {
+    mSendFinalConfirm (toIntranet) {
       this.ft_mSend_changeSendMan();//清除原被告sendChoice属性
-      // 处理提交数据
+      // 提交数据
       for (let j = 0; j < this.mSendBindData.length; j++) {
+        // 获取原告的送达信息
         if (this.mSendBindData[j].radioGroup.indexOf('plant') > -1)  {
             let strTemp = this.mSendBindData[j].sendGroup.join(',');
             //送达信息
@@ -285,6 +286,7 @@ export default {
               servicePhone:this.mSendBindData[j].servicePhone,
               serviceEmail:this.mSendBindData[j].serviceEmail,
             }
+            // 获取律师的送达信息
         }  else if(this.mSendBindData[j].radioGroup.indexOf('agent') > -1) {
             for (let k = 0; k < this.mSendList[j].caseInfo.plaintiffs[0].layers.length; k++) {
               if(this.mSendBindData[j].radioGroup === this.mSendList[j].caseInfo.plaintiffs[0].layers[k].agentId) {
@@ -299,6 +301,10 @@ export default {
               }
             }
         }
+        // 插入是否导入内网标签
+        this.mSendList.forEach((item,index)=>{
+           item.toIntranet=toIntranet;
+        })
       }
       this.$emit('mEvitoStep5',this.mSendList);//提交数据到下一步
     },

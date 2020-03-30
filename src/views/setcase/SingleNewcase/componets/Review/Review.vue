@@ -2,15 +2,6 @@
 
 <template>
   <div>
-    <!-- <Tabs value="name1" type="card" style="margin-top:20px;" class="ft-review-tab">
-      <TabPane label="起诉状" name="1">标签一的内容</TabPane>
-      <TabPane label="单位证明文件" name="2">标签二的内容</TabPane>
-      <TabPane label="法定代表人身份证明文件" name="3">标签三的内容</TabPane>
-      <TabPane label="代理人授权委托书" name="4">标签三的内容</TabPane>
-      <TabPane label="律师函" name="5">标签三的内容</TabPane>
-      <TabPane label="证据材料" name="6">标签三的内容</TabPane>
-      <TabPane label="送达事项确认书" name="7">标签三的内容</TabPane>
-    </Tabs> -->
     <div class='ft-review-notice'>
       <img src="@/images/reviewnotice.png" alt="" style="margin:50px 100px 0 0">
       <h3 style="margin:20px 100px 0 0">请确保信息确认无误后提交</h3>
